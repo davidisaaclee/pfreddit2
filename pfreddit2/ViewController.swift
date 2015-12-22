@@ -12,7 +12,6 @@ class ViewController: UIViewController {
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		// Do any additional setup after loading the view, typically from a nib.
 
 		RedditCommunicator.loadStoriesFromSubreddit("all").onSuccess { listing in
 			guard let g = listing.asyncElementGenerator() else {
@@ -33,12 +32,5 @@ class ViewController: UIViewController {
 			g.next()?.onSuccess(callback: successLoop)
 		}
 	}
-
-	override func didReceiveMemoryWarning() {
-		super.didReceiveMemoryWarning()
-		// Dispose of any resources that can be recreated.
-	}
-
-
 }
 
