@@ -9,27 +9,28 @@
 import UIKit
 
 class GraphNavigationViewController: UINavigationController {
+	let kNavigationEdgeWeight = 1.0
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+	var nodeViewControllers: [NodeViewController] = []
 
-        // Do any additional setup after loading the view.
-    }
+//	override func viewDidLoad() {
+//	}
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
+	func pushNodeViewForNode(node: ContentNode) {
+		let nodeViewController = NodeViewController(node: node)
+		nodeViewController.nodeViewDelegate = self
+		self.pushViewController(nodeViewController, animated: true)
+		nodeViewControllers.append(nodeViewController)
+	}
+}
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
+extension GraphNavigationViewController: NodeViewControllerDelegate {
+	func nodeViewController(nodeViewController: NodeViewController, navigatedToNode node: ContentNode) {
+		if let previousNode = nodeViewController.activeNode {
+			SharedContentGraph.incrementEdge(previousNode, destination: node, incrementBy: EdgeWeight.FollowedEdge)
+//				.onSuccess { edge in print("Incremented edge:", edge) }
+//				.onFailure { error in print("Failed to increment edge:", error) }
+		}
+		self.pushNodeViewForNode(node)
+	}
 }

@@ -9,5 +9,7 @@ pod 'BrightFutures'
 pod 'SwiftyJSON'
 pod 'RealmSwift'
 
+pod 'SBTableLayout'
+
 end
 

@@ -7,11 +7,13 @@ PODS:
   - RealmSwift (0.97.0):
     - Realm (= 0.97.0)
   - Result (1.0.1)
+  - SBTableLayout (0.0.2)
   - SwiftyJSON (2.3.2)
 
 DEPENDENCIES:
   - BrightFutures
   - RealmSwift
+  - SBTableLayout
   - SwiftyJSON
 
 SPEC CHECKSUMS:
@@ -19,6 +21,7 @@ SPEC CHECKSUMS:
   Realm: b498a6fb9d288b171ff98d0e2d4384c295be8990
   RealmSwift: d014810dec75c9a3f1a33926d2dabfed855c582c
   Result: caef80340451e1f07492fa1e89117f83613bce24
+  SBTableLayout: ed42a1579a5d458dc1f95afbe9d79f9dcbd2fde1
   SwiftyJSON: 04ccea08915aa0109039157c7974cf0298da292a
 
 COCOAPODS: 0.39.0

@@ -6,4 +6,6 @@
 //  Copyright © 2015 David Lee. All rights reserved.
 //
 
-import Foundation
+import RealmSwift
+
+var SharedContentGraph: ContentGraph! = RealmContentGraph(realm: try! Realm())

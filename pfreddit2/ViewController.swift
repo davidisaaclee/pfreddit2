@@ -7,30 +7,55 @@
 //
 
 import UIKit
+import RealmSwift
+import BrightFutures
 
 class ViewController: UIViewController {
 
+	lazy var graphNavigationController: GraphNavigationViewController! = GraphNavigationViewController()
+	var activeNode: ContentNode?
+
 	override func viewDidLoad() {
 		super.viewDidLoad()
-
-		RedditCommunicator.loadStoriesFromSubreddit("all").onSuccess { listing in
-			guard let g = listing.asyncElementGenerator() else {
-				print("Couldn't make generator")
-				return
-			}
-
-			var i = 0
-			func successLoop(link: RedditLink) {
-				print(link.title)
-				if ++i > 50 {
-					return
-				} else {
-					g.next()?.onSuccess(callback: successLoop)
+		downloadStories(25) {
+			SharedContentGraph.pickNodes(1).onSuccess { nodes in
+				self.presentViewController(self.graphNavigationController, animated: true) {
+					self.graphNavigationController.pushNodeViewForNode(nodes.first!)
 				}
 			}
+		}
+	}
 
-			g.next()?.onSuccess(callback: successLoop)
+	func downloadStories(downloadCount: Int = 25, callback: () -> Void) {
+		func readNodePage(alreadyDownloaded: Int)(listing: RedditListing<RedditLink>) {
+			if listing.children.count + alreadyDownloaded >= downloadCount {
+				let numberToRead = downloadCount - alreadyDownloaded
+				let childrenSliceToRead = listing.children.prefix(numberToRead)
+				SharedContentGraph.writeNodes(childrenSliceToRead.map(ContentNode.init))
+				callback()
+				// exit recursion
+				return
+			} else {
+				SharedContentGraph.writeNodes(listing.children.map(ContentNode.init))
+				listing.next().onSuccess(callback: readNodePage(alreadyDownloaded + listing.children.count))
+			}
+		}
+
+		RedditCommunicator.loadStoriesFromSubreddit("all")
+			.onSuccess(callback: readNodePage(0))
+			.onFailure { print("ERROR:", $0) }
+	}
+
+	func makeArbitraryLinks(callback: () -> Void) {
+		SharedContentGraph.pickNodes(25).map { nodeSet in
+			nodeSet.reduce([]) { (var acc, elm) -> [ContentEdge] in
+				if let last = acc.last {
+					acc.append(ContentEdge(sourceNode: last.destination, destinationNode: elm))
+				} else {
+					acc.append(ContentEdge(sourceNode: elm, destinationNode: elm))
+				}
+				return acc
+			}
 		}
 	}
 }
-

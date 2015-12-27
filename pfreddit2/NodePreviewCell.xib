@@ -1,10 +1,67 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6211" systemVersion="14A298i" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9060" systemVersion="15D9c" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6204"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9051"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="NodePreviewCell" customModule="pfreddit2" customModuleProvider="target"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="" id="nxj-0e-WIX" customClass="NodePreviewCell" customModule="pfreddit2" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="253" height="192"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="253" height="192"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="lsB-yd-Qhk">
+                        <rect key="frame" x="8" y="67" width="58" height="58"/>
+                        <animations/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="58" id="J5R-Ak-vSe"/>
+                            <constraint firstAttribute="width" secondItem="lsB-yd-Qhk" secondAttribute="height" multiplier="1:1" id="KZO-bt-5rP"/>
+                        </constraints>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bKX-l4-MFJ">
+                        <rect key="frame" x="74" y="8" width="171" height="176"/>
+                        <animations/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                        <color key="shadowColor" red="0.0" green="0.0" blue="0.0" alpha="0.41251572988791946" colorSpace="calibratedRGB"/>
+                        <size key="shadowOffset" width="1" height="1"/>
+                    </label>
+                </subviews>
+                <animations/>
+                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+            </view>
+            <animations/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="bKX-l4-MFJ" secondAttribute="trailing" constant="8" id="0wg-5m-dyD"/>
+                <constraint firstItem="bKX-l4-MFJ" firstAttribute="top" secondItem="nxj-0e-WIX" secondAttribute="top" constant="8" id="1jP-lb-hAL"/>
+                <constraint firstItem="lsB-yd-Qhk" firstAttribute="leading" secondItem="nxj-0e-WIX" secondAttribute="leading" constant="8" id="20R-Qo-X9l"/>
+                <constraint firstItem="bKX-l4-MFJ" firstAttribute="leading" secondItem="lsB-yd-Qhk" secondAttribute="trailing" constant="8" id="Afk-5G-r45"/>
+                <constraint firstItem="lsB-yd-Qhk" firstAttribute="leading" secondItem="nxj-0e-WIX" secondAttribute="leading" constant="8" id="H3H-RM-5el"/>
+                <constraint firstAttribute="bottom" secondItem="lsB-yd-Qhk" secondAttribute="bottom" constant="8" id="Sb9-fb-j5M"/>
+                <constraint firstItem="lsB-yd-Qhk" firstAttribute="centerY" secondItem="nxj-0e-WIX" secondAttribute="centerY" id="Tev-gK-uN6"/>
+                <constraint firstItem="lsB-yd-Qhk" firstAttribute="top" secondItem="nxj-0e-WIX" secondAttribute="top" constant="8" id="Zpk-Cp-hEx"/>
+                <constraint firstItem="bKX-l4-MFJ" firstAttribute="centerY" secondItem="nxj-0e-WIX" secondAttribute="centerY" id="e3e-Z5-O1y"/>
+                <constraint firstAttribute="bottom" secondItem="bKX-l4-MFJ" secondAttribute="bottom" constant="8" id="jeI-U3-u6h"/>
+            </constraints>
+            <size key="customSize" width="253" height="192"/>
+            <variation key="default">
+                <mask key="constraints">
+                    <exclude reference="20R-Qo-X9l"/>
+                    <exclude reference="Sb9-fb-j5M"/>
+                    <exclude reference="Zpk-Cp-hEx"/>
+                </mask>
+            </variation>
+            <connections>
+                <outlet property="thumbnailView" destination="lsB-yd-Qhk" id="csG-Nu-7lI"/>
+                <outlet property="titleLabel" destination="bKX-l4-MFJ" id="AEc-YL-tRP"/>
+            </connections>
+            <point key="canvasLocation" x="772.5" y="449"/>
+        </collectionViewCell>
     </objects>
 </document>

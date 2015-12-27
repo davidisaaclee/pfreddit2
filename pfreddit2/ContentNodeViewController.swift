@@ -9,12 +9,14 @@
 import UIKit
 
 protocol ContentNodeViewDataSource {
-	func nodeForContentNodeView(contentViewController: ContentNodeViewController) -> RedditLink
+	func nodeForContentNodeView(contentViewController: ContentNodeViewController) -> ContentNode?
+}
+
+protocol ContentNodeViewDelegate {
+	func showEdgesForContentNodeView(contentNodeView: ContentNodeViewController)
 }
 
 class ContentNodeViewController: UIViewController {
-
-	@IBOutlet weak var titleLabel: UILabel!
 	@IBOutlet weak var webView: UIWebView!
 
 	var dataSource: ContentNodeViewDataSource? {
@@ -25,23 +27,28 @@ class ContentNodeViewController: UIViewController {
 		}
 	}
 
+	var delegate: ContentNodeViewDelegate?
+
 	convenience init() {
 		self.init(nibName: "ContentNodeViewController", bundle: nil)
 	}
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
+		webView.scalesPageToFit = true
 		reloadData()
 	}
 
 	func reloadData() {
 		guard let dataSource = dataSource else { return }
+		guard let link = dataSource.nodeForContentNodeView(self) else { return }
 
-		let link = dataSource.nodeForContentNodeView(self)
-
-		titleLabel.text = link.title
-		if let url = NSURL(string: link.url) {
+		if let linkURLString = link.linkURL, let url = NSURL(string: linkURLString) {
 			webView.loadRequest(NSURLRequest(URL: url))
 		}
+	}
+
+	@IBAction func showEdges() {
+		delegate?.showEdgesForContentNodeView(self)
 	}
 }

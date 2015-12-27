@@ -8,7 +8,6 @@
 
 import Foundation
 
-
 protocol RedditVotable {
 	var ups: Int { get }
 	var downs: Int { get }

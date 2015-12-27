@@ -9,7 +9,7 @@
 import Foundation
 
 protocol Edge: Hashable {
-	typealias NodeType: Node
+	typealias NodeType: Hashable
 
 	var source: NodeType { get }
 	var destination: NodeType { get }

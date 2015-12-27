@@ -1,19 +1,26 @@
 //
-//  GraphNavigationViewController.swift
+//  NodeViewController.swift
 //  pfreddit2
 //
 //  Created by David Lee on 12/22/15.
 //  Copyright © 2015 David Lee. All rights reserved.
 //
+//  Controls the view of a single node of content, along with navigation to the next node.
 
 import UIKit
 
-class NodeViewController: UINavigationController {
+protocol NodeViewControllerDelegate {
+	func nodeViewController(nodeViewController: NodeViewController, navigatedToNode node: ContentNode)
+}
+
+class NodeViewController: UIViewController {
 	let kEdgeFetchCount = 10
 	let kNodePreviewCellIdentifier = "NodePreviewCell"
 
-	var nodeViewController: ContentNodeViewController!
-	var edgesViewController: GraphEdgesViewController!
+	var nodeViewDelegate: NodeViewControllerDelegate?
+
+	lazy var nodeViewController: ContentNodeViewController! = ContentNodeViewController()
+	lazy var edgesViewController: GraphEdgesViewController! = GraphEdgesViewController()
 
 	var activeNode: ContentNode? {
 		didSet {
@@ -30,17 +37,19 @@ class NodeViewController: UINavigationController {
 	}
 	var edges: [ContentEdge]?
 
-	init() {
+	convenience init() {
+		self.init(node: nil)
+	}
+
+	init(node: ContentNode?) {
 		super.init(nibName: nil, bundle: nil)
-		nodeViewController = ContentNodeViewController()
-		edgesViewController = GraphEdgesViewController()
+		if let node = node {
+			presentNode(node)
+		}
 	}
 
 	required init?(coder aDecoder: NSCoder) {
 		super.init(coder: aDecoder)
-
-		nodeViewController = ContentNodeViewController()
-		edgesViewController = GraphEdgesViewController()
 	}
 
 	override func viewDidLoad() {
@@ -53,12 +62,21 @@ class NodeViewController: UINavigationController {
 
 	func presentNode(node: ContentNode) {
 		activeNode = node
-		print("Presenting", node.id)
-		self.pushViewController(nodeViewController, animated: true)
+		navigationItem.title = activeNode?.title
+		navigationItem.leftBarButtonItems = nil
+
+		addViewControllerToViewHierarchy(nodeViewController)
 	}
 
 	func presentEdgesViewForActiveNode() {
-		self.pushViewController(edgesViewController, animated: true)
+		self.presentViewController(edgesViewController, animated: true, completion: nil)
+	}
+
+	private func addViewControllerToViewHierarchy(viewController: UIViewController) {
+		addChildViewController(viewController)
+		viewController.view.frame = view.frame
+		view.addSubview(viewController.view)
+		viewController.didMoveToParentViewController(self)
 	}
 
 	private func edgeAtIndexPath(indexPath: NSIndexPath) -> ContentEdge? {
@@ -75,6 +93,11 @@ extension NodeViewController: UICollectionViewDataSource {
 		let cell = collectionView.dequeueReusableCellWithReuseIdentifier(kNodePreviewCellIdentifier, forIndexPath: indexPath)
 		if let cell = cell as? NodePreviewCell {
 			cell.titleLabel.text = self.edgeAtIndexPath(indexPath)?.destination.title
+			if let thumbnailURLString = self.edgeAtIndexPath(indexPath)?.destination.thumbnailURL,
+				let thumbnailURL = NSURL(string: thumbnailURLString),
+				let data = NSData(contentsOfURL: thumbnailURL) {
+					cell.thumbnailView.image = UIImage(data: data)
+			}
 		}
 		return cell
 	}
@@ -83,7 +106,8 @@ extension NodeViewController: UICollectionViewDataSource {
 extension NodeViewController: UICollectionViewDelegate {
 	func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
 		guard let destinationNode = self.edgeAtIndexPath(indexPath)?.destination else { return }
-		// TODO: delegate
+		nodeViewDelegate?.nodeViewController(self, navigatedToNode: destinationNode)
+		self.dismissViewControllerAnimated(true, completion: nil)
 	}
 }
 
@@ -98,3 +122,9 @@ extension NodeViewController: ContentNodeViewDelegate {
 		self.presentEdgesViewForActiveNode()
 	}
 }
+//
+//extension NodeViewController: UICollectionViewDelegateFlowLayout {
+//	func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+//		<#code#>
+//	}
+//}

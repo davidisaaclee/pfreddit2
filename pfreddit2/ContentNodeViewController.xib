@@ -3,12 +3,10 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9051"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="LinkDetailViewController" customModule="pfreddit2" customModuleProvider="target">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ContentNodeViewController" customModule="pfreddit2" customModuleProvider="target">
             <connections>
-                <outlet property="titleLabel" destination="cSn-tx-Lgj" id="ZqG-e2-HHe"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
                 <outlet property="webView" destination="ZZe-ci-RtV" id="WG1-mH-nfe"/>
             </connections>
@@ -23,45 +21,34 @@
                     <animations/>
                     <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="deviceRGB"/>
                 </webView>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cSn-tx-Lgj">
-                    <rect key="frame" x="15" y="15" width="575" height="21"/>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MsX-aD-djd">
+                    <rect key="frame" x="260" y="524" width="80" height="30"/>
                     <animations/>
                     <constraints>
-                        <constraint firstAttribute="width" constant="42" id="AnF-ei-6w2"/>
-                        <constraint firstAttribute="height" constant="21" id="bGD-Q1-HoB"/>
+                        <constraint firstAttribute="width" constant="80" id="4P7-8Q-ro1"/>
+                        <constraint firstAttribute="height" constant="30" id="dQB-PW-KvW"/>
                     </constraints>
-                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                    <nil key="highlightedColor"/>
-                    <variation key="default">
-                        <mask key="constraints">
-                            <exclude reference="AnF-ei-6w2"/>
-                            <exclude reference="bGD-Q1-HoB"/>
-                        </mask>
-                    </variation>
-                </label>
+                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
+                    <size key="titleShadowOffset" width="1" height="1"/>
+                    <state key="normal" title="Children">
+                        <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="titleShadowColor" red="0.0" green="0.0" blue="0.0" alpha="0.51738150167785235" colorSpace="calibratedRGB"/>
+                    </state>
+                    <connections>
+                        <action selector="showEdges" destination="-1" eventType="primaryActionTriggered" id="NzA-4J-mf4"/>
+                    </connections>
+                </button>
             </subviews>
             <animations/>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
-                <constraint firstItem="cSn-tx-Lgj" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="10" id="4gc-Gx-EiD"/>
-                <constraint firstItem="cSn-tx-Lgj" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="15" id="9IJ-eL-ztS"/>
-                <constraint firstAttribute="trailing" secondItem="cSn-tx-Lgj" secondAttribute="trailing" constant="10" id="PAM-oY-Wrd"/>
+                <constraint firstAttribute="bottom" secondItem="MsX-aD-djd" secondAttribute="bottom" constant="46" id="Jet-q4-eZz"/>
                 <constraint firstItem="ZZe-ci-RtV" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="Qvs-1v-giX"/>
+                <constraint firstItem="MsX-aD-djd" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="Rkj-Gl-qmG"/>
                 <constraint firstAttribute="bottom" secondItem="ZZe-ci-RtV" secondAttribute="bottom" id="U10-OO-Hn8"/>
-                <constraint firstItem="cSn-tx-Lgj" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="topMargin" constant="7" id="bLo-Q0-r2N"/>
                 <constraint firstItem="ZZe-ci-RtV" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="dqY-wx-grG"/>
-                <constraint firstItem="cSn-tx-Lgj" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="yIx-43-9Mj"/>
-                <constraint firstItem="cSn-tx-Lgj" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" id="yVZ-GH-KNE"/>
                 <constraint firstAttribute="trailing" secondItem="ZZe-ci-RtV" secondAttribute="trailing" id="yqZ-C7-Lm9"/>
             </constraints>
-            <variation key="default">
-                <mask key="constraints">
-                    <exclude reference="4gc-Gx-EiD"/>
-                    <exclude reference="yIx-43-9Mj"/>
-                    <exclude reference="yVZ-GH-KNE"/>
-                </mask>
-            </variation>
         </view>
     </objects>
 </document>
