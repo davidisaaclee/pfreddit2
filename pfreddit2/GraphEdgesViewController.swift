@@ -29,21 +29,6 @@ class GraphEdgesViewController: UIViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 
-//		let tableLayout = SBCollectionViewTableLayout()
-//		collectionView.setCollectionViewLayout(tableLayout, animated: false)
-
-//		if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-//			layout.minimumInteritemSpacing = 9999.0
-//		}
-
-//		if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-//			let xInsets = collectionView.contentInset.left
-//									+ collectionView.contentInset.right
-//									+ layout.sectionInset.left
-//									+ layout.sectionInset.right
-//			layout.estimatedItemSize = CGSize(width: collectionView.frame.width - xInsets - 1, height: 100.0)
-//		}
-
 		collectionView.dataSource = collectionDataSource
 		collectionView.delegate = collectionDelegate
 		_registeredCells.forEach { reuseIdentifier, cellClass in

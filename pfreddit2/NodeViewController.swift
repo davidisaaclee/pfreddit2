@@ -14,7 +14,7 @@ protocol NodeViewControllerDelegate {
 }
 
 class NodeViewController: UIViewController {
-	let kEdgeFetchCount = 10
+	let kEdgeFetchCount = 50
 	let kNodePreviewCellIdentifier = "NodePreviewCell"
 
 	var nodeViewDelegate: NodeViewControllerDelegate?
@@ -65,16 +65,22 @@ class NodeViewController: UIViewController {
 		navigationItem.title = activeNode?.title
 		navigationItem.leftBarButtonItems = nil
 
+		nodeViewController.view.frame = view.frame
 		addViewControllerToViewHierarchy(nodeViewController)
 	}
 
 	func presentEdgesViewForActiveNode() {
+//		edgesViewController.view.frame = view.frame
+//		addViewControllerToViewHierarchy(edgesViewController)
+
+		edgesViewController.providesPresentationContextTransitionStyle = true
+		edgesViewController.definesPresentationContext = true
+		edgesViewController.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
 		self.presentViewController(edgesViewController, animated: true, completion: nil)
 	}
 
 	private func addViewControllerToViewHierarchy(viewController: UIViewController) {
 		addChildViewController(viewController)
-		viewController.view.frame = view.frame
 		view.addSubview(viewController.view)
 		viewController.didMoveToParentViewController(self)
 	}
@@ -91,13 +97,21 @@ extension NodeViewController: UICollectionViewDataSource {
 
 	func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
 		let cell = collectionView.dequeueReusableCellWithReuseIdentifier(kNodePreviewCellIdentifier, forIndexPath: indexPath)
+
+
 		if let cell = cell as? NodePreviewCell {
 			cell.titleLabel.text = self.edgeAtIndexPath(indexPath)?.destination.title
 			if let thumbnailURLString = self.edgeAtIndexPath(indexPath)?.destination.thumbnailURL,
-				let thumbnailURL = NSURL(string: thumbnailURLString),
-				let data = NSData(contentsOfURL: thumbnailURL) {
-					cell.thumbnailView.image = UIImage(data: data)
-			}
+					let thumbnailURL = NSURL(string: thumbnailURLString) {
+					dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0)) {
+						if let data = NSData(contentsOfURL: thumbnailURL) {
+							let image: UIImage? = UIImage(data: data)
+							dispatch_async(dispatch_get_main_queue()) {
+								cell.thumbnailView.image = image
+							}
+						}
+					}
+				}
 		}
 		return cell
 	}
@@ -122,9 +136,3 @@ extension NodeViewController: ContentNodeViewDelegate {
 		self.presentEdgesViewForActiveNode()
 	}
 }
-//
-//extension NodeViewController: UICollectionViewDelegateFlowLayout {
-//	func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
-//		<#code#>
-//	}
-//}
