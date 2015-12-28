@@ -17,7 +17,11 @@ protocol ContentNodeViewDelegate {
 }
 
 class ContentNodeViewController: UIViewController {
-	@IBOutlet weak var webView: UIWebView!
+	@IBOutlet weak var webView: UIWebView! {
+		didSet {
+			webView.scalesPageToFit = true
+		}
+	}
 
 	var dataSource: ContentNodeViewDataSource? {
 		didSet {
@@ -35,7 +39,6 @@ class ContentNodeViewController: UIViewController {
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		webView.scalesPageToFit = true
 		reloadData()
 	}
 

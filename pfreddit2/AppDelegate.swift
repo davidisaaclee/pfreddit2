@@ -12,10 +12,20 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
 	var window: UIWindow?
-
-
 	func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-		// Override point for customization after application launch.
+		window = UIWindow(frame: UIScreen.mainScreen().bounds)
+		window?.rootViewController = GraphNavigationViewController()
+		window?.makeKeyAndVisible()
+		guard let graphNavigationController = window?.rootViewController as? GraphNavigationViewController else {
+			return false
+		}
+
+		downloadStories(25) {
+			SharedContentGraph.pickNodes(1).onSuccess { nodes in
+				graphNavigationController.pushNodeViewForNode(nodes.first!)
+			}
+		}
+		
 		return true
 	}
 
@@ -44,3 +54,39 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 }
 
+
+// Some helpers for grabbing stories / making links
+extension AppDelegate {
+	func downloadStories(downloadCount: Int = 25, callback: () -> Void) {
+		func readNodePage(alreadyDownloaded: Int)(listing: RedditListing<RedditLink>) {
+			if listing.children.count + alreadyDownloaded >= downloadCount {
+				let numberToRead = downloadCount - alreadyDownloaded
+				let childrenSliceToRead = listing.children.prefix(numberToRead)
+				SharedContentGraph.writeNodes(childrenSliceToRead.map(ContentNode.init))
+				callback()
+				// exit recursion
+				return
+			} else {
+				SharedContentGraph.writeNodes(listing.children.map(ContentNode.init))
+				listing.next().onSuccess(callback: readNodePage(alreadyDownloaded + listing.children.count))
+			}
+		}
+
+		RedditCommunicator.loadStoriesFromSubreddit("all")
+			.onSuccess(callback: readNodePage(0))
+			.onFailure { print("ERROR:", $0) }
+	}
+
+	func makeArbitraryLinks(callback: () -> Void) {
+		SharedContentGraph.pickNodes(25).map { nodeSet in
+			nodeSet.reduce([]) { (var acc, elm) -> [ContentEdge] in
+				if let last = acc.last {
+					acc.append(ContentEdge(sourceNode: last.destination, destinationNode: elm))
+				} else {
+					acc.append(ContentEdge(sourceNode: elm, destinationNode: elm))
+				}
+				return acc
+			}
+		}
+	}
+}

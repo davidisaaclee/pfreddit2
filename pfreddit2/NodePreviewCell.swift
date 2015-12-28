@@ -15,9 +15,7 @@ class NodePreviewCell: UICollectionViewCell {
 	required init?(coder aDecoder: NSCoder) {
 		super.init(coder: aDecoder)
 
-		self.backgroundView = UIView()
-		self.backgroundView?.backgroundColor = UIColor(white: 0.5, alpha: 0.7)
-
+		self.backgroundView = UIVisualEffectView(effect: UIBlurEffect(style: .Dark))
 		self.selectedBackgroundView = UIView()
 		self.selectedBackgroundView?.backgroundColor = UIColor(white: 0.1, alpha: 0.9)
 	}

@@ -10,7 +10,7 @@
 import UIKit
 
 protocol NodeViewControllerDelegate {
-	func nodeViewController(nodeViewController: NodeViewController, navigatedToNode node: ContentNode)
+	func nodeViewController(nodeViewController: NodeViewController, navigateToNode node: ContentNode)
 }
 
 class NodeViewController: UIViewController {
@@ -58,6 +58,7 @@ class NodeViewController: UIViewController {
 		edgesViewController.registerNib(UINib(nibName: "NodePreviewCell", bundle: nil), forCellWithReuseIdentifier: kNodePreviewCellIdentifier)
 		edgesViewController.collectionDataSource = self
 		edgesViewController.collectionDelegate = self
+		edgesViewController.delegate = self
 	}
 
 	func presentNode(node: ContentNode) {
@@ -70,19 +71,68 @@ class NodeViewController: UIViewController {
 	}
 
 	func presentEdgesViewForActiveNode() {
-//		edgesViewController.view.frame = view.frame
-//		addViewControllerToViewHierarchy(edgesViewController)
-
-		edgesViewController.providesPresentationContextTransitionStyle = true
-		edgesViewController.definesPresentationContext = true
-		edgesViewController.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
-		self.presentViewController(edgesViewController, animated: true, completion: nil)
+		edgesViewController.view.frame = view.frame
+		presentEdgesViewControllerAnimated(true)
 	}
 
-	private func addViewControllerToViewHierarchy(viewController: UIViewController) {
-		addChildViewController(viewController)
-		view.addSubview(viewController.view)
-		viewController.didMoveToParentViewController(self)
+	func navigateToNode(node: ContentNode) {
+		nodeViewDelegate?.nodeViewController(self, navigateToNode: node)
+		dismissEdgesViewControllerAnimated(false)
+	}
+
+	func presentEdgesViewControllerAnimated(shouldAnimate: Bool) {
+		let offscreenOrigin = CGPoint(x: view.frame.origin.x, y: view.frame.origin.y + view.frame.size.height)
+		edgesViewController.view.frame = CGRect(origin: offscreenOrigin, size: view.frame.size)
+		addViewControllerToViewHierarchy(edgesViewController)
+		navigationController?.setNavigationBarHidden(true, animated: true)
+
+		let animations = {
+			self.edgesViewController.view.frame = self.view.frame
+		}
+
+		if shouldAnimate {
+			let animationOptions: UIViewAnimationOptions = [
+				.CurveEaseOut,
+				.BeginFromCurrentState
+			]
+			UIView.animateWithDuration(0.2, delay: 0.0, options: animationOptions,
+				animations: animations, completion: nil)
+		} else {
+			animations()
+		}
+	}
+
+	func dismissEdgesViewControllerAnimated(shouldAnimate: Bool) {
+		self.navigationController?.setNavigationBarHidden(false, animated: true)
+
+		let animations = {
+			let originʹ = CGPoint(x: self.edgesViewController.view.frame.origin.x, y: self.view.bounds.maxY)
+			self.edgesViewController.view.frame = CGRect(origin: originʹ, size: self.edgesViewController.view.frame.size)
+		}
+		let completion: Bool -> Void = { completed in
+			guard completed else { return }
+			self.edgesViewController.removeFromParentViewController()
+			self.edgesViewController.view.removeFromSuperview()
+		}
+
+		if shouldAnimate {
+			let animationOptions: UIViewAnimationOptions = [
+				.CurveEaseOut,
+				.BeginFromCurrentState
+			]
+			UIView.animateWithDuration(0.2, delay: 0.0, options: animationOptions,
+				animations: animations, completion: completion)
+		} else {
+			animations()
+			completion(true)
+		}
+	}
+
+	private func addViewControllerToViewHierarchy(viewController: UIViewController, parentViewController parentOrNil: UIViewController? = nil) {
+		let parentViewController = parentOrNil ?? self
+		parentViewController.addChildViewController(viewController)
+		parentViewController.view.addSubview(viewController.view)
+		viewController.didMoveToParentViewController(parentViewController)
 	}
 
 	private func edgeAtIndexPath(indexPath: NSIndexPath) -> ContentEdge? {
@@ -97,8 +147,6 @@ extension NodeViewController: UICollectionViewDataSource {
 
 	func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
 		let cell = collectionView.dequeueReusableCellWithReuseIdentifier(kNodePreviewCellIdentifier, forIndexPath: indexPath)
-
-
 		if let cell = cell as? NodePreviewCell {
 			cell.titleLabel.text = self.edgeAtIndexPath(indexPath)?.destination.title
 			if let thumbnailURLString = self.edgeAtIndexPath(indexPath)?.destination.thumbnailURL,
@@ -120,8 +168,7 @@ extension NodeViewController: UICollectionViewDataSource {
 extension NodeViewController: UICollectionViewDelegate {
 	func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
 		guard let destinationNode = self.edgeAtIndexPath(indexPath)?.destination else { return }
-		nodeViewDelegate?.nodeViewController(self, navigatedToNode: destinationNode)
-		self.dismissViewControllerAnimated(true, completion: nil)
+		navigateToNode(destinationNode)
 	}
 }
 
@@ -134,5 +181,11 @@ extension NodeViewController: ContentNodeViewDataSource {
 extension NodeViewController: ContentNodeViewDelegate {
 	func showEdgesForContentNodeView(contentNodeView: ContentNodeViewController) {
 		self.presentEdgesViewForActiveNode()
+	}
+}
+
+extension NodeViewController: GraphEdgesViewControllerDelegate {
+	func dismissGraphEdgesViewController(graphEdgesViewController: GraphEdgesViewController, animated: Bool) {
+		dismissEdgesViewControllerAnimated(true)
 	}
 }

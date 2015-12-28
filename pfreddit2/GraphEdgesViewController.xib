@@ -16,32 +16,19 @@
             <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="g2f-7q-Kci">
-                    <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                    <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="E2L-ym-BSU">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <animations/>
-                    </view>
-                    <animations/>
-                    <blurEffect style="dark"/>
-                </visualEffectView>
-                <collectionView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" alpha="0.80000000000000004" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="zFa-of-9S0">
+                <collectionView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="zFa-of-9S0">
                     <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                     <animations/>
+                    <color key="backgroundColor" red="0.99667825488553308" green="0.96357921664107227" blue="1" alpha="0.0" colorSpace="calibratedRGB"/>
                     <collectionViewLayout key="collectionViewLayout" id="qdl-wS-tYf" customClass="TableCollectionViewLayout" customModule="pfreddit2" customModuleProvider="target"/>
                 </collectionView>
             </subviews>
             <animations/>
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="zFa-of-9S0" secondAttribute="bottom" id="A61-Mo-tyf"/>
-                <constraint firstItem="g2f-7q-Kci" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="E4z-VW-IP0"/>
                 <constraint firstItem="zFa-of-9S0" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="K5d-7F-x0Z"/>
                 <constraint firstAttribute="trailing" secondItem="zFa-of-9S0" secondAttribute="trailing" id="MNm-eo-xeq"/>
                 <constraint firstItem="zFa-of-9S0" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="fGK-HT-wZw"/>
-                <constraint firstItem="g2f-7q-Kci" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="ohd-cz-EKy"/>
-                <constraint firstAttribute="trailing" secondItem="g2f-7q-Kci" secondAttribute="trailing" id="ow3-Tz-Jz7"/>
-                <constraint firstAttribute="bottom" secondItem="g2f-7q-Kci" secondAttribute="bottom" id="uPo-Pq-xxW"/>
             </constraints>
         </view>
     </objects>
