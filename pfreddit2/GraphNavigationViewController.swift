@@ -11,25 +11,29 @@ import UIKit
 class GraphNavigationViewController: UINavigationController {
 	let kNavigationEdgeWeight = 1.0
 
-	var nodeViewControllers: [NodeViewController] = []
-
-//	override func viewDidLoad() {
-//	}
+	override func viewDidLoad() {
+		styleNavigationController()
+	}
 
 	func pushNodeViewForNode(node: ContentNode) {
 		let nodeViewController = NodeViewController(node: node)
 		nodeViewController.nodeViewDelegate = self
-		self.pushViewController(nodeViewController, animated: true)
-		nodeViewControllers.append(nodeViewController)
+		pushViewController(nodeViewController, animated: true)
+	}
+
+	private func styleNavigationController() {
+		navigationBar.barStyle = .Black
+		navigationBar.translucent = true
+
+		navigationBar
 	}
 }
 
 extension GraphNavigationViewController: NodeViewControllerDelegate {
-	func nodeViewController(nodeViewController: NodeViewController, navigatedToNode node: ContentNode) {
+	func nodeViewController(nodeViewController: NodeViewController, navigateToNode node: ContentNode) {
 		if let previousNode = nodeViewController.activeNode {
 			SharedContentGraph.incrementEdge(previousNode, destination: node, incrementBy: EdgeWeight.FollowedEdge)
-//				.onSuccess { edge in print("Incremented edge:", edge) }
-//				.onFailure { error in print("Failed to increment edge:", error) }
+				.onFailure { error in print("Failed to increment edge:", error) }
 		}
 		self.pushNodeViewForNode(node)
 	}
