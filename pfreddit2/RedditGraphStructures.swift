@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension ContentNode {
+extension RealmContentNode {
 	convenience init(link: RedditLink) {
 		var thumbnailURL: String?
 		if case let .URL(url) = link.thumbnail {
@@ -19,7 +19,7 @@ extension ContentNode {
 		self.id = link.id
 		self.title = link.title
 		self.thumbnailURL = thumbnailURL
-		self.linkURL = link.url
+//		self.linkURL = link.url
 		self.selftext = link.selftext
 	}
 }

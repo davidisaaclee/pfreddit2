@@ -17,8 +17,8 @@ class RealmContentGraph {
 		self.realm = realm
 	}
 
-	private func edgeFrom(source: ContentNode, toDestination destination: ContentNode) -> Future<ContentEdge, ContentGraphError> {
-		let edgeQuery = realm.objects(ContentEdge).filter("sourceNode = %@ && destinationNode == %@", source, destination)
+	private func edgeFrom(source: ContentNode, toDestination destination: ContentNode) -> Future<RealmContentEdge, ContentGraphError> {
+		let edgeQuery = realm.objects(RealmContentEdge).filter("realmSourceNode.id = %@ && realmDestinationNode.id == %@", source.id, destination.id)
 		if edgeQuery.count > 1 {
 			print("WARNING: Duplicate edges in graph between \(source.id) and \(destination.id)")
 		}
@@ -26,9 +26,9 @@ class RealmContentGraph {
 		if let edge = edgeQuery.first {
 			return Future(value: edge)
 		} else {
-			let edge = ContentEdge()
-			edge.sourceNode = source
-			edge.destinationNode = destination
+			let edge = RealmContentEdge()
+			edge.realmSourceNode = RealmContentNode(node: source)
+			edge.realmDestinationNode = RealmContentNode(node: destination)
 			return safeWrite(edge) { edge, realm in
 				realm.add(edge)
 				try! realm.commitWrite()
@@ -63,35 +63,36 @@ class RealmContentGraph {
 
 extension RealmContentGraph: ContentGraph {
 	func nodeForID(id: String) -> Future<ContentNode?, ContentGraphError> {
-		return Future(value: realm.objects(ContentNode).filter("id == \(id)").first)
+		return Future(value: realm.objects(RealmContentNode).filter("id == \(id)").first)
 	}
 
 	func edgeForID(id: String) -> Future<ContentEdge?, ContentGraphError> {
-		return Future(value: realm.objects(ContentEdge).filter("id == \(id)").first)
+		return Future(value: realm.objects(RealmContentEdge).filter("id == \(id)").first)
 	}
 
-	func pickNodes(count: Int) -> Future<Set<ContentNode>, ContentGraphError> {
+	func pickNodes(count: Int) -> Future<[ContentNode], ContentGraphError> {
 		guard count > 0 else { return Future(value: []) }
 
-		let nodesQuery = realm.objects(ContentNode)
+		let nodesQuery = realm.objects(RealmContentNode)
 		let generator = nodesQuery.generate()
-		var result: Set<ContentNode> = []
+		var result: [ContentNode] = []
 		for _ in 0..<count {
 			guard let next = generator.next() else { break }
-			result.insert(next)
+			result.append(next)
 		}
-		return Future(value: result)
+		return Future(value: Array(result))
 	}
 
 	func writeNodes(nodes: [ContentNode]) -> Future<[ContentNode], ContentGraphError> {
-		return safeWrite(nodes) { nodes, realm in
+		let realmNodes = nodes.map { RealmContentNode.init(node: $0) }
+		return safeWrite(realmNodes) { nodes, realm in
 			nodes.forEach { realm.add($0, update: true) }
-		}
+		}.map { $0.map { $0 as ContentNode } }
 	}
 
 	func incrementEdge(source: ContentNode, destination: ContentNode, incrementBy weightDelta: EdgeWeight) -> Future<ContentEdge, ContentGraphError> {
 		return edgeFrom(source, toDestination: destination).flatMap { edge in
-			self.safeWrite(edge) { edge, realm in
+			self.safeWrite(edge) { (var edge, realm) in
 				switch weightDelta {
 				case .FollowedEdge:
 					edge.weightFollowedEdge += 1
@@ -101,10 +102,10 @@ extension RealmContentGraph: ContentGraph {
 	}
 
 	func sortedEdgesFromNode(sourceNode: ContentNode, count: Int = 25) -> Future<[ContentEdge], ContentGraphError> {
-		let edgesQuery = realm.objects(ContentEdge).filter("sourceNode.id == %@", sourceNode.id)
-		var result = Array<ContentEdge>(edgesQuery.sorted("weight").prefix(count))
+		let edgesQuery = realm.objects(RealmContentEdge).filter("realmSourceNode.id == %@", sourceNode.id)
+		var result: [ContentEdge] = Array<RealmContentEdge>(edgesQuery.sorted("weight").prefix(count))
 		return pickNodes(count - result.count).map { nodeSet in
-			result.appendContentsOf(nodeSet.map { ContentEdge(sourceNode: sourceNode, destinationNode: $0) })
+			result.appendContentsOf(nodeSet.map { RealmContentEdge(sourceNode: sourceNode, destinationNode: $0) })
 			return result
 		}
 	}

@@ -10,80 +10,50 @@ import Foundation
 import RealmSwift
 import BrightFutures
 
-class ContentNode: Object {
-	dynamic var id: String = ""
-	dynamic var title: String = ""
-	dynamic var thumbnailURL: String?
-	dynamic var linkURL: String?
-	dynamic var selftext: String?
-
-	override static func primaryKey() -> String? {
-		return "id"
-	}
+protocol ContentNode {
+	var id: String { get }
+	var title: String { get }
+	var thumbnailURL: String? { get }
+	var content: ContentType? { get }
+	var selftext: String? { get }
 }
 
-extension ContentNode: Hashable {}
-func ==(lhs: ContentNode, rhs: ContentNode) -> Bool {
-	return lhs.id == rhs.id
+protocol ContentEdge {
+	var id: String { get }
+	var sourceNode: ContentNode! { get }
+	var destinationNode: ContentNode! { get }
+	var weight: Double { get }
+	var weightFollowedEdge: Int { get set }
 }
-
-class ContentEdge: Object {
-	dynamic var id: String = ""
-	dynamic var sourceNode: ContentNode! = nil { didSet { updateID() } }
-	dynamic var destinationNode: ContentNode! = nil { didSet { updateID() } }
-	dynamic var weight: Double = 0.0
-	dynamic var weightFollowedEdge: Int = 0 { didSet { recalculateWeight() } }
-
-	override var description: String {
-		return "\(id) (\(weight))"
-	}
-
-	convenience init(sourceNode: ContentNode, destinationNode: ContentNode) {
-		self.init()
-		self.sourceNode = sourceNode
-		self.destinationNode = destinationNode
-	}
-
-	override static func primaryKey() -> String? {
-		return "id"
-	}
-
-	func recalculateWeight() {
-		self.weight = Double(weightFollowedEdge)
-	}
-
-	private func updateID() {
-		guard sourceNode != nil && destinationNode != nil else { return }
-		self.id = "(\(sourceNode.id) -> \(destinationNode.id))"
-	}
-}
-
-extension ContentEdge: Edge {
-	var source: ContentNode {
-		return sourceNode
-	}
-	var destination: ContentNode {
-		return destinationNode
-	}
-}
-func ==(lhs: ContentEdge, rhs: ContentEdge) -> Bool {
-	return false
-}
-
 
 enum ContentGraphError: ErrorType {
 	case DatabaseError(ErrorType)
+	case InvalidNode(String)
+	case InvalidEdge(String)
 }
 
 enum EdgeWeight {
-	// When a user has followed an edge which has been presented to them.
+	// User has followed an edge which has been presented to them.
 	case FollowedEdge
 }
 
 protocol ContentGraph {
+//	typealias NodeType: ContentNode
+//	typealias EdgeType: ContentEdge
+//
+//	func nodeForID(id: String) -> Future<NodeType?, ContentGraphError>
+//	func edgeForID(id: String) -> Future<EdgeType?, ContentGraphError>
+//	// TODO: Is there any way this method can return `Future<Set<ContentNode>, ...>` without assigning type parameters?
+//	func pickNodes(count: Int) -> Future<[NodeType], ContentGraphError>
+//	func writeNode(node: NodeType) -> Future<NodeType, ContentGraphError>
+//	func writeNodes(nodes: [NodeType]) -> Future<[NodeType], ContentGraphError>
+//	func incrementEdge(source: NodeType, destination: NodeType, incrementBy weightDelta: EdgeWeight) -> Future<EdgeType, ContentGraphError>
+//	func sortedEdgesFromNode(sourceNode: NodeType, count: Int) -> Future<[EdgeType], ContentGraphError>
+
 	func nodeForID(id: String) -> Future<ContentNode?, ContentGraphError>
 	func edgeForID(id: String) -> Future<ContentEdge?, ContentGraphError>
-	func pickNodes(count: Int) -> Future<Set<ContentNode>, ContentGraphError>
+	// TODO: Is there any way this method can return `Future<Set<ContentNode>, ...>` without assigning type parameters?
+	func pickNodes(count: Int) -> Future<[ContentNode], ContentGraphError>
 	func writeNode(node: ContentNode) -> Future<ContentNode, ContentGraphError>
 	func writeNodes(nodes: [ContentNode]) -> Future<[ContentNode], ContentGraphError>
 	func incrementEdge(source: ContentNode, destination: ContentNode, incrementBy weightDelta: EdgeWeight) -> Future<ContentEdge, ContentGraphError>

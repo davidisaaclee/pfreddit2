@@ -24,7 +24,7 @@ class NodeViewController: UIViewController {
 
 	var activeNode: ContentNode? {
 		didSet {
-			guard activeNode != oldValue else { return }
+//			guard activeNode != oldValue else { return }
 			edges = nil
 			if let activeNode = activeNode {
 				SharedContentGraph.sortedEdgesFromNode(activeNode, count: kEdgeFetchCount).onSuccess {
@@ -148,8 +148,8 @@ extension NodeViewController: UICollectionViewDataSource {
 	func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
 		let cell = collectionView.dequeueReusableCellWithReuseIdentifier(kNodePreviewCellIdentifier, forIndexPath: indexPath)
 		if let cell = cell as? NodePreviewCell {
-			cell.titleLabel.text = self.edgeAtIndexPath(indexPath)?.destination.title
-			if let thumbnailURLString = self.edgeAtIndexPath(indexPath)?.destination.thumbnailURL,
+			cell.titleLabel.text = self.edgeAtIndexPath(indexPath)?.destinationNode.title
+			if let thumbnailURLString = self.edgeAtIndexPath(indexPath)?.destinationNode.thumbnailURL,
 					let thumbnailURL = NSURL(string: thumbnailURLString) {
 					dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0)) {
 						if let data = NSData(contentsOfURL: thumbnailURL) {
@@ -167,7 +167,7 @@ extension NodeViewController: UICollectionViewDataSource {
 
 extension NodeViewController: UICollectionViewDelegate {
 	func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-		guard let destinationNode = self.edgeAtIndexPath(indexPath)?.destination else { return }
+		guard let destinationNode = self.edgeAtIndexPath(indexPath)?.destinationNode else { return }
 		navigateToNode(destinationNode)
 	}
 }

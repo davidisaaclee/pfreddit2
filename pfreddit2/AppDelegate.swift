@@ -61,13 +61,14 @@ extension AppDelegate {
 		func readNodePage(alreadyDownloaded: Int)(listing: RedditListing<RedditLink>) {
 			if listing.children.count + alreadyDownloaded >= downloadCount {
 				let numberToRead = downloadCount - alreadyDownloaded
-				let childrenSliceToRead = listing.children.prefix(numberToRead)
-				SharedContentGraph.writeNodes(childrenSliceToRead.map(ContentNode.init))
+				let childrenSliceToRead: [ContentNode] = Array(listing.children.prefix(numberToRead)).map(RealmContentNode.init).map { $0 as ContentNode }
+//				let nodesSlice = childrenSliceToRead.map(RealmContentNode.init)
+				SharedContentGraph.writeNodes(childrenSliceToRead)
 				callback()
 				// exit recursion
 				return
 			} else {
-				SharedContentGraph.writeNodes(listing.children.map(ContentNode.init))
+				SharedContentGraph.writeNodes(listing.children.map(RealmContentNode.init))
 				listing.next().onSuccess(callback: readNodePage(alreadyDownloaded + listing.children.count))
 			}
 		}
@@ -77,16 +78,16 @@ extension AppDelegate {
 			.onFailure { print("ERROR:", $0) }
 	}
 
-	func makeArbitraryLinks(callback: () -> Void) {
-		SharedContentGraph.pickNodes(25).map { nodeSet in
-			nodeSet.reduce([]) { (var acc, elm) -> [ContentEdge] in
-				if let last = acc.last {
-					acc.append(ContentEdge(sourceNode: last.destination, destinationNode: elm))
-				} else {
-					acc.append(ContentEdge(sourceNode: elm, destinationNode: elm))
-				}
-				return acc
-			}
-		}
-	}
+//	func makeArbitraryLinks(callback: () -> Void) {
+//		SharedContentGraph.pickNodes(25).map { nodeSet in
+//			nodeSet.reduce([]) { (var acc, elm) -> [RealmContentEdge] in
+//				if let last = acc.last {
+//					acc.append(RealmContentEdge(sourceNode: last.destination, destinationNode: elm))
+//				} else {
+//					acc.append(RealmContentEdge(sourceNode: elm, destinationNode: elm))
+//				}
+//				return acc
+//			}
+//		}
+//	}
 }
