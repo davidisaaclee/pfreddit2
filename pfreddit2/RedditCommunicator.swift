@@ -35,10 +35,10 @@ enum RedditOrdering: String {
 
 extension RedditLink: Decodable {
 	init?(json j: JSON)	{
-		guard let id					= j["data"]["id"].string							else { return nil }
+		guard let id						= j["data"]["id"].string							else { return nil }
 		guard let fullname		= j["data"]["name"].string						else { return nil }
-		guard let kind				= j["kind"].string										else { return nil }
-		guard let created_utc = j["data"]["created_utc"].double		else { return nil }
+		guard let kind					= j["kind"].string										else { return nil }
+		guard let created_utc = j["data"]["created_utc"].double			else { return nil }
 		guard let ups					= j["data"]["ups"].int								else { return nil }
 		guard let downs				= j["data"]["downs"].int							else { return nil }
 		let likes = j["data"]["likes"].bool

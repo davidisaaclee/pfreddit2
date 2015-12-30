@@ -14,4 +14,5 @@ enum ContentType {
 	// gifs, html video
 	case InlineVideo(NSURL)
 	case Webpage(NSURL)
+	case Unknown(String)
 }

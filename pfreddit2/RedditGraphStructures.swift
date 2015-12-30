@@ -19,7 +19,13 @@ extension RealmContentNode {
 		self.id = link.id
 		self.title = link.title
 		self.thumbnailURL = thumbnailURL
-//		self.linkURL = link.url
 		self.selftext = link.selftext
+
+		// TODO: parse content
+		if let pageURL = NSURL(string: link.url) {
+			self.content = ContentType.Webpage(pageURL)
+		} else {
+			self.content = ContentType.Unknown(link.url)
+		}
 	}
 }

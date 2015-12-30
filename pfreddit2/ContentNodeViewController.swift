@@ -46,9 +46,9 @@ class ContentNodeViewController: UIViewController {
 		guard let dataSource = dataSource else { return }
 		guard let link = dataSource.nodeForContentNodeView(self) else { return }
 
-//		if let linkURLString = link.linkURL, let url = NSURL(string: linkURLString) {
-//			webView.loadRequest(NSURLRequest(URL: url))
-//		}
+		if let content = link.content, case let .Webpage(url) = content {
+			webView.loadRequest(NSURLRequest(URL: url))
+		}
 	}
 
 	@IBAction func showEdges() {

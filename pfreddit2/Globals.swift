@@ -8,8 +8,4 @@
 
 import RealmSwift
 
-// TODO: Is there any way of keeping Realm out of this? It seems that there's no way around
-//   specifying which kind of nodes/edges are in an adopter of `ContentGraph`...
-
-//var SharedContentGraph: ContentGraph! = RealmContentGraph(realm: try! Realm())
-var SharedContentGraph: RealmContentGraph! = RealmContentGraph(realm: try! Realm())
+var SharedContentGraph: ContentGraph! = RealmContentGraph(realm: try! Realm())

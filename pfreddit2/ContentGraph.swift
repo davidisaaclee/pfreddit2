@@ -38,21 +38,9 @@ enum EdgeWeight {
 }
 
 protocol ContentGraph {
-//	typealias NodeType: ContentNode
-//	typealias EdgeType: ContentEdge
-//
-//	func nodeForID(id: String) -> Future<NodeType?, ContentGraphError>
-//	func edgeForID(id: String) -> Future<EdgeType?, ContentGraphError>
-//	// TODO: Is there any way this method can return `Future<Set<ContentNode>, ...>` without assigning type parameters?
-//	func pickNodes(count: Int) -> Future<[NodeType], ContentGraphError>
-//	func writeNode(node: NodeType) -> Future<NodeType, ContentGraphError>
-//	func writeNodes(nodes: [NodeType]) -> Future<[NodeType], ContentGraphError>
-//	func incrementEdge(source: NodeType, destination: NodeType, incrementBy weightDelta: EdgeWeight) -> Future<EdgeType, ContentGraphError>
-//	func sortedEdgesFromNode(sourceNode: NodeType, count: Int) -> Future<[EdgeType], ContentGraphError>
-
 	func nodeForID(id: String) -> Future<ContentNode?, ContentGraphError>
 	func edgeForID(id: String) -> Future<ContentEdge?, ContentGraphError>
-	// TODO: Is there any way this method can return `Future<Set<ContentNode>, ...>` without assigning type parameters?
+	// TODO: Is there any way this method can return `Future<Set<ContentNode>, ...>` without assigning type parameters (via `Hashable`)?
 	func pickNodes(count: Int) -> Future<[ContentNode], ContentGraphError>
 	func writeNode(node: ContentNode) -> Future<ContentNode, ContentGraphError>
 	func writeNodes(nodes: [ContentNode]) -> Future<[ContentNode], ContentGraphError>

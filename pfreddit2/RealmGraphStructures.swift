@@ -16,13 +16,14 @@ class ContentTypeObject: Object {
 		static let Image: String = "Image"
 		static let InlineVideo: String = "InlineVideo"
 		static let Webpage: String = "Webpage"
+		static let Unknown: String = "Unknown"
 	}
 
 	dynamic var contentType: String?
 	dynamic var url: String?
 
-	init(content: ContentType) {
-		super.init()
+	convenience init(content: ContentType) {
+		self.init()
 
 		switch content {
 		case let .Image(imageURL):
@@ -36,11 +37,11 @@ class ContentTypeObject: Object {
 		case let .Webpage(pageURL):
 			contentType = TypeString.Webpage
 			url = pageURL.absoluteString
-		}
-	}
 
-	required init() {
-		super.init()
+		case let .Unknown(urlString):
+			contentType = TypeString.Unknown
+			url = urlString
+		}
 	}
 
 	func asContentType() -> ContentType? {
@@ -115,14 +116,14 @@ class RealmContentEdge: Object, ContentEdge {
 	dynamic var weightFollowedEdge: Int = 0 { didSet { recalculateWeight() } }
 
 	var sourceNode: ContentNode! {
-		return realmSourceNode as ContentNode
+		return realmSourceNode as? ContentNode
 	}
 	var destinationNode: ContentNode! {
-		return realmDestinationNode as ContentNode
+		return realmDestinationNode as? ContentNode
 	}
 
-	dynamic var realmSourceNode: RealmContentNode! { didSet { updateID() } }
-	dynamic var realmDestinationNode: RealmContentNode! { didSet { updateID() } }
+	dynamic var realmSourceNode: RealmContentNode? { didSet { updateID() } }
+	dynamic var realmDestinationNode: RealmContentNode? { didSet { updateID() } }
 
 
 	override var description: String {
@@ -144,7 +145,7 @@ class RealmContentEdge: Object, ContentEdge {
 	}
 
 	private func updateID() {
-		guard sourceNode != nil && destinationNode != nil else { return }
+		guard realmSourceNode != nil && realmDestinationNode != nil else { return }
 		self.id = "(\(sourceNode.id) -> \(destinationNode.id))"
 	}
 }
