@@ -8,4 +8,5 @@
 
 import RealmSwift
 
-var SharedContentGraph: ContentGraph! = RealmContentGraph(realm: try! Realm())
+var SharedContentGraph: ContentGraph = RealmContentGraph(realm: try! Realm())
+var SharedContentParser: ContentParser = ContentParser(modules: [WebpageContentParser()])

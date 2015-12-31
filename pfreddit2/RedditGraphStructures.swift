@@ -21,11 +21,18 @@ extension RealmContentNode {
 		self.thumbnailURL = thumbnailURL
 		self.selftext = link.selftext
 
-		// TODO: parse content
-		if let pageURL = NSURL(string: link.url) {
-			self.content = ContentType.Webpage(pageURL)
-		} else {
-			self.content = ContentType.Unknown(link.url)
+		SharedContentParser.parseFromURLString(link.url).onSuccess { content in
+			guard let SharedContentGraph = SharedContentGraph as? RealmContentGraph else {
+				fatalError("RealmContentNode could not access RealmContentGraph.")
+			}
+
+			SharedContentGraph.safeWrite(self) { node, realm in
+				node.content = content
+			}.onFailure { error in
+				print("Error writing content: ", error)
+			}
+		}.onFailure { error in
+			print("Error parsing content: ", error)
 		}
 	}
 }

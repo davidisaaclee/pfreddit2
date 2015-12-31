@@ -16,11 +16,17 @@ protocol ContentParserModule {
 class ContentParser {
 	enum Error: ErrorType {
 		case InvalidURL(urlString: String)
+		case ServiceError(service: String, error: ErrorType)
 	}
 
 	var modules: [ContentParserModule] = []
 
-	func parseFromURL(urlString: String) -> Future<ContentType, ContentParser.Error> {
+	convenience init(modules: [ContentParserModule]) {
+		self.init()
+		self.modules = modules
+	}
+
+	func parseFromURLString(urlString: String) -> Future<ContentType, ContentParser.Error> {
 		let promise = Promise<ContentType, ContentParser.Error>()
 		guard let url = NSURL(string: urlString) else {	return Future(error: ContentParser.Error.InvalidURL(urlString: urlString)) }
 
@@ -34,5 +40,11 @@ class ContentParser {
 		}
 
 		return promise.future
+	}
+}
+
+class WebpageContentParser: ContentParserModule {
+	func parseFromURL(url: NSURL) -> Future<ContentType?, ContentParser.Error> {
+		return Future(value: ContentType.Webpage(url))
 	}
 }

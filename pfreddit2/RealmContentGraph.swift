@@ -36,7 +36,7 @@ class RealmContentGraph {
 		}
 	}
 
-	private func safeWrite<T>(focusedItem: T, block: (T, Realm) -> Void) -> Future<T, ContentGraphError> {
+	func safeWrite<T>(focusedItem: T, block: (T, Realm) -> Void) -> Future<T, ContentGraphError> {
 		let promise = Promise<T, ContentGraphError>()
 
 		var notificationToken: NotificationToken!
@@ -113,12 +113,12 @@ extension RealmContentGraph: ContentGraph {
 
 	func sortedEdgesFromNode(sourceNode: ContentNode, count: Int = 25) -> Future<[ContentEdge], ContentGraphError> {
 		let edgesQuery = realm.objects(RealmContentEdge).filter("realmSourceNode.id == %@", sourceNode.id)
-		var result: [ContentEdge] = Array<RealmContentEdge>(edgesQuery.sorted("weight").prefix(count))
+		var result = [ContentEdge](edgesQuery.sorted("weight").prefix(count).map { $0 as ContentEdge })
 		return pickNodes(count - result.count).map { nodeSet in
-			let edgeSet: [ContentEdge] = nodeSet.map(self.nodeToRealmNode).map {
+			let edgeSet: [RealmContentEdge] = nodeSet.map(self.nodeToRealmNode).map {
 				RealmContentEdge(sourceNode: self.nodeToRealmNode(sourceNode), destinationNode: $0)
 			}
-			result.appendContentsOf(edgeSet)
+			result.appendContentsOf(edgeSet.map { $0 as ContentEdge })
 			return result
 		}
 	}
