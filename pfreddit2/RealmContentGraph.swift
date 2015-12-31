@@ -27,8 +27,8 @@ class RealmContentGraph {
 			return Future(value: edge)
 		} else {
 			let edge = RealmContentEdge()
-			edge.realmSourceNode = RealmContentNode(node: source)
-			edge.realmDestinationNode = RealmContentNode(node: destination)
+			edge.realmSourceNode = nodeToRealmNode(source)
+			edge.realmDestinationNode = nodeToRealmNode(destination)
 			return safeWrite(edge) { edge, realm in
 				realm.add(edge)
 				try! realm.commitWrite()
@@ -59,6 +59,16 @@ class RealmContentGraph {
 
 		return promise.future
 	}
+
+	private func nodeToRealmNode(node: ContentNode) -> RealmContentNode {
+		if let node = node as? RealmContentNode {
+			return node
+		} else if let node = realm.objects(RealmContentNode).filter("id == \(node.id)").first {
+			return node
+		} else {
+			return RealmContentNode(node: node)
+		}
+	}
 }
 
 extension RealmContentGraph: ContentGraph {
@@ -84,7 +94,7 @@ extension RealmContentGraph: ContentGraph {
 	}
 
 	func writeNodes(nodes: [ContentNode]) -> Future<[ContentNode], ContentGraphError> {
-		let realmNodes = nodes.map { RealmContentNode.init(node: $0) }
+		let realmNodes = nodes.map(nodeToRealmNode)
 		return safeWrite(realmNodes) { nodes, realm in
 			nodes.forEach { realm.add($0, update: true) }
 		}.map { $0.map { $0 as ContentNode } }
@@ -105,7 +115,10 @@ extension RealmContentGraph: ContentGraph {
 		let edgesQuery = realm.objects(RealmContentEdge).filter("realmSourceNode.id == %@", sourceNode.id)
 		var result: [ContentEdge] = Array<RealmContentEdge>(edgesQuery.sorted("weight").prefix(count))
 		return pickNodes(count - result.count).map { nodeSet in
-			result.appendContentsOf(nodeSet.map { RealmContentEdge(sourceNode: sourceNode, destinationNode: $0) })
+			let edgeSet: [ContentEdge] = nodeSet.map(self.nodeToRealmNode).map {
+				RealmContentEdge(sourceNode: self.nodeToRealmNode(sourceNode), destinationNode: $0)
+			}
+			result.appendContentsOf(edgeSet)
 			return result
 		}
 	}

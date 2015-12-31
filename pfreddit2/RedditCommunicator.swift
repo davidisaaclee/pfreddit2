@@ -41,7 +41,7 @@ extension RedditLink: Decodable {
 		guard let created_utc = j["data"]["created_utc"].double			else { return nil }
 		guard let ups					= j["data"]["ups"].int								else { return nil }
 		guard let downs				= j["data"]["downs"].int							else { return nil }
-		let likes = j["data"]["likes"].bool
+		let likes							= j["data"]["likes"].bool
 
 		// the account name of the poster. null if this is a promotional link
 		var author: Author!

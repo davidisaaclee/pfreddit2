@@ -130,10 +130,10 @@ class RealmContentEdge: Object, ContentEdge {
 		return "\(id) (\(weight))"
 	}
 
-	convenience init(sourceNode: ContentNode, destinationNode: ContentNode) {
+	convenience init(sourceNode: RealmContentNode, destinationNode: RealmContentNode) {
 		self.init()
-		self.realmSourceNode = RealmContentNode(node: sourceNode)
-		self.realmDestinationNode = RealmContentNode(node: destinationNode)
+		self.realmSourceNode = sourceNode
+		self.realmDestinationNode = destinationNode
 	}
 
 	override static func primaryKey() -> String? {
