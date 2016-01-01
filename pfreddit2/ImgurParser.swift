@@ -10,15 +10,24 @@ import Foundation
 import BrightFutures
 import SwiftyJSON
 
-
 class ImgurParser: ContentParserModule {
+	private typealias R = RegexUtilities
+
 	struct Patterns {
 		static let contentExt = "(?:jpg|gif|webm|gifv)"
 		static let imageId = "[^#\\./]+"
 		static let albumId = "[^#\\./]+"
 		static let galleryId = "[^#\\./]+"
 
-		static let imageURL = "imgur.com/(\(imageId))(?:\\.(\(contentExt)))?"
+		static let imageURL: String = "^"
+			+ R.URL.HTTP
+			+ R.Optional(R.URL.WWW)
+			+ R.Optional("i\\.")
+			+ R.Optional("m\\.")
+			+ "imgur\\.com"
+			+ "/"
+			+ R.CapturingGroup(R.LengthRange(R.Set([R.WordCharacter, R.DigitCharacter]), lower: 3))
+			+ R.Optional("\\." + R.Union(["jpg", "gif", "png"]))
 
 //		static let patterns = [
 //			"image": "imgur.com/(\(imageId))(?:\\.\(contentExt))?",
@@ -43,7 +52,7 @@ class ImgurParser: ContentParserModule {
 				return ContentParser.Error.ServiceError(service: "Imgur", error: dataRequestorError)
 			}.map { imgurImage -> ContentType? in
 				guard let imgurImage = imgurImage else {
-					print("Could not parse response from Imgur.")
+					print("Could not parse response from Imgur", url.absoluteString)
 					// couldn't parse response from imgur
 					return nil
 				}
@@ -53,11 +62,10 @@ class ImgurParser: ContentParserModule {
 					return nil
 				} else {
 					guard let imageURL = NSURL(string: imgurImage.link) else { return nil }
-					print("Created .Image content.")
 					return ContentType.Image(imageURL)
 				}
 			}.onFailure { error in
-				print("Could not create internal imgur representation.")
+				print("Could not create internal imgur representation.", url.absoluteString)
 			}
 		} else {
 			return Future(value: nil)
@@ -77,8 +85,6 @@ class ImgurParser: ContentParserModule {
 			.mapError { error in DataRequestor.Error.ExternalError(error) }
 			.map { JSON(data: $0) }
 			.map(ImgurImageModel.init)
-//			.map(JSON.init)
-//			.map(ImgurImageModel.init)
 	}
 
 	private func simpleRegexMatch(regex: NSRegularExpression, string: String) -> NSTextCheckingResult? {

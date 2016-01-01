@@ -12,6 +12,7 @@
 		630855B31C2B414000CE8CB6 /* NodePreviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630855B21C2B414000CE8CB6 /* NodePreviewCell.swift */; };
 		630855B51C2B7DB000CE8CB6 /* Globals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630855B41C2B7DB000CE8CB6 /* Globals.swift */; };
 		630855B91C2B8E7100CE8CB6 /* GraphNavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630855B81C2B8E7100CE8CB6 /* GraphNavigationViewController.swift */; };
+		632917741C3600BE00572D40 /* RegexUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632917731C3600BE00572D40 /* RegexUtilities.swift */; };
 		6335F04B1C32C6C800F36B1B /* RealmGraphStructures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6335F04A1C32C6C800F36B1B /* RealmGraphStructures.swift */; };
 		6361F27B1C29ADC40020C4CF /* CommunicationUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6361F27A1C29ADC40020C4CF /* CommunicationUtilities.swift */; };
 		6363EB841C28A35F00CB5E82 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6363EB831C28A35F00CB5E82 /* AppDelegate.swift */; };
@@ -47,6 +48,7 @@
 		630855B21C2B414000CE8CB6 /* NodePreviewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NodePreviewCell.swift; sourceTree = "<group>"; };
 		630855B41C2B7DB000CE8CB6 /* Globals.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Globals.swift; sourceTree = "<group>"; };
 		630855B81C2B8E7100CE8CB6 /* GraphNavigationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphNavigationViewController.swift; sourceTree = "<group>"; };
+		632917731C3600BE00572D40 /* RegexUtilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegexUtilities.swift; sourceTree = "<group>"; };
 		6335F04A1C32C6C800F36B1B /* RealmGraphStructures.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmGraphStructures.swift; sourceTree = "<group>"; };
 		6361F27A1C29ADC40020C4CF /* CommunicationUtilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommunicationUtilities.swift; sourceTree = "<group>"; };
 		6363EB801C28A35F00CB5E82 /* pfreddit2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = pfreddit2.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -184,6 +186,7 @@
 			isa = PBXGroup;
 			children = (
 				63F66A5B1C29C13400E0E52B /* composeHashValues.swift */,
+				632917731C3600BE00572D40 /* RegexUtilities.swift */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";
@@ -387,6 +390,7 @@
 				637825FF1C2F5A2500A17668 /* CGPoint++.swift in Sources */,
 				6368C6C81C35BEA700B3D432 /* ImgurParser.swift in Sources */,
 				63F66A6D1C29CF2500E0E52B /* RedditDataStructures.swift in Sources */,
+				632917741C3600BE00572D40 /* RegexUtilities.swift in Sources */,
 				6368C6CA1C35DD1D00B3D432 /* String+substringWithRange.swift in Sources */,
 				630855B91C2B8E7100CE8CB6 /* GraphNavigationViewController.swift in Sources */,
 			);
