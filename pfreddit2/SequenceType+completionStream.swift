@@ -15,7 +15,7 @@ extension SequenceType where Self.Generator.Element: AsyncType, Self.Generator.E
 
 	// Block is supplied the completed `Result`, and returns `true` if stream should continue, else `false`.
 	// Returns a `Future` of the final `Result`, or a `Future` of `nil` if no completion was accepted.
-	func completionStream(block: ElementResultType -> Bool) -> Future<ElementResultType?, NoError> {
+	public func completionStream(block: ElementResultType -> Bool) -> Future<ElementResultType?, NoError> {
 		let promise = Promise<ElementResultType?, NoError>()
 		var isStreaming = true
 		var pendingFutures = 0
@@ -33,7 +33,7 @@ extension SequenceType where Self.Generator.Element: AsyncType, Self.Generator.E
 						return
 					}
 
-					if --pendingFutures <= 0 {
+					if --pendingFutures == 0 {
 						isStreaming = false
 						promise.success(nil)
 					}

@@ -29,21 +29,25 @@ class ContentParser {
 		self.fallback = fallback
 	}
 
+	private var numberOfImages: Int = 0
+	private var numberOfWebpages: Int = 0
+
 	func parseFromURLString(urlString: String) -> Future<ContentType, ContentParser.Error> {
 		let promise = Promise<ContentType, ContentParser.Error>()
 		guard let url = NSURL(string: urlString) else {	return Future(error: ContentParser.Error.InvalidURL(urlString: urlString)) }
 
 		modules.map { $0.parseFromURL(url) }.completionStream { result -> Bool in
-			if let contentOrNil = result.value, let content = contentOrNil {
-//				promise.success(content)
-				return true
-			} else {
+			if let contentOrNil = result.value, let _ = contentOrNil {
+				// Successful parsing, stop the stream.
 				return false
+			} else {
+				return true
 			}
 		}.onSuccess { acceptedResultOrNil in
 			if let acceptedResult = acceptedResultOrNil,
 					let contentOrNil = acceptedResult.value,
 					let content = contentOrNil {
+//				print("Images:", ++self.numberOfImages)
 				promise.success(content)
 			} else {
 				// nothing succeeded - fallback if possible
@@ -53,6 +57,7 @@ class ContentParser {
 				}
 				fallback.parseFromURL(url).onSuccess { content in
 					if let content = content {
+//						print("Webpages:", ++self.numberOfWebpages)
 						promise.success(content)
 					} else {
 						// Not even fallback could handle .... Uh, oh!
@@ -63,8 +68,6 @@ class ContentParser {
 				}
 			}
 		}
-
-		
 
 		return promise.future
 	}

@@ -13,6 +13,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 	var window: UIWindow?
 	func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+		// Setup initial view controller.
 		window = UIWindow(frame: UIScreen.mainScreen().bounds)
 		window?.rootViewController = GraphNavigationViewController()
 		window?.makeKeyAndVisible()
@@ -20,7 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			return false
 		}
 
-		downloadStories(25) {
+		downloadStories(15) {
 			SharedContentGraph.pickNodes(1).onSuccess { nodes in
 				graphNavigationController.pushNodeViewForNode(nodes.first!)
 			}

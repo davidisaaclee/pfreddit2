@@ -14,7 +14,7 @@ protocol NodeViewControllerDelegate {
 }
 
 class NodeViewController: UIViewController {
-	let kEdgeFetchCount = 50
+	let kEdgeFetchCount = 10
 	let kNodePreviewCellIdentifier = "NodePreviewCell"
 
 	var nodeViewDelegate: NodeViewControllerDelegate?

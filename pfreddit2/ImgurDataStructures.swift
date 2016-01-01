@@ -28,9 +28,14 @@ struct ImgurImageModel: Decodable {
 	// looping	boolean	OPTIONAL, Whether the image has a looping animation. Only available if the image is animated and type is 'image/gif'.
 
 	init?(json: JSON) {
+		guard let success = json["success"].bool else { return nil }
+		guard success else { return nil }
+
 		let data = json["data"]
 
-		guard let id = data["id"].string else { return nil }
+		guard let id = data["id"].string else {
+			return nil
+		}
 		guard let animated = data["animated"].bool else { return nil }
 		guard let width = data["width"].int else { return nil }
 		guard let height = data["height"].int else { return nil }

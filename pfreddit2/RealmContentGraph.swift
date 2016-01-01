@@ -15,6 +15,7 @@ class RealmContentGraph {
 
 	init(realm: Realm) {
 		self.realm = realm
+		print("Initialized RealmContentGraph with database at", realm.path)
 	}
 
 	private func edgeFrom(source: ContentNode, toDestination destination: ContentNode) -> Future<RealmContentEdge, ContentGraphError> {

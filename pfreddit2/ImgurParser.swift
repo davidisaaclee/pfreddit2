@@ -11,9 +11,9 @@ import BrightFutures
 import SwiftyJSON
 
 class ImgurParser: ContentParserModule {
-	private typealias R = RegexUtilities
-
 	struct Patterns {
+		private typealias R = RegexUtilities
+
 		static let contentExt = "(?:jpg|gif|webm|gifv)"
 		static let imageId = "[^#\\./]+"
 		static let albumId = "[^#\\./]+"
@@ -53,19 +53,19 @@ class ImgurParser: ContentParserModule {
 			}.map { imgurImage -> ContentType? in
 				guard let imgurImage = imgurImage else {
 					print("Could not parse response from Imgur", url.absoluteString)
-					// couldn't parse response from imgur
 					return nil
 				}
 
 				if imgurImage.animated {
 					// TODO
+					print("Animated images not yet supported.")
 					return nil
 				} else {
 					guard let imageURL = NSURL(string: imgurImage.link) else { return nil }
 					return ContentType.Image(imageURL)
 				}
 			}.onFailure { error in
-				print("Could not create internal imgur representation.", url.absoluteString)
+				print("Could not create internal Imgur representation for URL \(url.absoluteString):", error)
 			}
 		} else {
 			return Future(value: nil)

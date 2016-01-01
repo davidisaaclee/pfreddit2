@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9060" systemVersion="15D9c" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9531" systemVersion="15D9c" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9051"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ContentNodeViewController" customModule="pfreddit2" customModuleProvider="target">
@@ -18,12 +18,10 @@
             <subviews>
                 <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZZe-ci-RtV">
                     <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                    <animations/>
                     <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="deviceRGB"/>
                 </webView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MsX-aD-djd">
                     <rect key="frame" x="260" y="524" width="80" height="30"/>
-                    <animations/>
                     <constraints>
                         <constraint firstAttribute="width" constant="80" id="4P7-8Q-ro1"/>
                         <constraint firstAttribute="height" constant="30" id="dQB-PW-KvW"/>
@@ -39,7 +37,6 @@
                     </connections>
                 </button>
             </subviews>
-            <animations/>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="MsX-aD-djd" secondAttribute="bottom" constant="46" id="Jet-q4-eZz"/>
