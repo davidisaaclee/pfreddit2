@@ -46,8 +46,16 @@ class ContentNodeViewController: UIViewController {
 		guard let dataSource = dataSource else { return }
 		guard let link = dataSource.nodeForContentNodeView(self) else { return }
 
-		if let content = link.content, case let .Webpage(url) = content {
+		guard let content = link.content else { return }
+		switch content {
+		case let .Webpage(url):
+			print("Loading .Webpage content \(url.absoluteString)...")
 			webView.loadRequest(NSURLRequest(URL: url))
+		case let .Image(url):
+			print("Loading .Image content \(url.absoluteString)...")
+			webView.loadRequest(NSURLRequest(URL: url))
+		default:
+			break
 		}
 	}
 
