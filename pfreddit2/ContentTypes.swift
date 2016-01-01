@@ -16,3 +16,7 @@ enum ContentType {
 	case Webpage(NSURL)
 	case Unknown(String)
 }
+
+enum MetadataType {
+	case Reddit(id: String, score: Int)
+}

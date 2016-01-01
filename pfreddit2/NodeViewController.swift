@@ -24,7 +24,6 @@ class NodeViewController: UIViewController {
 
 	var activeNode: ContentNode? {
 		didSet {
-//			guard activeNode != oldValue else { return }
 			edges = nil
 			if let activeNode = activeNode {
 				SharedContentGraph.sortedEdgesFromNode(activeNode, count: kEdgeFetchCount).onSuccess {
@@ -60,7 +59,7 @@ class NodeViewController: UIViewController {
 		edgesViewController.collectionDelegate = self
 		edgesViewController.delegate = self
 	}
-
+	
 	func presentNode(node: ContentNode) {
 		activeNode = node
 		navigationItem.title = activeNode?.title
@@ -84,7 +83,6 @@ class NodeViewController: UIViewController {
 		let offscreenOrigin = CGPoint(x: view.frame.origin.x, y: view.frame.origin.y + view.frame.size.height)
 		edgesViewController.view.frame = CGRect(origin: offscreenOrigin, size: view.frame.size)
 		addViewControllerToViewHierarchy(edgesViewController)
-		navigationController?.setNavigationBarHidden(true, animated: true)
 
 		let animations = {
 			self.edgesViewController.view.frame = self.view.frame
@@ -103,8 +101,6 @@ class NodeViewController: UIViewController {
 	}
 
 	func dismissEdgesViewControllerAnimated(shouldAnimate: Bool) {
-		self.navigationController?.setNavigationBarHidden(false, animated: true)
-
 		let animations = {
 			let originʹ = CGPoint(x: self.edgesViewController.view.frame.origin.x, y: self.view.bounds.maxY)
 			self.edgesViewController.view.frame = CGRect(origin: originʹ, size: self.edgesViewController.view.frame.size)

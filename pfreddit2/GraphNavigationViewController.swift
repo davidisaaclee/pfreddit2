@@ -9,8 +9,6 @@
 import UIKit
 
 class GraphNavigationViewController: UINavigationController {
-	let kNavigationEdgeWeight = 1.0
-
 	override func viewDidLoad() {
 		styleNavigationController()
 	}
@@ -22,10 +20,7 @@ class GraphNavigationViewController: UINavigationController {
 	}
 
 	private func styleNavigationController() {
-		navigationBar.barStyle = .Black
-		navigationBar.translucent = true
-
-		navigationBar
+		navigationBar.hidden = true
 	}
 }
 

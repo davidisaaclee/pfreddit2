@@ -20,7 +20,11 @@ class ImageContentViewController: ContentViewController {
 				}
 
 				DataRequestor.requestHTTP(url, HTTPAdditionalHeaders: nil).onSuccess { data in
-					self.imageView.image = UIImage(data: data)
+					guard let image = UIImage(data: data) else {
+						print("Unable to parse image data as image.")
+						return
+					}
+					self.imageView.image = image
 					self.imageView.sizeToFit()
 				}.onFailure { error in
 					print("Failed to load image.")

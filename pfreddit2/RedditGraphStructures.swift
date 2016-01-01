@@ -19,7 +19,7 @@ extension RealmContentNode {
 		self.id = link.id
 		self.title = link.title
 		self.thumbnailURL = thumbnailURL
-		self.selftext = link.selftext
+		self.metadata = MetadataType.Reddit(id: link.id, score: link.ups)
 
 		SharedContentParser.parseFromURLString(link.url).onSuccess { content in
 			guard let SharedContentGraph = SharedContentGraph as? RealmContentGraph else {

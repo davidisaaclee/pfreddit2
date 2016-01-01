@@ -15,7 +15,7 @@ protocol ContentNode {
 	var title: String { get }
 	var thumbnailURL: String? { get }
 	var content: ContentType? { get }
-	var selftext: String? { get }
+	var metadata: MetadataType? { get }
 }
 
 protocol ContentEdge {

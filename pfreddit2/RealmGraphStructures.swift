@@ -69,11 +69,54 @@ class ContentTypeObject: Object {
 	}
 }
 
+class MetadataTypeObject: Object {
+	private struct TypeString {
+		static let Reddit = "Reddit"
+	}
+
+	dynamic var type: String!
+	dynamic var id: String!
+	dynamic var score: Int = 0
+
+	convenience init(metadata: MetadataType) {
+		self.init()
+		switch metadata {
+		case let .Reddit(id, score):
+			self.type = TypeString.Reddit
+			self.id = id
+			self.score = score
+		}
+	}
+
+	func asMetadataType() -> MetadataType? {
+		switch self.type {
+		case TypeString.Reddit:
+			return MetadataType.Reddit(id: self.id, score: self.score)
+
+		default:
+			return nil
+		}
+	}
+}
+
 class RealmContentNode: Object, ContentNode {
 	dynamic var id: String = ""
 	dynamic var title: String = ""
 	dynamic var thumbnailURL: String?
-	dynamic var selftext: String?
+
+	dynamic var metadataObject: MetadataTypeObject?
+	var metadata: MetadataType? {
+		set {
+			guard let newValue = newValue else {
+				metadataObject = nil
+				return
+			}
+			metadataObject = MetadataTypeObject(metadata: newValue)
+		}
+		get {
+			return metadataObject?.asMetadataType()
+		}
+	}
 
 	dynamic var contentObject: ContentTypeObject?
 	var content: ContentType? {
@@ -94,7 +137,7 @@ class RealmContentNode: Object, ContentNode {
     id = node.id
     title = node.title
     thumbnailURL = node.thumbnailURL
-    selftext = node.selftext
+    metadata = node.metadata
 		if let nodeContent = node.content {
 			contentObject = ContentTypeObject(content: nodeContent)
 		}

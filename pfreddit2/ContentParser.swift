@@ -29,9 +29,6 @@ class ContentParser {
 		self.fallback = fallback
 	}
 
-	private var numberOfImages: Int = 0
-	private var numberOfWebpages: Int = 0
-
 	func parseFromURLString(urlString: String) -> Future<ContentType, ContentParser.Error> {
 		let promise = Promise<ContentType, ContentParser.Error>()
 		guard let url = NSURL(string: urlString) else {	return Future(error: ContentParser.Error.InvalidURL(urlString: urlString)) }
@@ -47,7 +44,6 @@ class ContentParser {
 			if let acceptedResult = acceptedResultOrNil,
 					let contentOrNil = acceptedResult.value,
 					let content = contentOrNil {
-//				print("Images:", ++self.numberOfImages)
 				promise.success(content)
 			} else {
 				// nothing succeeded - fallback if possible
@@ -57,7 +53,6 @@ class ContentParser {
 				}
 				fallback.parseFromURL(url).onSuccess { content in
 					if let content = content {
-//						print("Webpages:", ++self.numberOfWebpages)
 						promise.success(content)
 					} else {
 						// Not even fallback could handle .... Uh, oh!
@@ -75,6 +70,13 @@ class ContentParser {
 
 class WebpageContentParser: ContentParserModule {
 	func parseFromURL(url: NSURL) -> Future<ContentType?, ContentParser.Error> {
+		// TODO: It would be great to somehow check if the URL is pointing to an image. Is there a way of doing this without
+		//			 downloading content? Should we just do this at download time?
+//		if url.absoluteString.hasSuffix(".jpg") || url.absoluteString.hasSuffix(".png") {
+//			return Future(value: ContentType.Image(url))
+//		} else {
+//			return Future(value: ContentType.Webpage(url))
+//		}
 		return Future(value: ContentType.Webpage(url))
 	}
 }

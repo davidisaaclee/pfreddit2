@@ -17,31 +17,42 @@ protocol ContentNodeViewDelegate {
 }
 
 class ContentNodeViewController: UIViewController {
-	@IBOutlet weak var contentView: UIView!
-
-	var dataSource: ContentNodeViewDataSource? {
-		didSet {
-			if isViewLoaded() {
-				reloadData()
-			}
-		}
+	@IBOutlet weak var contentView: UIView! {
+		didSet { populateContentView() }
+	}
+	@IBOutlet weak var titleLabel: UILabel! {
+		didSet { populateTitleView() }
 	}
 
+	@IBOutlet weak var scoreLabel: UILabel? {
+		didSet { populateScoreLabel() }
+	}
+
+	var dataSource: ContentNodeViewDataSource? {
+		didSet { reloadData() }
+	}
 	var delegate: ContentNodeViewDelegate?
+
+	var node: ContentNode? { return dataSource?.nodeForContentNodeView(self) }
+	var content: ContentType? { return node?.content }
 
 	convenience init() {
 		self.init(nibName: "ContentNodeViewController", bundle: nil)
 	}
 
-	override func viewDidLoad() {
-		super.viewDidLoad()
-		reloadData()
+	@IBAction func showEdges() {
+		delegate?.showEdgesForContentNodeView(self)
 	}
 
 	func reloadData() {
-		guard let dataSource = dataSource else { return }
-		guard let link = dataSource.nodeForContentNodeView(self) else { return }
-		guard let content = link.content else { return }
+		populateContentView()
+		populateTitleView()
+		populateScoreLabel()
+	}
+
+	private func populateContentView() {
+		guard let contentView = contentView else { return }
+		guard let content = content else { return }
 		guard let contentViewController = createContentViewForContent(content, dataSource: self) else { return }
 
 		addChildViewController(contentViewController)
@@ -50,8 +61,15 @@ class ContentNodeViewController: UIViewController {
 		contentViewController.didMoveToParentViewController(self)
 	}
 
-	@IBAction func showEdges() {
-		delegate?.showEdgesForContentNodeView(self)
+	private func populateTitleView() {
+		guard let titleLabel = titleLabel else { return }
+		titleLabel.text = node?.title
+	}
+
+	private func populateScoreLabel() {
+		guard let scoreLabel = scoreLabel else { return }
+		guard let metadata = node?.metadata, case let MetadataType.Reddit(_, score) = metadata else { return }
+		scoreLabel.text = score > 0 ? "+\(score)" : "\(score)"
 	}
 }
 
