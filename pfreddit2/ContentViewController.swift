@@ -8,29 +8,16 @@
 
 import UIKit
 
-class ContentViewController: UIViewController, ContentView {
+protocol ContentViewControllerDataSource {
+	func contentForContentViewController(contentViewController: ContentViewController) -> ContentType?
+}
 
-	override func viewDidLoad() {
-		super.viewDidLoad()
-
-		// Do any additional setup after loading the view.
+class ContentViewController: UIViewController {
+	var contentDataSource: ContentViewControllerDataSource? {
+		didSet {
+			didSetContentDataSource(contentDataSource, oldValue: oldValue)
+		}
 	}
 
-	override func didReceiveMemoryWarning() {
-		super.didReceiveMemoryWarning()
-		// Dispose of any resources that can be recreated.
-	}
-
-	func displayContent(content: ContentType) {}
-
-	/*
-	// MARK: - Navigation
-
-	// In a storyboard-based application, you will often want to do a little preparation before navigation
-	override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-	// Get the new view controller using segue.destinationViewController.
-	// Pass the selected object to the new view controller.
-	}
-	*/
-
+	internal func didSetContentDataSource(contentDataSource: ContentViewControllerDataSource?, oldValue: ContentViewControllerDataSource?) {}
 }

@@ -10,26 +10,15 @@ import UIKit
 
 class WebpageContentViewController: ContentViewController {
 
-	@IBOutlet var webView: UIWebView!
+	@IBOutlet var webView: UIWebView! {
+		didSet {
+			if let content = contentDataSource?.contentForContentViewController(self) {
+				guard case let .Webpage(url) = content else {
+					fatalError("Attempted to display unsupported content on WebpageContentViewController.")
+				}
 
-	override func viewDidLoad() {
-		super.viewDidLoad()
-		// Do any additional setup after loading the view.
-	}
-
-	override func didReceiveMemoryWarning() {
-		super.didReceiveMemoryWarning()
-		// Dispose of any resources that can be recreated.
-	}
-
-	// MARK: - ContentView
-	override func displayContent(content: ContentType) {
-		super.displayContent(content)
-
-		guard case let .Webpage(url) = content else {
-			fatalError("Attempted to display unsupported content on WebpageContentViewController.")
+				webView.loadRequest(NSURLRequest(URL: url))
+			}
 		}
-
-		webView.loadRequest(NSURLRequest(URL: url))
 	}
 }

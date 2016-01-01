@@ -17,11 +17,7 @@ protocol ContentNodeViewDelegate {
 }
 
 class ContentNodeViewController: UIViewController {
-	@IBOutlet weak var webView: UIWebView! {
-		didSet {
-			webView.scalesPageToFit = true
-		}
-	}
+	@IBOutlet weak var contentView: UIView!
 
 	var dataSource: ContentNodeViewDataSource? {
 		didSet {
@@ -45,21 +41,22 @@ class ContentNodeViewController: UIViewController {
 	func reloadData() {
 		guard let dataSource = dataSource else { return }
 		guard let link = dataSource.nodeForContentNodeView(self) else { return }
-
 		guard let content = link.content else { return }
-		switch content {
-		case let .Webpage(url):
-			print("Loading .Webpage content \(url.absoluteString)...")
-			webView.loadRequest(NSURLRequest(URL: url))
-		case let .Image(url):
-			print("Loading .Image content \(url.absoluteString)...")
-			webView.loadRequest(NSURLRequest(URL: url))
-		default:
-			break
-		}
+		guard let contentViewController = createContentViewForContent(content, dataSource: self) else { return }
+
+		addChildViewController(contentViewController)
+		contentViewController.view.frame = contentView.bounds
+		contentView.addSubview(contentViewController.view)
+		contentViewController.didMoveToParentViewController(self)
 	}
 
 	@IBAction func showEdges() {
 		delegate?.showEdgesForContentNodeView(self)
+	}
+}
+
+extension ContentNodeViewController: ContentViewControllerDataSource {
+	func contentForContentViewController(contentViewController: ContentViewController) -> ContentType? {
+		return dataSource?.nodeForContentNodeView(self)?.content
 	}
 }

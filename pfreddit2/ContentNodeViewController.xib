@@ -7,8 +7,8 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ContentNodeViewController" customModule="pfreddit2" customModuleProvider="target">
             <connections>
+                <outlet property="contentView" destination="fKg-tQ-h5l" id="6Km-mg-H0R"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
-                <outlet property="webView" destination="ZZe-ci-RtV" id="WG1-mH-nfe"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -16,10 +16,10 @@
             <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZZe-ci-RtV">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fKg-tQ-h5l">
                     <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                    <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="deviceRGB"/>
-                </webView>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                </view>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MsX-aD-djd">
                     <rect key="frame" x="260" y="524" width="80" height="30"/>
                     <constraints>
@@ -39,12 +39,12 @@
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
+                <constraint firstAttribute="bottom" secondItem="fKg-tQ-h5l" secondAttribute="bottom" id="4I3-OE-Ivm"/>
                 <constraint firstAttribute="bottom" secondItem="MsX-aD-djd" secondAttribute="bottom" constant="46" id="Jet-q4-eZz"/>
-                <constraint firstItem="ZZe-ci-RtV" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="Qvs-1v-giX"/>
                 <constraint firstItem="MsX-aD-djd" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="Rkj-Gl-qmG"/>
-                <constraint firstAttribute="bottom" secondItem="ZZe-ci-RtV" secondAttribute="bottom" id="U10-OO-Hn8"/>
-                <constraint firstItem="ZZe-ci-RtV" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="dqY-wx-grG"/>
-                <constraint firstAttribute="trailing" secondItem="ZZe-ci-RtV" secondAttribute="trailing" id="yqZ-C7-Lm9"/>
+                <constraint firstItem="fKg-tQ-h5l" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="jWJ-oK-giu"/>
+                <constraint firstItem="fKg-tQ-h5l" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="k1Y-Xy-mqG"/>
+                <constraint firstAttribute="trailing" secondItem="fKg-tQ-h5l" secondAttribute="trailing" id="wC7-rj-Fbe"/>
             </constraints>
         </view>
     </objects>
