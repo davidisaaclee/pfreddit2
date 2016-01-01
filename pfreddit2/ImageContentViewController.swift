@@ -10,14 +10,21 @@ import UIKit
 
 class ImageContentViewController: ContentViewController {
 
-	@IBOutlet var webView: UIWebView! {
+	@IBOutlet var imageView: UIImageView! {
 		didSet {
+			imageView.contentMode = .ScaleAspectFit
+
 			if let content = contentDataSource?.contentForContentViewController(self) {
 				guard case let .Image(url) = content else {
 					fatalError("Attempted to display unsupported content on ImageContentViewController.")
 				}
 
-				webView.loadRequest(NSURLRequest(URL: url))
+				DataRequestor.requestHTTP(url, HTTPAdditionalHeaders: nil).onSuccess { data in
+					self.imageView.image = UIImage(data: data)
+					self.imageView.sizeToFit()
+				}.onFailure { error in
+					print("Failed to load image.")
+				}
 			}
 		}
 	}
