@@ -19,8 +19,8 @@ class NodeViewController: UIViewController {
 
 	var nodeViewDelegate: NodeViewControllerDelegate?
 
-	lazy var nodeViewController: ContentNodeViewController! = ContentNodeViewController()
-	lazy var edgesViewController: GraphEdgesViewController! = GraphEdgesViewController()
+	var nodeViewController: ContentNodeViewController! = ContentNodeViewController()
+	var edgesViewController: GraphEdgesViewController! = GraphEdgesViewController()
 
 	var activeNode: ContentNode? {
 		didSet {
@@ -36,19 +36,11 @@ class NodeViewController: UIViewController {
 	}
 	var edges: [ContentEdge]?
 
-	convenience init() {
-		self.init(node: nil)
-	}
-
-	init(node: ContentNode?) {
-		super.init(nibName: nil, bundle: nil)
+	convenience init(node: ContentNode? = nil) {
+		self.init(nibName: nil, bundle: nil)
 		if let node = node {
 			presentNode(node)
 		}
-	}
-
-	required init?(coder aDecoder: NSCoder) {
-		super.init(coder: aDecoder)
 	}
 
 	override func viewDidLoad() {
