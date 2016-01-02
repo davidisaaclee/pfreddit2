@@ -9,14 +9,6 @@
 import UIKit
 
 class SlidingDrawerBehavior: UIDynamicBehavior {
-	let item: UIDynamicItem
-	let drawerStart: (from: CGPoint, to: CGPoint)
-	let drawerEnd: (from: CGPoint, to: CGPoint)
-
-	var itemBehavior: UIDynamicItemBehavior!
-	var drawerStartSpringBehavior: UIFieldBehavior!
-	var drawerEndSpringBehavior: UIFieldBehavior!
-	var collisionBehavior: UICollisionBehavior!
 
 	typealias Boundary = (from: CGPoint, to: CGPoint)
 
@@ -24,15 +16,24 @@ class SlidingDrawerBehavior: UIDynamicBehavior {
 		case Top, Left, Right, Bottom
 	}
 
-	init(item: UIDynamicItem, drawerStart: (from: CGPoint, to: CGPoint), drawerEnd: (from: CGPoint, to: CGPoint)) {
+	let item: UIDynamicItem
+	let stops: [(boundary: Boundary, side: BoundarySide)]
+
+	var itemBehavior: UIDynamicItemBehavior!
+	var springBehaviors: [UIFieldBehavior]!
+	var collisionBehavior: UICollisionBehavior!
+	private var poppedResistanceValue: CGFloat!
+
+	var collisionMargin: CGFloat = 10.0
+
+	init(item: UIDynamicItem, stops: [(boundary: Boundary, side: BoundarySide)]) {
 		self.item = item
-		self.drawerStart = drawerStart
-		self.drawerEnd = drawerEnd
+		self.stops = stops
 		super.init()
 
 		itemBehavior = makeDynamicItemBehavior()
-		(drawerStartSpringBehavior, drawerEndSpringBehavior) = makeSpringBehaviors()
-//		collisionBehavior = makeCollisionBehavior()
+		springBehaviors = makeSpringBehaviors()
+		collisionBehavior = makeCollisionBehavior()
 		setupChildrenBehavior()
 	}
 
@@ -49,17 +50,19 @@ class SlidingDrawerBehavior: UIDynamicBehavior {
 		itemBehavior.addItem(item)
 		addChildBehavior(itemBehavior)
 
-		drawerStartSpringBehavior.addItem(item)
-		addChildBehavior(drawerStartSpringBehavior)
+		collisionBehavior.addItem(item)
+		addChildBehavior(collisionBehavior)
 
-		drawerEndSpringBehavior.addItem(item)
-		addChildBehavior(drawerEndSpringBehavior)
+		springBehaviors.forEach { behavior in
+			behavior.addItem(self.item)
+			addChildBehavior(behavior)
+		}
 	}
 
 	private func makeDynamicItemBehavior() -> UIDynamicItemBehavior {
 		let itemBehavior = UIDynamicItemBehavior()
-		itemBehavior.density = 0.01
-		itemBehavior.resistance = 2
+		itemBehavior.density = 0.03
+		itemBehavior.resistance = 4
 		itemBehavior.friction = 0.0
 		itemBehavior.allowsRotation = false
 
@@ -68,34 +71,41 @@ class SlidingDrawerBehavior: UIDynamicBehavior {
 
 	private func makeCollisionBehavior() -> UICollisionBehavior {
 		let collisionBehavior = UICollisionBehavior()
-		collisionBehavior.addBoundaryWithIdentifier("DrawerStart", fromPoint: drawerStart.from, toPoint: drawerStart.to)
-		collisionBehavior.addBoundaryWithIdentifier("DrawerEnd", fromPoint: drawerEnd.from, toPoint: drawerEnd.to)
+		collisionBehavior.collisionDelegate = self
+
+		for i in 0..<stops.count {
+			let (boundary, side) = stops[i]
+			var marginOffset: CGPoint!
+			switch side {
+			case .Top:
+				marginOffset = CGPoint(x: 0, y: -self.collisionMargin)
+
+			case .Bottom:
+				marginOffset = CGPoint(x: 0, y: self.collisionMargin)
+
+			default:
+				fatalError("Not implemented.")
+			}
+
+			collisionBehavior.addBoundaryWithIdentifier("Stop \(i)", fromPoint: boundary.from + marginOffset, toPoint: boundary.to + marginOffset)
+		}
 
 		return collisionBehavior
 	}
 
-	private func makeSpringBehaviors() -> (UIFieldBehavior!, UIFieldBehavior!) {
-		let drawerStartSpringBehavior = UIFieldBehavior.springField()
-		let drawerEndSpringBehavior = UIFieldBehavior.springField()
-
-		// TODO: remove hardcoded vertical
-		let (startRegion, startPosition) = regionAndPositionFromBoundary(drawerStart, forItem: item, onSide: .Top)
-		drawerStartSpringBehavior.region = startRegion
-		drawerStartSpringBehavior.position = startPosition
-		drawerStartSpringBehavior.strength = 50.0
-
-		let (endRegion, endPosition) = regionAndPositionFromBoundary(drawerEnd, forItem: item, onSide: .Bottom)
-		drawerEndSpringBehavior.region = endRegion
-		drawerEndSpringBehavior.position = endPosition
-		drawerEndSpringBehavior.strength = 50.0
-
-		print(startPosition, endPosition)
-
-		return (drawerStartSpringBehavior, drawerEndSpringBehavior)
+	private func makeSpringBehaviors() -> [UIFieldBehavior] {
+		return stops.map { boundary, side in
+			let behavior = UIFieldBehavior.springField()
+			let (region, position) = self.regionAndPositionFromBoundary(boundary, forItem: self.item, onSide: side)
+			behavior.region = region
+			behavior.position = position
+			behavior.strength = 200.0
+			return behavior
+		}
 	}
 
 	private func regionAndPositionFromBoundary(boundary: (from: CGPoint, to: CGPoint), forItem item: UIDynamicItem, onSide side: BoundarySide) -> (UIRegion, CGPoint) {
-		let regionCrossDimension: CGFloat = 30
+		let regionCrossDimension: CGFloat = 60
 		let boundaryCenter = ((boundary.to - boundary.from) / 2.0) + boundary.from
 
 		var region: UIRegion!
@@ -121,5 +131,21 @@ class SlidingDrawerBehavior: UIDynamicBehavior {
 		}
 
 		return (region, position)
+	}
+}
+
+extension SlidingDrawerBehavior: UICollisionBehaviorDelegate {
+	func collisionBehavior(behavior: UICollisionBehavior, beganContactForItem item: UIDynamicItem, withBoundaryIdentifier identifier: NSCopying?, atPoint p: CGPoint) {
+		let speedThreshold: CGFloat = 100.0
+		poppedResistanceValue = itemBehavior.resistance
+		let speed = itemBehavior.linearVelocityForItem(item).length
+		print(itemBehavior.linearVelocityForItem(item).length)
+		if speed > speedThreshold {
+			itemBehavior.resistance = 150.0 * speed / speedThreshold
+		}
+	}
+
+	func collisionBehavior(behavior: UICollisionBehavior, endedContactForItem item: UIDynamicItem, withBoundaryIdentifier identifier: NSCopying?) {
+		itemBehavior.resistance = poppedResistanceValue
 	}
 }

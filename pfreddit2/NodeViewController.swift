@@ -18,11 +18,14 @@ class NodeViewController: UIViewController {
 	let kNodePreviewCellIdentifier = "NodePreviewCell"
 
 	var nodeViewDelegate: NodeViewControllerDelegate?
+	lazy var nodeViewDragRecognizer: UIPanGestureRecognizer = UIPanGestureRecognizer(target: self, action: "handleNodeViewDrag:")
+
+
+	// MARK: - Child view controllers
 
 	var nodeViewController: ContentNodeViewController! {
 		didSet {
 			nodeViewController.dataSource = self
-			nodeViewController.delegate = self
 		}
 	}
 
@@ -34,6 +37,9 @@ class NodeViewController: UIViewController {
 			edgesViewController.delegate = self
 		}
 	}
+
+
+	// MARK: - State
 
 	var activeNode: ContentNode? {
 		didSet {
@@ -51,89 +57,19 @@ class NodeViewController: UIViewController {
 		}
 	}
 
+
+	// MARK: - Dynamics
+
+	var dynamicsAnimator: UIDynamicAnimator?
+	var nodeViewDynamicsBehavior: UIDynamicBehavior!
+
+
 	override func viewDidLoad() {
 		createNodeViewController()
 		createEdgesViewController()
 		startDynamics()
 	}
 
-
-	var dynamicsAnimator: UIDynamicAnimator?
-//	let nodeViewDynamicsBehavior = UIDynamicItemBehavior()
-	var nodeViewDynamicsBehavior: UIDynamicBehavior!
-//	let collisionBehavior = UICollisionBehavior()
-	lazy var nodeViewDragRecognizer: UIPanGestureRecognizer = UIPanGestureRecognizer(target: self, action: "handleNodeViewDrag:")
-
-	private func startDynamics() {
-		dynamicsAnimator = UIDynamicAnimator(referenceView: view)
-
-		let drawerStart = (from: view.bounds.origin, to: view.bounds.origin + CGPoint(x: view.bounds.width, y: 0))
-		let drawerBottomOffset = view.bounds.height * 2 - nodeViewController.infoBar.bounds.height
-		let drawerEnd = (from: view.bounds.origin + CGPoint(x: 0, y: drawerBottomOffset), to: view.bounds.origin + CGPoint(x: view.bounds.width, y: drawerBottomOffset))
-
-		nodeViewDynamicsBehavior = SlidingDrawerBehavior(item: nodeViewController.view,
-			drawerStart: drawerStart,
-			drawerEnd: drawerEnd)
-
-		if let nodeViewDynamicsBehavior = nodeViewDynamicsBehavior as? UIDynamicItemBehavior {
-			nodeViewDynamicsBehavior.resistance = 0.4
-			nodeViewDynamicsBehavior.elasticity = 0
-			nodeViewDynamicsBehavior.allowsRotation = false
-			nodeViewDynamicsBehavior.addItem(nodeViewController.view)
-		}
-		dynamicsAnimator?.addBehavior(nodeViewDynamicsBehavior)
-		nodeViewController.view.addGestureRecognizer(nodeViewDragRecognizer)
-	}
-
-	private func createNodeViewController() {
-		nodeViewController = ContentNodeViewController()
-		addChildViewController(nodeViewController)
-		nodeViewController.view.frame = view.bounds
-		view.addSubview(nodeViewController.view)
-		nodeViewController.didMoveToParentViewController(self)
-	}
-
-	internal func handleNodeViewDrag(recognizer: UIPanGestureRecognizer) {
-		if let nodeViewDynamicsBehavior = nodeViewDynamicsBehavior as? SlidingDrawerBehavior {
-			switch recognizer.state {
-			case .Began:
-				nodeViewDynamicsBehavior.setVelocityZero()
-
-			case .Changed:
-				nodeViewController.view.frame = nodeViewController.view.frame.offsetBy(dx: 0, dy: recognizer.translationInView(view).y)
-				dynamicsAnimator?.updateItemUsingCurrentState(nodeViewController.view)
-				recognizer.setTranslation(CGPointZero, inView: view)
-
-			case .Ended:
-				nodeViewDynamicsBehavior.addLinearVelocity(CGPoint(x: 0, y: recognizer.velocityInView(self.view).y), forItem: nodeViewController.view)
-
-			default:
-				break
-			}
-		}
-	}
-
-	private func createEdgesViewController() {
-		edgesViewController = GraphEdgesViewController()
-		addChildViewController(edgesViewController)
-		edgesViewController.view.frame = view.bounds
-		view.insertSubview(edgesViewController.view, belowSubview: nodeViewController.view)
-		edgesViewController.didMoveToParentViewController(self)
-	}
-	
-//	func presentNode(node: ContentNode) {
-//		activeNode = node
-//		navigationItem.title = activeNode?.title
-////		navigationItem.leftBarButtonItems = nil
-//
-//		nodeViewController.view.frame = view.frame
-//		addViewControllerToViewHierarchy(nodeViewController)
-//	}
-
-//	func presentEdgesViewForActiveNode() {
-//		edgesViewController.view.frame = view.frame
-//		presentEdgesViewControllerAnimated(true)
-//	}
 
 	func navigateToNode(node: ContentNode) {
 		nodeViewDelegate?.nodeViewController(self, wantsToNavigateToNode: node)
@@ -185,11 +121,56 @@ class NodeViewController: UIViewController {
 		}
 	}
 
+
+	// MARK: - Setup helpers
+
+	private func createNodeViewController() {
+		nodeViewController = ContentNodeViewController()
+		addChildViewController(nodeViewController)
+		nodeViewController.view.frame = view.bounds
+		view.addSubview(nodeViewController.view)
+		nodeViewController.didMoveToParentViewController(self)
+	}
+
+	private func createEdgesViewController() {
+		edgesViewController = GraphEdgesViewController()
+		addChildViewController(edgesViewController)
+		edgesViewController.view.frame = view.bounds
+		view.insertSubview(edgesViewController.view, belowSubview: nodeViewController.view)
+		edgesViewController.didMoveToParentViewController(self)
+	}
+
+	private func startDynamics() {
+		dynamicsAnimator = UIDynamicAnimator(referenceView: view)
+
+		let drawerStart = (from: view.bounds.origin, to: view.bounds.origin + CGPoint(x: view.bounds.width, y: 0))
+		let drawerBottomOffset = view.bounds.height * 2 - nodeViewController.infoBar.bounds.height
+		let drawerEnd = (from: view.bounds.origin + CGPoint(x: 0, y: drawerBottomOffset), to: view.bounds.origin + CGPoint(x: view.bounds.width, y: drawerBottomOffset))
+
+		nodeViewDynamicsBehavior = SlidingDrawerBehavior(item: nodeViewController.view,
+			stops: [
+				(boundary: drawerStart, side: .Top),
+				(boundary: drawerEnd, side: .Bottom)
+			])
+
+		if let nodeViewDynamicsBehavior = nodeViewDynamicsBehavior as? UIDynamicItemBehavior {
+			nodeViewDynamicsBehavior.resistance = 0.4
+			nodeViewDynamicsBehavior.elasticity = 0
+			nodeViewDynamicsBehavior.allowsRotation = false
+			nodeViewDynamicsBehavior.addItem(nodeViewController.view)
+		}
+		dynamicsAnimator?.addBehavior(nodeViewDynamicsBehavior)
+		nodeViewController.view.addGestureRecognizer(nodeViewDragRecognizer)
+	}
+
+
+	// MARK: - Helpers
+
 	private func reloadEdgesForNode(node: ContentNode) {
 		SharedContentGraph.sortedEdgesFromNode(node, count: kEdgeFetchCount).onSuccess {
 			self.edges = $0
-		}.onFailure { error in
-			print("ERROR:", error)
+			}.onFailure { error in
+				print("ERROR:", error)
 		}
 	}
 
@@ -203,7 +184,33 @@ class NodeViewController: UIViewController {
 	private func edgeAtIndexPath(indexPath: NSIndexPath) -> ContentEdge? {
 		return edges?[indexPath.item]
 	}
+
+
+	// MARK: - Handlers
+
+	internal func handleNodeViewDrag(recognizer: UIPanGestureRecognizer) {
+		if let nodeViewDynamicsBehavior = nodeViewDynamicsBehavior as? SlidingDrawerBehavior {
+			switch recognizer.state {
+			case .Began:
+				nodeViewDynamicsBehavior.setVelocityZero()
+
+			case .Changed:
+				nodeViewController.view.frame = nodeViewController.view.frame.offsetBy(dx: 0, dy: recognizer.translationInView(view).y)
+				dynamicsAnimator?.updateItemUsingCurrentState(nodeViewController.view)
+				recognizer.setTranslation(CGPointZero, inView: view)
+
+			case .Ended:
+				nodeViewDynamicsBehavior.addLinearVelocity(CGPoint(x: 0, y: recognizer.velocityInView(self.view).y), forItem: nodeViewController.view)
+
+			default:
+				break
+			}
+		}
+	}
 }
+
+
+// MARK: - UICollectionViewDataSource
 
 extension NodeViewController: UICollectionViewDataSource {
 	func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -231,6 +238,9 @@ extension NodeViewController: UICollectionViewDataSource {
 	}
 }
 
+
+// MARK: - UICollectionViewDelegate
+
 extension NodeViewController: UICollectionViewDelegate {
 	func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
 		guard let destinationNode = self.edgeAtIndexPath(indexPath)?.destinationNode else { return }
@@ -238,19 +248,17 @@ extension NodeViewController: UICollectionViewDelegate {
 	}
 }
 
+
+// MARK: - ContentNodeViewDataSource
+
 extension NodeViewController: ContentNodeViewDataSource {
 	func nodeForContentNodeView(contentViewController: ContentNodeViewController) -> ContentNode? {
 		return activeNode
 	}
 }
 
-extension NodeViewController: ContentNodeViewDelegate {
-	func showEdgesForContentNodeView(contentNodeView: ContentNodeViewController) {
-		print("Delete me!")
-		nodeViewController.view.frame = nodeViewController.view.frame.offsetBy(dx: 0, dy: 100)
-//		self.presentEdgesViewForActiveNode()
-	}
-}
+
+// MARK: - GraphEdgesViewControllerDelegate
 
 extension NodeViewController: GraphEdgesViewControllerDelegate {
 	func dismissGraphEdgesViewController(graphEdgesViewController: GraphEdgesViewController, animated: Bool) {

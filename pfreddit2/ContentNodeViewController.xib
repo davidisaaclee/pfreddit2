@@ -37,7 +37,7 @@
                                     <rect key="frame" x="602" y="15" width="60" height="70"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="+100" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="N82-Oy-893" userLabel="Upvotes Label">
-                                            <rect key="frame" x="11" y="26" width="39" height="20"/>
+                                            <rect key="frame" x="14" y="25" width="34" height="21"/>
                                             <fontDescription key="fontDescription" name="SourceSansPro-Regular" family="Source Sans Pro" pointSize="17"/>
                                             <color key="textColor" red="1" green="0.11183061346261558" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
@@ -80,23 +80,12 @@
                         </view>
                     </subviews>
                 </stackView>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7fq-96-LPP">
-                    <rect key="frame" x="312" y="321" width="46" height="30"/>
-                    <state key="normal" title="Button">
-                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
-                    <connections>
-                        <action selector="showEdges" destination="-1" eventType="primaryActionTriggered" id="EPN-nA-E8h"/>
-                    </connections>
-                </button>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstItem="AaM-Nf-N7I" firstAttribute="leading" secondItem="sY4-R1-enE" secondAttribute="leading" id="903-1V-Ns8"/>
                 <constraint firstAttribute="bottom" secondItem="AaM-Nf-N7I" secondAttribute="bottom" id="Lzh-TA-sBj"/>
                 <constraint firstAttribute="trailing" secondItem="AaM-Nf-N7I" secondAttribute="trailing" id="R90-Gx-OXp"/>
-                <constraint firstAttribute="bottom" secondItem="7fq-96-LPP" secondAttribute="bottom" constant="10" id="a5m-hX-ID7"/>
-                <constraint firstItem="7fq-96-LPP" firstAttribute="centerX" secondItem="sY4-R1-enE" secondAttribute="centerX" id="fCy-ax-svw"/>
                 <constraint firstItem="AaM-Nf-N7I" firstAttribute="top" secondItem="sY4-R1-enE" secondAttribute="top" id="mmH-od-6Ig"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>

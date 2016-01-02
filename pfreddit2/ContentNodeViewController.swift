@@ -12,10 +12,6 @@ protocol ContentNodeViewDataSource {
 	func nodeForContentNodeView(contentViewController: ContentNodeViewController) -> ContentNode?
 }
 
-protocol ContentNodeViewDelegate {
-	func showEdgesForContentNodeView(contentNodeView: ContentNodeViewController)
-}
-
 class ContentNodeViewController: UIViewController {
 	@IBOutlet weak var contentView: UIView! {
 		didSet { populateContentView() }
@@ -34,17 +30,12 @@ class ContentNodeViewController: UIViewController {
 	var dataSource: ContentNodeViewDataSource? {
 		didSet { reloadData() }
 	}
-	var delegate: ContentNodeViewDelegate?
 
 	var node: ContentNode? { return dataSource?.nodeForContentNodeView(self) }
 	var content: ContentType? { return node?.content }
 
 	convenience init() {
 		self.init(nibName: "ContentNodeViewController", bundle: nil)
-	}
-
-	@IBAction func showEdges() {
-		delegate?.showEdgesForContentNodeView(self)
 	}
 
 	func reloadData() {
