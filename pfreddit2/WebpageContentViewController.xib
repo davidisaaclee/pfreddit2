@@ -16,16 +16,28 @@
             <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kyY-b2-IcE">
+                <webView multipleTouchEnabled="YES" contentMode="scaleToFill" scalesPageToFit="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kyY-b2-IcE">
                     <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                     <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="deviceRGB"/>
                 </webView>
+                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="BTW-Co-1hM">
+                    <rect key="frame" x="20" y="549" width="51" height="31"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="31" id="2o0-7G-CVs"/>
+                        <constraint firstAttribute="width" constant="49" id="CIj-K7-49u"/>
+                    </constraints>
+                    <connections>
+                        <action selector="scrollLockDidChange:" destination="-1" eventType="valueChanged" id="iUT-Ag-U8h"/>
+                    </connections>
+                </switch>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
+                <constraint firstAttribute="bottom" secondItem="BTW-Co-1hM" secondAttribute="bottom" constant="20" id="6dI-b6-DSz"/>
                 <constraint firstItem="kyY-b2-IcE" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="6vZ-PY-vMV"/>
                 <constraint firstItem="kyY-b2-IcE" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="FCq-4P-xUg"/>
                 <constraint firstAttribute="bottom" secondItem="kyY-b2-IcE" secondAttribute="bottom" id="gWI-l9-7U8"/>
+                <constraint firstItem="BTW-Co-1hM" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="20" id="rQZ-qX-pz7"/>
                 <constraint firstAttribute="trailing" secondItem="kyY-b2-IcE" secondAttribute="trailing" id="su7-Hu-E5Y"/>
             </constraints>
         </view>

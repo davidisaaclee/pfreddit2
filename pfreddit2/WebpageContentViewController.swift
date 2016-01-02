@@ -12,6 +12,7 @@ class WebpageContentViewController: ContentViewController {
 
 	@IBOutlet var webView: UIWebView! {
 		didSet {
+			lockScroll()
 			if let content = contentDataSource?.contentForContentViewController(self) {
 				guard case let .Webpage(url) = content else {
 					fatalError("Attempted to display unsupported content on WebpageContentViewController.")
@@ -20,5 +21,21 @@ class WebpageContentViewController: ContentViewController {
 				webView.loadRequest(NSURLRequest(URL: url))
 			}
 		}
+	}
+
+	@IBAction func scrollLockDidChange(sender: UISwitch) {
+		if sender.on {
+			unlockScroll()
+		} else {
+			lockScroll()
+		}
+	}
+
+	@IBAction func unlockScroll() {
+		webView.scrollView.scrollEnabled = true
+	}
+
+	@IBAction func lockScroll() {
+		webView.scrollView.scrollEnabled = false
 	}
 }

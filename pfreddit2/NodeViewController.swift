@@ -214,6 +214,7 @@ class NodeViewController: UIViewController {
 
 extension NodeViewController: UICollectionViewDataSource {
 	func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+		// TODO: There's something funky going on here...
 		print("Edge count:", edges?.count ?? 0)
 		return edges?.count ?? 0
 	}

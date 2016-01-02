@@ -139,7 +139,6 @@ extension SlidingDrawerBehavior: UICollisionBehaviorDelegate {
 		let speedThreshold: CGFloat = 100.0
 		poppedResistanceValue = itemBehavior.resistance
 		let speed = itemBehavior.linearVelocityForItem(item).length
-		print(itemBehavior.linearVelocityForItem(item).length)
 		if speed > speedThreshold {
 			itemBehavior.resistance = 150.0 * speed / speedThreshold
 		}
