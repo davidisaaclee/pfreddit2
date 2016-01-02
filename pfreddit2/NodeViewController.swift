@@ -10,7 +10,7 @@
 import UIKit
 
 protocol NodeViewControllerDelegate {
-	func nodeViewController(nodeViewController: NodeViewController, navigateToNode node: ContentNode)
+	func nodeViewController(nodeViewController: NodeViewController, wantsToNavigateToNode node: ContentNode)
 }
 
 class NodeViewController: UIViewController {
@@ -19,55 +19,124 @@ class NodeViewController: UIViewController {
 
 	var nodeViewDelegate: NodeViewControllerDelegate?
 
-	var nodeViewController: ContentNodeViewController! = ContentNodeViewController()
-	var edgesViewController: GraphEdgesViewController! = GraphEdgesViewController()
+	var nodeViewController: ContentNodeViewController! {
+		didSet {
+			nodeViewController.dataSource = self
+			nodeViewController.delegate = self
+		}
+	}
+
+	var edgesViewController: GraphEdgesViewController! {
+		didSet {
+			edgesViewController.registerNib(UINib(nibName: "NodePreviewCell", bundle: nil), forCellWithReuseIdentifier: kNodePreviewCellIdentifier)
+			edgesViewController.collectionDataSource = self
+			edgesViewController.collectionDelegate = self
+			edgesViewController.delegate = self
+		}
+	}
 
 	var activeNode: ContentNode? {
 		didSet {
 			edges = nil
 			if let activeNode = activeNode {
-				SharedContentGraph.sortedEdgesFromNode(activeNode, count: kEdgeFetchCount).onSuccess {
-					self.edges = $0
-				}.onFailure { error in
-					print("ERROR:", error)
-				}
+				reloadEdgesForNode(activeNode)
 			}
 		}
 	}
-	var edges: [ContentEdge]?
-
-	convenience init(node: ContentNode? = nil) {
-		self.init(nibName: nil, bundle: nil)
-		if let node = node {
-			presentNode(node)
+	var edges: [ContentEdge]? {
+		didSet {
+			if isViewLoaded() {
+				edgesViewController?.collectionView?.reloadData()
+			}
 		}
 	}
 
 	override func viewDidLoad() {
-		nodeViewController.dataSource = self
-		nodeViewController.delegate = self
-		edgesViewController.registerNib(UINib(nibName: "NodePreviewCell", bundle: nil), forCellWithReuseIdentifier: kNodePreviewCellIdentifier)
-		edgesViewController.collectionDataSource = self
-		edgesViewController.collectionDelegate = self
-		edgesViewController.delegate = self
+		createNodeViewController()
+		createEdgesViewController()
+		startDynamics()
+	}
+
+
+	var dynamicsAnimator: UIDynamicAnimator?
+//	let nodeViewDynamicsBehavior = UIDynamicItemBehavior()
+	var nodeViewDynamicsBehavior: UIDynamicBehavior!
+//	let collisionBehavior = UICollisionBehavior()
+	lazy var nodeViewDragRecognizer: UIPanGestureRecognizer = UIPanGestureRecognizer(target: self, action: "handleNodeViewDrag:")
+
+	private func startDynamics() {
+		dynamicsAnimator = UIDynamicAnimator(referenceView: view)
+
+		let drawerStart = (from: view.bounds.origin, to: view.bounds.origin + CGPoint(x: view.bounds.width, y: 0))
+		let drawerBottomOffset = view.bounds.height * 2 - nodeViewController.infoBar.bounds.height
+		let drawerEnd = (from: view.bounds.origin + CGPoint(x: 0, y: drawerBottomOffset), to: view.bounds.origin + CGPoint(x: view.bounds.width, y: drawerBottomOffset))
+
+		nodeViewDynamicsBehavior = SlidingDrawerBehavior(item: nodeViewController.view,
+			drawerStart: drawerStart,
+			drawerEnd: drawerEnd)
+
+		if let nodeViewDynamicsBehavior = nodeViewDynamicsBehavior as? UIDynamicItemBehavior {
+			nodeViewDynamicsBehavior.resistance = 0.4
+			nodeViewDynamicsBehavior.elasticity = 0
+			nodeViewDynamicsBehavior.allowsRotation = false
+			nodeViewDynamicsBehavior.addItem(nodeViewController.view)
+		}
+		dynamicsAnimator?.addBehavior(nodeViewDynamicsBehavior)
+		nodeViewController.view.addGestureRecognizer(nodeViewDragRecognizer)
+	}
+
+	private func createNodeViewController() {
+		nodeViewController = ContentNodeViewController()
+		addChildViewController(nodeViewController)
+		nodeViewController.view.frame = view.bounds
+		view.addSubview(nodeViewController.view)
+		nodeViewController.didMoveToParentViewController(self)
+	}
+
+	internal func handleNodeViewDrag(recognizer: UIPanGestureRecognizer) {
+		if let nodeViewDynamicsBehavior = nodeViewDynamicsBehavior as? SlidingDrawerBehavior {
+			switch recognizer.state {
+			case .Began:
+				nodeViewDynamicsBehavior.setVelocityZero()
+
+			case .Changed:
+				nodeViewController.view.frame = nodeViewController.view.frame.offsetBy(dx: 0, dy: recognizer.translationInView(view).y)
+				dynamicsAnimator?.updateItemUsingCurrentState(nodeViewController.view)
+				recognizer.setTranslation(CGPointZero, inView: view)
+
+			case .Ended:
+				nodeViewDynamicsBehavior.addLinearVelocity(CGPoint(x: 0, y: recognizer.velocityInView(self.view).y), forItem: nodeViewController.view)
+
+			default:
+				break
+			}
+		}
+	}
+
+	private func createEdgesViewController() {
+		edgesViewController = GraphEdgesViewController()
+		addChildViewController(edgesViewController)
+		edgesViewController.view.frame = view.bounds
+		view.insertSubview(edgesViewController.view, belowSubview: nodeViewController.view)
+		edgesViewController.didMoveToParentViewController(self)
 	}
 	
-	func presentNode(node: ContentNode) {
-		activeNode = node
-		navigationItem.title = activeNode?.title
-		navigationItem.leftBarButtonItems = nil
+//	func presentNode(node: ContentNode) {
+//		activeNode = node
+//		navigationItem.title = activeNode?.title
+////		navigationItem.leftBarButtonItems = nil
+//
+//		nodeViewController.view.frame = view.frame
+//		addViewControllerToViewHierarchy(nodeViewController)
+//	}
 
-		nodeViewController.view.frame = view.frame
-		addViewControllerToViewHierarchy(nodeViewController)
-	}
-
-	func presentEdgesViewForActiveNode() {
-		edgesViewController.view.frame = view.frame
-		presentEdgesViewControllerAnimated(true)
-	}
+//	func presentEdgesViewForActiveNode() {
+//		edgesViewController.view.frame = view.frame
+//		presentEdgesViewControllerAnimated(true)
+//	}
 
 	func navigateToNode(node: ContentNode) {
-		nodeViewDelegate?.nodeViewController(self, navigateToNode: node)
+		nodeViewDelegate?.nodeViewController(self, wantsToNavigateToNode: node)
 		dismissEdgesViewControllerAnimated(false)
 	}
 
@@ -116,6 +185,14 @@ class NodeViewController: UIViewController {
 		}
 	}
 
+	private func reloadEdgesForNode(node: ContentNode) {
+		SharedContentGraph.sortedEdgesFromNode(node, count: kEdgeFetchCount).onSuccess {
+			self.edges = $0
+		}.onFailure { error in
+			print("ERROR:", error)
+		}
+	}
+
 	private func addViewControllerToViewHierarchy(viewController: UIViewController, parentViewController parentOrNil: UIViewController? = nil) {
 		let parentViewController = parentOrNil ?? self
 		parentViewController.addChildViewController(viewController)
@@ -130,6 +207,7 @@ class NodeViewController: UIViewController {
 
 extension NodeViewController: UICollectionViewDataSource {
 	func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+		print("Edge count:", edges?.count ?? 0)
 		return edges?.count ?? 0
 	}
 
@@ -168,7 +246,9 @@ extension NodeViewController: ContentNodeViewDataSource {
 
 extension NodeViewController: ContentNodeViewDelegate {
 	func showEdgesForContentNodeView(contentNodeView: ContentNodeViewController) {
-		self.presentEdgesViewForActiveNode()
+		print("Delete me!")
+		nodeViewController.view.frame = nodeViewController.view.frame.offsetBy(dx: 0, dy: 100)
+//		self.presentEdgesViewForActiveNode()
 	}
 }
 

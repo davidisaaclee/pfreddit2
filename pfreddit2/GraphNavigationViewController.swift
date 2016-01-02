@@ -14,7 +14,8 @@ class GraphNavigationViewController: UINavigationController {
 	}
 
 	func pushNodeViewForNode(node: ContentNode) {
-		let nodeViewController = NodeViewController(node: node)
+		let nodeViewController = NodeViewController()
+		nodeViewController.activeNode = node
 		nodeViewController.nodeViewDelegate = self
 		pushViewController(nodeViewController, animated: true)
 	}
@@ -25,7 +26,7 @@ class GraphNavigationViewController: UINavigationController {
 }
 
 extension GraphNavigationViewController: NodeViewControllerDelegate {
-	func nodeViewController(nodeViewController: NodeViewController, navigateToNode node: ContentNode) {
+	func nodeViewController(nodeViewController: NodeViewController, wantsToNavigateToNode node: ContentNode) {
 		if let previousNode = nodeViewController.activeNode {
 			SharedContentGraph.incrementEdge(previousNode, destination: node, incrementBy: EdgeWeight.FollowedEdge)
 				.onFailure { error in print("Failed to increment edge:", error) }

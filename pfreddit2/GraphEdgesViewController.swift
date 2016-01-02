@@ -14,15 +14,17 @@ protocol GraphEdgesViewControllerDelegate {
 
 class GraphEdgesViewController: UIViewController {
 
-	@IBOutlet weak var collectionView: UICollectionView! {
+	@IBOutlet weak var collectionView: UICollectionView? {
 		didSet {
+			guard let collectionView = collectionView else { return }
 			collectionView.dataSource = collectionDataSource
 			collectionView.delegate = collectionDelegate
+			collectionView.reloadData()
 			_registeredCells.forEach { reuseIdentifier, cellClass in
-				self.collectionView.registerClass(cellClass, forCellWithReuseIdentifier: reuseIdentifier)
+				collectionView.registerClass(cellClass, forCellWithReuseIdentifier: reuseIdentifier)
 			}
 			_registeredNibs.forEach { reuseIdentifier, nib in
-				self.collectionView.registerNib(nib, forCellWithReuseIdentifier: reuseIdentifier)
+				collectionView.registerNib(nib, forCellWithReuseIdentifier: reuseIdentifier)
 			}
 		}
 	}
@@ -43,11 +45,11 @@ class GraphEdgesViewController: UIViewController {
 	}
 
 	func registerDismissRecognizer() {
-		collectionView.panGestureRecognizer.addTarget(self, action: "handlePanDismiss:")
+		collectionView?.panGestureRecognizer.addTarget(self, action: "handlePanDismiss:")
 	}
 
 	func unregisterDismissRecognizer() {
-		collectionView.panGestureRecognizer.removeTarget(self, action: "handlePanDismiss:")
+		collectionView?.panGestureRecognizer.removeTarget(self, action: "handlePanDismiss:")
 	}
 
 	func registerClass(cell: AnyClass?, forCellWithReuseIdentifier reuseIdentifier: String) {
@@ -59,6 +61,7 @@ class GraphEdgesViewController: UIViewController {
 	}
 
 	internal func handlePanDismiss(recognizer: UIPanGestureRecognizer) {
+		guard let collectionView = collectionView else { return }
 		switch recognizer.state {
 		case .Ended:
 			let threshold: CGFloat = 100

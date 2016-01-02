@@ -20,6 +20,9 @@ class ContentNodeViewController: UIViewController {
 	@IBOutlet weak var contentView: UIView! {
 		didSet { populateContentView() }
 	}
+
+	@IBOutlet weak var infoBar: UIView!
+
 	@IBOutlet weak var titleLabel: UILabel! {
 		didSet { populateTitleView() }
 	}

@@ -36,6 +36,8 @@
 		639FA3121C35921F001E47B3 /* SequenceType+completionStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639FA3111C35921F001E47B3 /* SequenceType+completionStream.swift */; };
 		63B0E9181C29DF25000FF7A2 /* RealmContentGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B0E9171C29DF25000FF7A2 /* RealmContentGraph.swift */; };
 		63B0E91A1C2A0524000FF7A2 /* RedditGraphStructures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B0E9191C2A0524000FF7A2 /* RedditGraphStructures.swift */; };
+		63C726911C378815005136BE /* SlidingDrawerBehavior.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C726901C378815005136BE /* SlidingDrawerBehavior.swift */; };
+		63C726931C379010005136BE /* CGRect+center.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C726921C379010005136BE /* CGRect+center.swift */; };
 		63C875131C3172CA0051F970 /* ContentTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C875121C3172CA0051F970 /* ContentTypes.swift */; };
 		63F66A581C29BC7B00E0E52B /* Graph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F66A571C29BC7B00E0E52B /* Graph.swift */; };
 		63F66A5A1C29BE8100E0E52B /* DirectedWeightedGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F66A591C29BE8100E0E52B /* DirectedWeightedGraph.swift */; };
@@ -93,6 +95,20 @@
 		639FA3111C35921F001E47B3 /* SequenceType+completionStream.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SequenceType+completionStream.swift"; sourceTree = "<group>"; };
 		63B0E9171C29DF25000FF7A2 /* RealmContentGraph.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmContentGraph.swift; sourceTree = "<group>"; };
 		63B0E9191C2A0524000FF7A2 /* RedditGraphStructures.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RedditGraphStructures.swift; sourceTree = "<group>"; };
+		63C726831C377A0D005136BE /* SourceSansPro-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SourceSansPro-Regular.otf"; sourceTree = "<group>"; };
+		63C726851C377A4B005136BE /* SourceSansPro-Black.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SourceSansPro-Black.otf"; sourceTree = "<group>"; };
+		63C726861C377A4B005136BE /* SourceSansPro-BlackIt.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SourceSansPro-BlackIt.otf"; sourceTree = "<group>"; };
+		63C726871C377A4B005136BE /* SourceSansPro-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SourceSansPro-Bold.otf"; sourceTree = "<group>"; };
+		63C726881C377A4B005136BE /* SourceSansPro-BoldIt.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SourceSansPro-BoldIt.otf"; sourceTree = "<group>"; };
+		63C726891C377A4B005136BE /* SourceSansPro-ExtraLight.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SourceSansPro-ExtraLight.otf"; sourceTree = "<group>"; };
+		63C7268A1C377A4B005136BE /* SourceSansPro-ExtraLightIt.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SourceSansPro-ExtraLightIt.otf"; sourceTree = "<group>"; };
+		63C7268B1C377A4B005136BE /* SourceSansPro-It.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SourceSansPro-It.otf"; sourceTree = "<group>"; };
+		63C7268C1C377A4B005136BE /* SourceSansPro-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SourceSansPro-Light.otf"; sourceTree = "<group>"; };
+		63C7268D1C377A4B005136BE /* SourceSansPro-LightIt.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SourceSansPro-LightIt.otf"; sourceTree = "<group>"; };
+		63C7268E1C377A4B005136BE /* SourceSansPro-Semibold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SourceSansPro-Semibold.otf"; sourceTree = "<group>"; };
+		63C7268F1C377A4B005136BE /* SourceSansPro-SemiboldIt.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SourceSansPro-SemiboldIt.otf"; sourceTree = "<group>"; };
+		63C726901C378815005136BE /* SlidingDrawerBehavior.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SlidingDrawerBehavior.swift; sourceTree = "<group>"; };
+		63C726921C379010005136BE /* CGRect+center.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGRect+center.swift"; sourceTree = "<group>"; };
 		63C875121C3172CA0051F970 /* ContentTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentTypes.swift; sourceTree = "<group>"; };
 		63F66A571C29BC7B00E0E52B /* Graph.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Graph.swift; sourceTree = "<group>"; };
 		63F66A591C29BE8100E0E52B /* DirectedWeightedGraph.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DirectedWeightedGraph.swift; sourceTree = "<group>"; };
@@ -197,6 +213,7 @@
 				6363EB8A1C28A35F00CB5E82 /* Assets.xcassets */,
 				6363EB8C1C28A35F00CB5E82 /* LaunchScreen.storyboard */,
 				6363EB8F1C28A35F00CB5E82 /* Info.plist */,
+				63C726841C377A2D005136BE /* Fonts */,
 			);
 			path = pfreddit2;
 			sourceTree = "<group>";
@@ -208,6 +225,7 @@
 				639FA30F1C35818E001E47B3 /* SequenceType+firstSuccess.swift */,
 				639FA3111C35921F001E47B3 /* SequenceType+completionStream.swift */,
 				6368C6C91C35DD1D00B3D432 /* String+substringWithRange.swift */,
+				63C726921C379010005136BE /* CGRect+center.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -219,6 +237,25 @@
 				6368C6CB1C35E45100B3D432 /* ImgurDataStructures.swift */,
 			);
 			name = Imgur;
+			sourceTree = "<group>";
+		};
+		63C726841C377A2D005136BE /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				63C726851C377A4B005136BE /* SourceSansPro-Black.otf */,
+				63C726861C377A4B005136BE /* SourceSansPro-BlackIt.otf */,
+				63C726871C377A4B005136BE /* SourceSansPro-Bold.otf */,
+				63C726881C377A4B005136BE /* SourceSansPro-BoldIt.otf */,
+				63C726891C377A4B005136BE /* SourceSansPro-ExtraLight.otf */,
+				63C7268A1C377A4B005136BE /* SourceSansPro-ExtraLightIt.otf */,
+				63C7268B1C377A4B005136BE /* SourceSansPro-It.otf */,
+				63C7268C1C377A4B005136BE /* SourceSansPro-Light.otf */,
+				63C7268D1C377A4B005136BE /* SourceSansPro-LightIt.otf */,
+				63C7268E1C377A4B005136BE /* SourceSansPro-Semibold.otf */,
+				63C7268F1C377A4B005136BE /* SourceSansPro-SemiboldIt.otf */,
+				63C726831C377A0D005136BE /* SourceSansPro-Regular.otf */,
+			);
+			name = Fonts;
 			sourceTree = "<group>";
 		};
 		63C875141C31B14C0051F970 /* Realm */ = {
@@ -256,6 +293,7 @@
 				63F66A5D1C29C3CE00E0E52B /* Utilities */,
 				6361F27A1C29ADC40020C4CF /* CommunicationUtilities.swift */,
 				637825FC1C2F05E500A17668 /* TableCollectionViewLayout.swift */,
+				63C726901C378815005136BE /* SlidingDrawerBehavior.swift */,
 			);
 			name = Generic;
 			sourceTree = "<group>";
@@ -467,11 +505,13 @@
 			files = (
 				6363EB961C28A37E00CB5E82 /* RedditCommunicator.swift in Sources */,
 				632917931C36BF3E00572D40 /* ContentViewFactory.swift in Sources */,
+				63C726911C378815005136BE /* SlidingDrawerBehavior.swift in Sources */,
 				63F66A5A1C29BE8100E0E52B /* DirectedWeightedGraph.swift in Sources */,
 				639FA3121C35921F001E47B3 /* SequenceType+completionStream.swift in Sources */,
 				63F66A5C1C29C13400E0E52B /* composeHashValues.swift in Sources */,
 				6361F27B1C29ADC40020C4CF /* CommunicationUtilities.swift in Sources */,
 				6335F04B1C32C6C800F36B1B /* RealmGraphStructures.swift in Sources */,
+				63C726931C379010005136BE /* CGRect+center.swift in Sources */,
 				63F66A6A1C29C6D400E0E52B /* GraphEdgesViewController.swift in Sources */,
 				639FA30C1C357CA0001E47B3 /* ContentParser.swift in Sources */,
 				637825FD1C2F05E500A17668 /* TableCollectionViewLayout.swift in Sources */,
@@ -664,6 +704,7 @@
 				632917821C36221F00572D40 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		6363EB7B1C28A35E00CB5E82 /* Build configuration list for PBXProject "pfreddit2" */ = {
 			isa = XCConfigurationList;
