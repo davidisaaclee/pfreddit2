@@ -32,8 +32,7 @@ class NodeViewController: UIViewController {
 	var edgesViewController: GraphEdgesViewController! {
 		didSet {
 			edgesViewController.registerNib(UINib(nibName: "NodePreviewCell", bundle: nil), forCellWithReuseIdentifier: kNodePreviewCellIdentifier)
-			edgesViewController.collectionDataSource = self
-			edgesViewController.collectionDelegate = self
+			edgesViewController.dataSource = self
 			edgesViewController.delegate = self
 		}
 	}
@@ -210,46 +209,6 @@ class NodeViewController: UIViewController {
 }
 
 
-// MARK: - UICollectionViewDataSource
-
-extension NodeViewController: UICollectionViewDataSource {
-	func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-		// TODO: There's something funky going on here...
-		print("Edge count:", edges?.count ?? 0)
-		return edges?.count ?? 0
-	}
-
-	func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-		let cell = collectionView.dequeueReusableCellWithReuseIdentifier(kNodePreviewCellIdentifier, forIndexPath: indexPath)
-		if let cell = cell as? NodePreviewCell {
-			cell.titleLabel.text = self.edgeAtIndexPath(indexPath)?.destinationNode.title
-			if let thumbnailURLString = self.edgeAtIndexPath(indexPath)?.destinationNode.thumbnailURL,
-					let thumbnailURL = NSURL(string: thumbnailURLString) {
-					dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0)) {
-						if let data = NSData(contentsOfURL: thumbnailURL) {
-							let image: UIImage? = UIImage(data: data)
-							dispatch_async(dispatch_get_main_queue()) {
-								cell.thumbnailView.image = image
-							}
-						}
-					}
-				}
-		}
-		return cell
-	}
-}
-
-
-// MARK: - UICollectionViewDelegate
-
-extension NodeViewController: UICollectionViewDelegate {
-	func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-		guard let destinationNode = self.edgeAtIndexPath(indexPath)?.destinationNode else { return }
-		navigateToNode(destinationNode)
-	}
-}
-
-
 // MARK: - ContentNodeViewDataSource
 
 extension NodeViewController: ContentNodeViewDataSource {
@@ -262,7 +221,38 @@ extension NodeViewController: ContentNodeViewDataSource {
 // MARK: - GraphEdgesViewControllerDelegate
 
 extension NodeViewController: GraphEdgesViewControllerDelegate {
-	func dismissGraphEdgesViewController(graphEdgesViewController: GraphEdgesViewController, animated: Bool) {
-		dismissEdgesViewControllerAnimated(true)
+	func graphEdgesViewController(graphEdgesViewController: GraphEdgesViewController, didSelectEdgeAtIndexPath indexPath: NSIndexPath) {
+		guard let destinationNode = self.edgeAtIndexPath(indexPath)?.destinationNode else { return }
+		navigateToNode(destinationNode)
+	}
+}
+
+
+// MARK: - GraphEdgesViewControllerDataSource
+
+extension NodeViewController: GraphEdgesViewControllerDataSource {
+	func numberOfEdgesForGraphEdgesViewController(graphEdgesViewController: GraphEdgesViewController) -> Int {
+		// TODO: There's something funky going on here...
+		print("Edge count:", edges?.count ?? 0)
+		return edges?.count ?? 0
+	}
+
+	func graphEdgesViewController(graphEdgesViewController: GraphEdgesViewController, viewForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+		let cell = graphEdgesViewController.dequeueReusableEdgeCellForIndexPath(indexPath)
+		if let cell = cell as? NodePreviewCell {
+			cell.titleLabel.text = self.edgeAtIndexPath(indexPath)?.destinationNode.title
+			if let thumbnailURLString = self.edgeAtIndexPath(indexPath)?.destinationNode.thumbnailURL,
+					let thumbnailURL = NSURL(string: thumbnailURLString) {
+				dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0)) {
+					if let data = NSData(contentsOfURL: thumbnailURL) {
+						let image: UIImage? = UIImage(data: data)
+						dispatch_async(dispatch_get_main_queue()) {
+							cell.thumbnailView.image = image
+						}
+					}
+				}
+			}
+		}
+		return cell
 	}
 }
