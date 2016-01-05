@@ -15,8 +15,7 @@ protocol NodeViewControllerDelegate {
 
 class NodeViewController: UIViewController {
 	let kEdgeFetchCount = 10
-	let kNodePreviewCellIdentifier = "NodePreviewCell"
-
+	
 	var nodeViewDelegate: NodeViewControllerDelegate?
 	lazy var nodeViewDragRecognizer: UIPanGestureRecognizer = UIPanGestureRecognizer(target: self, action: "handleNodeViewDrag:")
 
@@ -31,7 +30,6 @@ class NodeViewController: UIViewController {
 
 	var edgesViewController: GraphEdgesViewController! {
 		didSet {
-			edgesViewController.registerNib(UINib(nibName: "NodePreviewCell", bundle: nil), forCellWithReuseIdentifier: kNodePreviewCellIdentifier)
 			edgesViewController.dataSource = self
 			edgesViewController.delegate = self
 		}
@@ -51,7 +49,7 @@ class NodeViewController: UIViewController {
 	var edges: [ContentEdge]? {
 		didSet {
 			if isViewLoaded() {
-				edgesViewController?.collectionView?.reloadData()
+				edgesViewController?.reloadData()
 			}
 		}
 	}
@@ -181,7 +179,7 @@ class NodeViewController: UIViewController {
 	}
 
 	private func edgeAtIndexPath(indexPath: NSIndexPath) -> ContentEdge? {
-		return edges?[indexPath.item]
+		return edges?[indexPath.row]
 	}
 
 
@@ -237,22 +235,7 @@ extension NodeViewController: GraphEdgesViewControllerDataSource {
 		return edges?.count ?? 0
 	}
 
-	func graphEdgesViewController(graphEdgesViewController: GraphEdgesViewController, viewForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-		let cell = graphEdgesViewController.dequeueReusableEdgeCellForIndexPath(indexPath)
-		if let cell = cell as? NodePreviewCell {
-			cell.titleLabel.text = self.edgeAtIndexPath(indexPath)?.destinationNode.title
-			if let thumbnailURLString = self.edgeAtIndexPath(indexPath)?.destinationNode.thumbnailURL,
-					let thumbnailURL = NSURL(string: thumbnailURLString) {
-				dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0)) {
-					if let data = NSData(contentsOfURL: thumbnailURL) {
-						let image: UIImage? = UIImage(data: data)
-						dispatch_async(dispatch_get_main_queue()) {
-							cell.thumbnailView.image = image
-						}
-					}
-				}
-			}
-		}
-		return cell
+	func graphEdgesViewController(graphEdgesViewController: GraphEdgesViewController, edgeForIndexPath indexPath: NSIndexPath) -> ContentEdge? {
+		return self.edgeAtIndexPath(indexPath)
 	}
 }

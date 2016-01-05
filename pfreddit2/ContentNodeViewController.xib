@@ -64,7 +64,7 @@
                                 <constraint firstItem="pIo-bN-w1t" firstAttribute="leading" secondItem="fKB-cB-nWk" secondAttribute="trailing" constant="8" id="J4V-dY-OhY"/>
                                 <constraint firstItem="fKB-cB-nWk" firstAttribute="top" secondItem="2PC-Z5-779" secondAttribute="top" constant="8" id="Uc6-vf-pek"/>
                                 <constraint firstItem="pIo-bN-w1t" firstAttribute="centerY" secondItem="2PC-Z5-779" secondAttribute="centerY" id="lZG-tz-bsT"/>
-                                <constraint firstAttribute="height" constant="100" id="mIQ-Ne-GQa"/>
+                                <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="100" id="mIQ-Ne-GQa"/>
                                 <constraint firstItem="fKB-cB-nWk" firstAttribute="leading" secondItem="2PC-Z5-779" secondAttribute="leading" constant="16" id="s64-P4-oyX"/>
                                 <constraint firstAttribute="trailing" secondItem="fKB-cB-nWk" secondAttribute="trailing" constant="8" id="ulQ-eF-Uhf"/>
                             </constraints>

@@ -10,7 +10,7 @@ import UIKit
 
 protocol GraphEdgesViewControllerDataSource {
 	func numberOfEdgesForGraphEdgesViewController(graphEdgesViewController: GraphEdgesViewController) -> Int
-	func graphEdgesViewController(graphEdgesViewController: GraphEdgesViewController, viewForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell
+	func graphEdgesViewController(graphEdgesViewController: GraphEdgesViewController, edgeForIndexPath indexPath: NSIndexPath) -> ContentEdge?
 }
 
 protocol GraphEdgesViewControllerDelegate {
@@ -18,58 +18,98 @@ protocol GraphEdgesViewControllerDelegate {
 }
 
 class GraphEdgesViewController: UIViewController {
+	static let NodePreviewCellIdentifier = "NodePreviewCell"
 
-	@IBOutlet weak var collectionView: UICollectionView! {
+	@IBOutlet weak var tableView: UITableView! {
 		didSet {
-			collectionView.dataSource = self
-			collectionView.delegate = self
-			collectionView.reloadData()
-			_registeredCells.forEach { reuseIdentifier, cellClass in
-				collectionView.registerClass(cellClass, forCellWithReuseIdentifier: reuseIdentifier)
-			}
-			_registeredNibs.forEach { reuseIdentifier, nib in
-				collectionView.registerNib(nib, forCellWithReuseIdentifier: reuseIdentifier)
-			}
+//			_registeredCells.forEach { reuseIdentifier, cellClass in
+//				tableView.registerClass(cellClass, forCellReuseIdentifier: reuseIdentifier)
+//			}
+//			_registeredNibs.forEach { reuseIdentifier, nib in
+//				tableView.registerNib(nib, forCellReuseIdentifier: reuseIdentifier)
+//			}
+			tableView.registerNib(UINib(nibName: "NodePreviewCell", bundle: nil), forCellReuseIdentifier: GraphEdgesViewController.NodePreviewCellIdentifier)
+			tableView.dataSource = self
+			tableView.delegate = self
+			tableView.rowHeight = UITableViewAutomaticDimension
+			tableView.estimatedRowHeight = 96
+			reloadData()
 		}
 	}
 
 	var delegate: GraphEdgesViewControllerDelegate?
 	var dataSource: GraphEdgesViewControllerDataSource?
 
-	var contentBackgroundView: UIView!
-
-	private var _registeredCells: [String: AnyClass?] = [:]
-	private var _registeredNibs: [String: UINib?] = [:]
-
-	func registerClass(cell: AnyClass?, forCellWithReuseIdentifier reuseIdentifier: String) {
-		_registeredCells[reuseIdentifier] = cell
+	private var cellData: [Int: (text: String?, image: UIImage?)] = [:] {
+		didSet {
+			tableView.reloadData()
+		}
 	}
 
-	func registerNib(nib: UINib?, forCellWithReuseIdentifier reuseIdentifier: String) {
-		_registeredNibs[reuseIdentifier] = nib
+	func reloadData() {
+		guard let dataSource = dataSource else { return }
+		let numberOfEdges = dataSource.numberOfEdgesForGraphEdgesViewController(self)
+
+		for edgeIndex in 0..<numberOfEdges {
+			let edge = dataSource.graphEdgesViewController(self, edgeForIndexPath: NSIndexPath(forRow: edgeIndex, inSection: 0))
+			cellData[edgeIndex] = (text: edge?.destinationNode.title, image: nil)
+			if let thumbnailURLString = edge?.destinationNode.thumbnailURL,
+				let thumbnailURL = NSURL(string: thumbnailURLString) {
+					dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0)) {
+						if let data = NSData(contentsOfURL: thumbnailURL) {
+							let image: UIImage? = UIImage(data: data)
+							dispatch_async(dispatch_get_main_queue()) {
+								self.cellData[edgeIndex]!.image = image
+							}
+						}
+					}
+			}
+		}
 	}
 
-	func dequeueReusableEdgeCellForIndexPath(indexPath: NSIndexPath) -> UICollectionViewCell {
-		return collectionView.dequeueReusableCellWithReuseIdentifier("NodePreviewCell", forIndexPath: indexPath)
+//	private var _registeredCells: [String: AnyClass?] = [:]
+//	private var _registeredNibs: [String: UINib?] = [:]
+//	func registerClass(cell: AnyClass?, forCellWithReuseIdentifier reuseIdentifier: String) {
+//		_registeredCells[reuseIdentifier] = cell
+//	}
+//
+//	func registerNib(nib: UINib?, forCellWithReuseIdentifier reuseIdentifier: String) {
+//		_registeredNibs[reuseIdentifier] = nib
+//	}
+
+	func dequeueReusableEdgeCellForIndexPath(indexPath: NSIndexPath) -> UITableViewCell {
+		guard let cell = tableView.dequeueReusableCellWithIdentifier("NodePreviewCell") else {
+			fatalError("Could not dequeue reusable table view cell.")
+		}
+		return cell
 	}
 }
 
-extension GraphEdgesViewController: UICollectionViewDelegate {
-	func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+
+// MARK: - UICollectionViewDelegate
+
+extension GraphEdgesViewController: UITableViewDelegate {
+	func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
 		delegate?.graphEdgesViewController(self, didSelectEdgeAtIndexPath: indexPath)
 	}
 }
 
-extension GraphEdgesViewController: UICollectionViewDataSource {
-	func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+
+// MARK: - UICollectionViewDataSource
+
+extension GraphEdgesViewController: UITableViewDataSource {
+	func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 		guard let dataSource = dataSource else { return 0 }
 		return dataSource.numberOfEdgesForGraphEdgesViewController(self)
 	}
 
-	func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-		guard let dataSource = dataSource else {
-			return dequeueReusableEdgeCellForIndexPath(indexPath)
+	func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+		guard let cell = dequeueReusableEdgeCellForIndexPath(indexPath) as? NodePreviewCell else {
+			fatalError("Invalid cell type.")
 		}
-		return dataSource.graphEdgesViewController(self, viewForItemAtIndexPath: indexPath)
+		guard let cellData = cellData[indexPath.row] else { return cell }
+		cell.titleLabel.text = cellData.text
+		cell.thumbnailView.image = cellData.image
+		return cell
 	}
 }

@@ -8,16 +8,13 @@
 
 import UIKit
 
-class NodePreviewCell: UICollectionViewCell {
+class NodePreviewCell: UITableViewCell {
 	@IBOutlet var titleLabel: UILabel!
-	@IBOutlet var thumbnailView: UIImageView!
-
-	required init?(coder aDecoder: NSCoder) {
-		super.init(coder: aDecoder)
-
-		self.backgroundView = UIVisualEffectView(effect: UIBlurEffect(style: .Dark))
-		self.selectedBackgroundView = UIView()
-		self.selectedBackgroundView?.backgroundColor = UIColor(white: 0.1, alpha: 0.9)
+	@IBOutlet var thumbnailView: UIImageView! {
+		didSet {
+			thumbnailView.contentMode = .ScaleAspectFill
+			thumbnailView.clipsToBounds = true
+		}
 	}
 
 	override func prepareForReuse() {
