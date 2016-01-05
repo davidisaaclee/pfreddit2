@@ -70,7 +70,6 @@ class NodeViewController: UIViewController {
 
 	func navigateToNode(node: ContentNode) {
 		nodeViewDelegate?.nodeViewController(self, wantsToNavigateToNode: node)
-		dismissEdgesViewControllerAnimated(false)
 	}
 
 	func presentEdgesViewControllerAnimated(shouldAnimate: Bool) {
@@ -91,30 +90,6 @@ class NodeViewController: UIViewController {
 				animations: animations, completion: nil)
 		} else {
 			animations()
-		}
-	}
-
-	func dismissEdgesViewControllerAnimated(shouldAnimate: Bool) {
-		let animations = {
-			let originʹ = CGPoint(x: self.edgesViewController.view.frame.origin.x, y: self.view.bounds.maxY)
-			self.edgesViewController.view.frame = CGRect(origin: originʹ, size: self.edgesViewController.view.frame.size)
-		}
-		let completion: Bool -> Void = { completed in
-			guard completed else { return }
-			self.edgesViewController.removeFromParentViewController()
-			self.edgesViewController.view.removeFromSuperview()
-		}
-
-		if shouldAnimate {
-			let animationOptions: UIViewAnimationOptions = [
-				.CurveEaseOut,
-				.BeginFromCurrentState
-			]
-			UIView.animateWithDuration(0.2, delay: 0.0, options: animationOptions,
-				animations: animations, completion: completion)
-		} else {
-			animations()
-			completion(true)
 		}
 	}
 

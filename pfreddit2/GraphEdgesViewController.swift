@@ -22,12 +22,6 @@ class GraphEdgesViewController: UIViewController {
 
 	@IBOutlet weak var tableView: UITableView! {
 		didSet {
-//			_registeredCells.forEach { reuseIdentifier, cellClass in
-//				tableView.registerClass(cellClass, forCellReuseIdentifier: reuseIdentifier)
-//			}
-//			_registeredNibs.forEach { reuseIdentifier, nib in
-//				tableView.registerNib(nib, forCellReuseIdentifier: reuseIdentifier)
-//			}
 			tableView.registerNib(UINib(nibName: "NodePreviewCell", bundle: nil), forCellReuseIdentifier: GraphEdgesViewController.NodePreviewCellIdentifier)
 			tableView.dataSource = self
 			tableView.delegate = self
@@ -66,16 +60,6 @@ class GraphEdgesViewController: UIViewController {
 			}
 		}
 	}
-
-//	private var _registeredCells: [String: AnyClass?] = [:]
-//	private var _registeredNibs: [String: UINib?] = [:]
-//	func registerClass(cell: AnyClass?, forCellWithReuseIdentifier reuseIdentifier: String) {
-//		_registeredCells[reuseIdentifier] = cell
-//	}
-//
-//	func registerNib(nib: UINib?, forCellWithReuseIdentifier reuseIdentifier: String) {
-//		_registeredNibs[reuseIdentifier] = nib
-//	}
 
 	func dequeueReusableEdgeCellForIndexPath(indexPath: NSIndexPath) -> UITableViewCell {
 		guard let cell = tableView.dequeueReusableCellWithIdentifier("NodePreviewCell") else {
