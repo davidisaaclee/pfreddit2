@@ -8,12 +8,12 @@
 
 import UIKit
 
-protocol GraphEdgesViewControllerDataSource {
+protocol GraphEdgesViewControllerDataSource: class {
 	func numberOfEdgesForGraphEdgesViewController(graphEdgesViewController: GraphEdgesViewController) -> Int
 	func graphEdgesViewController(graphEdgesViewController: GraphEdgesViewController, edgeForIndexPath indexPath: NSIndexPath) -> ContentEdge?
 }
 
-protocol GraphEdgesViewControllerDelegate {
+protocol GraphEdgesViewControllerDelegate: class {
 	func graphEdgesViewController(graphEdgesViewController: GraphEdgesViewController, didSelectEdgeAtIndexPath indexPath: NSIndexPath)
 }
 
@@ -31,8 +31,8 @@ class GraphEdgesViewController: UIViewController {
 		}
 	}
 
-	var delegate: GraphEdgesViewControllerDelegate?
-	var dataSource: GraphEdgesViewControllerDataSource?
+	weak var delegate: GraphEdgesViewControllerDelegate?
+	weak var dataSource: GraphEdgesViewControllerDataSource?
 
 	private var cellData: [Int: (text: String?, image: UIImage?)] = [:] {
 		didSet {

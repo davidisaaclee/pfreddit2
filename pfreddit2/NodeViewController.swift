@@ -9,14 +9,14 @@
 
 import UIKit
 
-protocol NodeViewControllerDelegate {
+protocol NodeViewControllerDelegate: class {
 	func nodeViewController(nodeViewController: NodeViewController, wantsToNavigateToNode node: ContentNode)
 }
 
 class NodeViewController: UIViewController {
 	let kEdgeFetchCount = 10
 	
-	var nodeViewDelegate: NodeViewControllerDelegate?
+	weak var nodeViewDelegate: NodeViewControllerDelegate?
 	lazy var nodeViewDragRecognizer: UIPanGestureRecognizer = UIPanGestureRecognizer(target: self, action: "handleNodeViewDrag:")
 
 
@@ -205,8 +205,7 @@ extension NodeViewController: GraphEdgesViewControllerDelegate {
 
 extension NodeViewController: GraphEdgesViewControllerDataSource {
 	func numberOfEdgesForGraphEdgesViewController(graphEdgesViewController: GraphEdgesViewController) -> Int {
-		// TODO: There's something funky going on here...
-		print("Edge count:", edges?.count ?? 0)
+		// TODO: This is being called a lot of times. Is that normal?
 		return edges?.count ?? 0
 	}
 

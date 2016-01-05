@@ -9,6 +9,15 @@
 import UIKit
 
 class GraphNavigationViewController: UINavigationController {
+	override func pushViewController(viewController: UIViewController, animated: Bool) {
+		super.pushViewController(viewController, animated: animated)
+
+		if viewControllers.count > 2 {
+			let popped = viewControllers.removeFirst()
+			popped.removeFromParentViewController()
+		}
+	}
+
 	override func viewDidLoad() {
 		styleNavigationController()
 	}

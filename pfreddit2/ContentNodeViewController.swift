@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol ContentNodeViewDataSource {
+protocol ContentNodeViewDataSource: class {
 	func nodeForContentNodeView(contentViewController: ContentNodeViewController) -> ContentNode?
 }
 
@@ -27,7 +27,7 @@ class ContentNodeViewController: UIViewController {
 		didSet { populateScoreLabel() }
 	}
 
-	var dataSource: ContentNodeViewDataSource? {
+	weak var dataSource: ContentNodeViewDataSource? {
 		didSet { reloadData() }
 	}
 
