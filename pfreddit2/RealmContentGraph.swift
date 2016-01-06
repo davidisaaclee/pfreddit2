@@ -64,7 +64,7 @@ class RealmContentGraph {
 	private func nodeToRealmNode(node: ContentNode) -> RealmContentNode {
 		if let node = node as? RealmContentNode {
 			return node
-		} else if let node = realm.objects(RealmContentNode).filter("id == \(node.id)").first {
+		} else if let node = realm.objects(RealmContentNode).filter("id == %@", node.id).first {
 			return node
 		} else {
 			return RealmContentNode(node: node)
@@ -74,11 +74,11 @@ class RealmContentGraph {
 
 extension RealmContentGraph: ContentGraph {
 	func nodeForID(id: String) -> Future<ContentNode?, ContentGraphError> {
-		return Future(value: realm.objects(RealmContentNode).filter("id == \(id)").first)
+		return Future(value: realm.objects(RealmContentNode).filter("id == %@", id).first)
 	}
 
 	func edgeForID(id: String) -> Future<ContentEdge?, ContentGraphError> {
-		return Future(value: realm.objects(RealmContentEdge).filter("id == \(id)").first)
+		return Future(value: realm.objects(RealmContentEdge).filter("id == %@", id).first)
 	}
 
 	func pickNodes(count: Int) -> Future<[ContentNode], ContentGraphError> {

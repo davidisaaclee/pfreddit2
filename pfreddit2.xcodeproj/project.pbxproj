@@ -34,6 +34,7 @@
 		639FA30C1C357CA0001E47B3 /* ContentParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639FA30B1C357CA0001E47B3 /* ContentParser.swift */; };
 		639FA3101C35818E001E47B3 /* SequenceType+firstSuccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639FA30F1C35818E001E47B3 /* SequenceType+firstSuccess.swift */; };
 		639FA3121C35921F001E47B3 /* SequenceType+completionStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639FA3111C35921F001E47B3 /* SequenceType+completionStream.swift */; };
+		63AFA5631C3DEDBD007D6D79 /* SlideAnimatedTransitioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63AFA5621C3DEDBD007D6D79 /* SlideAnimatedTransitioning.swift */; };
 		63B0E9181C29DF25000FF7A2 /* RealmContentGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B0E9171C29DF25000FF7A2 /* RealmContentGraph.swift */; };
 		63B0E91A1C2A0524000FF7A2 /* RedditGraphStructures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B0E9191C2A0524000FF7A2 /* RedditGraphStructures.swift */; };
 		63C726911C378815005136BE /* SlidingDrawerBehavior.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C726901C378815005136BE /* SlidingDrawerBehavior.swift */; };
@@ -93,6 +94,7 @@
 		639FA30B1C357CA0001E47B3 /* ContentParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentParser.swift; sourceTree = "<group>"; };
 		639FA30F1C35818E001E47B3 /* SequenceType+firstSuccess.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SequenceType+firstSuccess.swift"; sourceTree = "<group>"; };
 		639FA3111C35921F001E47B3 /* SequenceType+completionStream.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SequenceType+completionStream.swift"; sourceTree = "<group>"; };
+		63AFA5621C3DEDBD007D6D79 /* SlideAnimatedTransitioning.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SlideAnimatedTransitioning.swift; sourceTree = "<group>"; };
 		63B0E9171C29DF25000FF7A2 /* RealmContentGraph.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmContentGraph.swift; sourceTree = "<group>"; };
 		63B0E9191C2A0524000FF7A2 /* RedditGraphStructures.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RedditGraphStructures.swift; sourceTree = "<group>"; };
 		63C726831C377A0D005136BE /* SourceSansPro-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SourceSansPro-Regular.otf"; sourceTree = "<group>"; };
@@ -294,6 +296,7 @@
 				6361F27A1C29ADC40020C4CF /* CommunicationUtilities.swift */,
 				637825FC1C2F05E500A17668 /* TableCollectionViewLayout.swift */,
 				63C726901C378815005136BE /* SlidingDrawerBehavior.swift */,
+				63AFA5621C3DEDBD007D6D79 /* SlideAnimatedTransitioning.swift */,
 			);
 			name = Generic;
 			sourceTree = "<group>";
@@ -519,6 +522,7 @@
 				63B0E9181C29DF25000FF7A2 /* RealmContentGraph.swift in Sources */,
 				63F66A581C29BC7B00E0E52B /* Graph.swift in Sources */,
 				639FA3101C35818E001E47B3 /* SequenceType+firstSuccess.swift in Sources */,
+				63AFA5631C3DEDBD007D6D79 /* SlideAnimatedTransitioning.swift in Sources */,
 				632917901C36BE5000572D40 /* ImageContentViewController.swift in Sources */,
 				63FDFEBA1C29D2950051BB3B /* ContentGraph.swift in Sources */,
 				63C875131C3172CA0051F970 /* ContentTypes.swift in Sources */,

@@ -61,6 +61,8 @@ class NodeViewController: UIViewController {
 	var nodeViewDynamicsBehavior: UIDynamicBehavior!
 
 
+	// MARK: - UIViewController
+
 	override func viewDidLoad() {
 		createNodeViewController()
 		createEdgesViewController()
@@ -68,9 +70,7 @@ class NodeViewController: UIViewController {
 	}
 
 
-	func navigateToNode(node: ContentNode) {
-		nodeViewDelegate?.nodeViewController(self, wantsToNavigateToNode: node)
-	}
+	// MARK: - Navigation
 
 	func presentEdgesViewControllerAnimated(shouldAnimate: Bool) {
 		let offscreenOrigin = CGPoint(x: view.frame.origin.x, y: view.frame.origin.y + view.frame.size.height)
@@ -124,6 +124,13 @@ class NodeViewController: UIViewController {
 				(boundary: drawerStart, side: .Top),
 				(boundary: drawerEnd, side: .Bottom)
 			])
+		let initialOrigin = nodeViewController.view.frame.origin
+		nodeViewDynamicsBehavior.action = {
+			let xOffset = self.nodeViewController.view.frame.origin.x - initialOrigin.x
+			if xOffset != 0 {
+				self.nodeViewController.view.frame = self.nodeViewController.view.frame.offsetBy(dx: -xOffset, dy: 0)
+			}
+		}
 
 		if let nodeViewDynamicsBehavior = nodeViewDynamicsBehavior as? UIDynamicItemBehavior {
 			nodeViewDynamicsBehavior.resistance = 0.4
@@ -196,7 +203,7 @@ extension NodeViewController: ContentNodeViewDataSource {
 extension NodeViewController: GraphEdgesViewControllerDelegate {
 	func graphEdgesViewController(graphEdgesViewController: GraphEdgesViewController, didSelectEdgeAtIndexPath indexPath: NSIndexPath) {
 		guard let destinationNode = self.edgeAtIndexPath(indexPath)?.destinationNode else { return }
-		navigateToNode(destinationNode)
+		nodeViewDelegate?.nodeViewController(self, wantsToNavigateToNode: destinationNode)
 	}
 }
 

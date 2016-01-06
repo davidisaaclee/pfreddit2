@@ -23,7 +23,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 		downloadStories(15) {
 			SharedContentGraph.pickNodes(1).onSuccess { nodes in
-				graphNavigationController.pushNodeViewForNode(nodes.first!)
+				graphNavigationController.pushNodeViewForNode(nodes.first!, animated: false)
 			}
 		}
 		
