@@ -10,16 +10,21 @@ import UIKit
 
 class WebpageContentViewController: ContentViewController {
 
-	@IBOutlet var webView: UIWebView! {
+	override weak var dataSource: ContentViewControllerDataSource? {
 		didSet {
-			lockScroll()
-			if let content = contentDataSource?.contentForContentViewController(self) {
+			if let content = dataSource?.contentForContentViewController(self) {
 				guard case let .Webpage(url) = content else {
 					fatalError("Attempted to display unsupported content on WebpageContentViewController.")
 				}
 
 				webView.loadRequest(NSURLRequest(URL: url))
 			}
+		}
+	}
+
+	@IBOutlet var webView: UIWebView! {
+		didSet {
+			lockScroll()
 		}
 	}
 

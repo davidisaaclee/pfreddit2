@@ -9,27 +9,35 @@
 import UIKit
 
 class ImageContentViewController: ContentViewController {
-
-	@IBOutlet var imageView: UIImageView! {
+	override weak var dataSource: ContentViewControllerDataSource? {
 		didSet {
-			imageView.contentMode = .ScaleAspectFit
-
-			if let content = contentDataSource?.contentForContentViewController(self) {
+			if let content = dataSource?.contentForContentViewController(self) {
 				guard case let .Image(url) = content else {
 					fatalError("Attempted to display unsupported content on ImageContentViewController.")
 				}
 
 				DataRequestor.requestHTTP(url, HTTPAdditionalHeaders: nil).onSuccess { data in
+					print("Downloaded image data.")
 					guard let image = UIImage(data: data) else {
 						print("Unable to parse image data as image.")
 						return
 					}
 					self.imageView.image = image
 					self.imageView.sizeToFit()
-				}.onFailure { error in
-					print("Failed to load image.")
+					}.onFailure { error in
+						print("Failed to load image.")
 				}
 			}
 		}
+	}
+
+	@IBOutlet weak var imageView: UIImageView! {
+		didSet {
+			imageView.contentMode = .ScaleAspectFit
+		}
+	}
+
+	deinit {
+		print("Deinit image view")
 	}
 }

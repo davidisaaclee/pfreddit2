@@ -8,18 +8,18 @@
 
 import Foundation
 
-func createContentViewForContent(content: ContentType, dataSource: ContentViewControllerDataSource) -> ContentViewController? {
+func createContentViewForContent(content: ContentType) -> ContentViewController? {
 	let controller = { content -> ContentViewController? in
 		switch content {
 		case .Webpage(_):
 			return WebpageContentViewController()
 		case .Image(_):
 			return ImageContentViewController()
+		case .InlineVideo(_):
+			return InlineVideoContentViewController()
 		default:
 			return nil
 		}
 	}(content)
-
-	controller?.contentDataSource = dataSource
 	return controller
 }

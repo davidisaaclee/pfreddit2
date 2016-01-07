@@ -22,8 +22,10 @@ struct ImgurImageModel: Decodable {
 	// link	string	The direct link to the the image. (Note: if fetching an animated GIF that was over 20MB in original size, a .gif thumbnail will be returned)
 	let link: String
 
-	// gifv   	string 	OPTIONAL, The .gifv link. Only available if the image is animated and type is 'image/gif'.
 	// mp4    	string 	OPTIONAL, The direct link to the .mp4. Only available if the image is animated and type is 'image/gif'.
+	let mp4: String?
+
+	// gifv   	string 	OPTIONAL, The .gifv link. Only available if the image is animated and type is 'image/gif'.
 	// webm   	string 	OPTIONAL, The direct link to the .webm. Only available if the image is animated and type is 'image/gif'.
 	// looping	boolean	OPTIONAL, Whether the image has a looping animation. Only available if the image is animated and type is 'image/gif'.
 
@@ -46,5 +48,6 @@ struct ImgurImageModel: Decodable {
 		self.width = width
 		self.height = height
 		self.link = link
+		self.mp4 = data["mp4"].string
 	}
 }

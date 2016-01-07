@@ -1,27 +1,27 @@
 PODS:
   - BrightFutures (3.2.2):
     - Result (~> 1.0)
+  - Player (0.1.0)
   - Realm (0.97.0):
     - Realm/Headers (= 0.97.0)
   - Realm/Headers (0.97.0)
   - RealmSwift (0.97.0):
     - Realm (= 0.97.0)
   - Result (1.0.1)
-  - SBTableLayout (0.0.2)
   - SwiftyJSON (2.3.2)
 
 DEPENDENCIES:
   - BrightFutures
+  - Player
   - RealmSwift
-  - SBTableLayout
   - SwiftyJSON
 
 SPEC CHECKSUMS:
   BrightFutures: 1722a83fa8415aef78d66319a6c6add6685a7a87
+  Player: e05be4073ea64fce1981869898ad9796c27cdd2b
   Realm: b498a6fb9d288b171ff98d0e2d4384c295be8990
   RealmSwift: d014810dec75c9a3f1a33926d2dabfed855c582c
   Result: caef80340451e1f07492fa1e89117f83613bce24
-  SBTableLayout: ed42a1579a5d458dc1f95afbe9d79f9dcbd2fde1
   SwiftyJSON: 04ccea08915aa0109039157c7974cf0298da292a
 
 COCOAPODS: 0.39.0

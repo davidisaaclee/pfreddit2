@@ -191,6 +191,10 @@ class NodeViewController: UIViewController {
 			}
 		}
 	}
+
+	deinit {
+		print("Deinit NodeViewController")
+	}
 }
 
 

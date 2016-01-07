@@ -28,13 +28,6 @@ class ImgurParser: ContentParserModule {
 			+ "/"
 			+ R.CapturingGroup(R.LengthRange(R.Set([R.WordCharacter, R.DigitCharacter]), lower: 3))
 			+ R.Optional("\\." + R.Union(["jpg", "gif", "png"]))
-
-//		static let patterns = [
-//			"image": "imgur.com/(\(imageId))(?:\\.\(contentExt))?",
-//			"album": "imgur.com/a/(\(albumId))",
-//			"imageInAlbum": "imgur.com/a/(\(albumId))(#(\(imageId)))?",
-//			"gallery": "imgur.com/gallery/(\(galleryId))"
-//		]
 	}
 
 
@@ -57,9 +50,12 @@ class ImgurParser: ContentParserModule {
 				}
 
 				if imgurImage.animated {
-					// TODO
-					print("Animated images not yet supported.")
-					return nil
+					guard let mp4Link = imgurImage.mp4 else {
+						print("Could not get mp4 link.")
+						return nil
+					}
+					guard let imageURL = NSURL(string: mp4Link) else { return nil }
+					return ContentType.InlineVideo(imageURL)
 				} else {
 					guard let imageURL = NSURL(string: imgurImage.link) else { return nil }
 					return ContentType.Image(imageURL)

@@ -47,12 +47,14 @@ class ContentNodeViewController: UIViewController {
 	private func populateContentView() {
 		guard let contentView = contentView else { return }
 		guard let content = content else { return }
-		guard let contentViewController = createContentViewForContent(content, dataSource: self) else { return }
+		guard let contentViewController = createContentViewForContent(content) else { return }
 
 		addChildViewController(contentViewController)
 		contentViewController.view.frame = contentView.bounds
 		contentView.addSubview(contentViewController.view)
 		contentViewController.didMoveToParentViewController(self)
+
+		contentViewController.dataSource = self
 	}
 
 	private func populateTitleView() {
@@ -64,6 +66,10 @@ class ContentNodeViewController: UIViewController {
 		guard let scoreLabel = scoreLabel else { return }
 		guard let metadata = node?.metadata, case let MetadataType.Reddit(_, score) = metadata else { return }
 		scoreLabel.text = score > 0 ? "+\(score)" : "\(score)"
+	}
+
+	deinit {
+		print("Deinit ContentNodeViewController")
 	}
 }
 

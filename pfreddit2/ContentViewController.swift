@@ -8,16 +8,10 @@
 
 import UIKit
 
-protocol ContentViewControllerDataSource {
+protocol ContentViewControllerDataSource: class {
 	func contentForContentViewController(contentViewController: ContentViewController) -> ContentType?
 }
 
 class ContentViewController: UIViewController {
-	var contentDataSource: ContentViewControllerDataSource? {
-		didSet {
-			didSetContentDataSource(contentDataSource, oldValue: oldValue)
-		}
-	}
-
-	internal func didSetContentDataSource(contentDataSource: ContentViewControllerDataSource?, oldValue: ContentViewControllerDataSource?) {}
+	weak var dataSource: ContentViewControllerDataSource?
 }
