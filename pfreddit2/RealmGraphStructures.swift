@@ -156,6 +156,8 @@ func ==(lhs: RealmContentNode, rhs: RealmContentNode) -> Bool {
 class RealmContentEdge: Object, ContentEdge {
 	dynamic var id: String = ""
 	dynamic var weight: Double = 0.0
+
+	// Specific weights
 	dynamic var weightFollowedEdge: Int = 0 { didSet { recalculateWeight() } }
 
 	var sourceNode: ContentNode! {

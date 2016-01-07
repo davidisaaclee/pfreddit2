@@ -153,8 +153,8 @@ class NodeViewController: UIViewController {
 	private func reloadEdgesForNode(node: ContentNode) {
 		SharedContentGraph.sortedEdgesFromNode(node, count: kEdgeFetchCount).onSuccess {
 			self.edges = $0
-			}.onFailure { error in
-				print("ERROR:", error)
+		}.onFailure { error in
+			print("ERROR:", error)
 		}
 	}
 

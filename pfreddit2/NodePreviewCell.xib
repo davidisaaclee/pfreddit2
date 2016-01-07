@@ -22,8 +22,8 @@
                             <constraint firstAttribute="width" constant="80" id="8cO-Da-B8e"/>
                         </constraints>
                     </imageView>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ivg-Z0-0JE">
-                        <rect key="frame" x="96" y="8" width="261" height="128"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This is a post title" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ivg-Z0-0JE">
+                        <rect key="frame" x="96" y="8" width="211" height="128"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="128" id="BZg-xz-ofW"/>
                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="96" id="rZR-SD-qlW"/>
@@ -38,15 +38,28 @@
                             </mask>
                         </variation>
                     </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0eH-IU-MUJ">
+                        <rect key="frame" x="315" y="61" width="42" height="21"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="42" id="3cp-kx-jHd"/>
+                            <constraint firstAttribute="height" constant="21" id="Gr3-7R-nsU"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
                 </subviews>
                 <constraints>
                     <constraint firstItem="ivg-Z0-0JE" firstAttribute="top" secondItem="OlU-hJ-QZe" secondAttribute="topMargin" id="9O9-Z7-eo5"/>
                     <constraint firstItem="ivg-Z0-0JE" firstAttribute="leading" secondItem="eJE-k8-KUQ" secondAttribute="trailing" constant="8" id="G55-AU-Ki3"/>
                     <constraint firstItem="ivg-Z0-0JE" firstAttribute="trailing" secondItem="OlU-hJ-QZe" secondAttribute="trailingMargin" id="M3h-5b-ToY"/>
+                    <constraint firstItem="0eH-IU-MUJ" firstAttribute="trailing" secondItem="OlU-hJ-QZe" secondAttribute="trailingMargin" id="Sem-EV-dMe"/>
+                    <constraint firstItem="0eH-IU-MUJ" firstAttribute="centerY" secondItem="OlU-hJ-QZe" secondAttribute="centerY" id="Xer-Fw-FUE"/>
                     <constraint firstItem="eJE-k8-KUQ" firstAttribute="leading" secondItem="OlU-hJ-QZe" secondAttribute="leadingMargin" id="buO-ia-Bw9"/>
                     <constraint firstItem="ivg-Z0-0JE" firstAttribute="bottom" secondItem="OlU-hJ-QZe" secondAttribute="bottomMargin" id="e8D-3Y-O0Y"/>
                     <constraint firstItem="eJE-k8-KUQ" firstAttribute="top" secondItem="OlU-hJ-QZe" secondAttribute="topMargin" id="lWk-8y-jkg"/>
                     <constraint firstItem="ivg-Z0-0JE" firstAttribute="leading" secondItem="eJE-k8-KUQ" secondAttribute="trailing" constant="8" id="nI6-E9-AFg"/>
+                    <constraint firstItem="0eH-IU-MUJ" firstAttribute="leading" secondItem="ivg-Z0-0JE" secondAttribute="trailing" constant="8" id="oSb-xm-M79"/>
                     <constraint firstItem="ivg-Z0-0JE" firstAttribute="bottom" secondItem="eJE-k8-KUQ" secondAttribute="bottom" id="vA9-tS-GJE"/>
                     <constraint firstAttribute="bottomMargin" relation="greaterThanOrEqual" secondItem="eJE-k8-KUQ" secondAttribute="bottom" id="vKv-kf-zaD"/>
                     <constraint firstAttribute="bottomMargin" relation="greaterThanOrEqual" secondItem="eJE-k8-KUQ" secondAttribute="bottom" priority="999" id="zgm-Tu-QjV"/>
@@ -55,11 +68,13 @@
                     <mask key="constraints">
                         <exclude reference="vKv-kf-zaD"/>
                         <exclude reference="G55-AU-Ki3"/>
+                        <exclude reference="M3h-5b-ToY"/>
                         <exclude reference="vA9-tS-GJE"/>
                     </mask>
                 </variation>
             </tableViewCellContentView>
             <connections>
+                <outlet property="scoreLabel" destination="0eH-IU-MUJ" id="uiB-H7-9mZ"/>
                 <outlet property="thumbnailView" destination="eJE-k8-KUQ" id="Dzr-dD-3YO"/>
                 <outlet property="titleLabel" destination="ivg-Z0-0JE" id="1Ln-au-cvr"/>
             </connections>

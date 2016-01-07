@@ -10,12 +10,14 @@ import UIKit
 
 class NodePreviewCell: UITableViewCell {
 	@IBOutlet var titleLabel: UILabel!
+	@IBOutlet var scoreLabel: UILabel!
 	@IBOutlet var thumbnailView: UIImageView! {
 		didSet {
 			thumbnailView.contentMode = .ScaleAspectFill
 			thumbnailView.clipsToBounds = true
 		}
 	}
+
 
 	override func prepareForReuse() {
 		thumbnailView.image = nil

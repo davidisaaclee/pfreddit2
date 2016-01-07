@@ -16,7 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		// Setup initial view controller.
 		let graphNavigationController = GraphNavigationViewController()
 		downloadStories(15) {
-			SharedContentGraph.pickNodes(1).onSuccess { nodes in
+			SharedContentGraph.pickNodes(1, filter: nil).onSuccess { nodes in
 				graphNavigationController.pushNodeViewForNode(nodes.first!, animated: false)
 			}
 		}

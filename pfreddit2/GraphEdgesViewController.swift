@@ -34,7 +34,9 @@ class GraphEdgesViewController: UIViewController {
 	weak var delegate: GraphEdgesViewControllerDelegate?
 	weak var dataSource: GraphEdgesViewControllerDataSource?
 
-	private var cellData: [Int: (text: String?, image: UIImage?)] = [:] {
+	private typealias CellData = (text: String?, image: UIImage?, weight: Double?)
+
+	private var cellData: [Int: CellData] = [:] {
 		didSet {
 			tableView.reloadData()
 		}
@@ -46,7 +48,7 @@ class GraphEdgesViewController: UIViewController {
 
 		for edgeIndex in 0..<numberOfEdges {
 			let edge = dataSource.graphEdgesViewController(self, edgeForIndexPath: NSIndexPath(forRow: edgeIndex, inSection: 0))
-			cellData[edgeIndex] = (text: edge?.destinationNode.title, image: nil)
+			cellData[edgeIndex] = (text: edge?.destinationNode.title, image: nil, weight: edge?.weight)
 			if let thumbnailURLString = edge?.destinationNode.thumbnailURL,
 				let thumbnailURL = NSURL(string: thumbnailURLString) {
 					dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0)) {
@@ -94,6 +96,9 @@ extension GraphEdgesViewController: UITableViewDataSource {
 		guard let cellData = cellData[indexPath.row] else { return cell }
 		cell.titleLabel.text = cellData.text
 		cell.thumbnailView.image = cellData.image
+		if let weight = cellData.weight {
+			cell.scoreLabel.text = ((weight > 0) ? "+" : "") + "\(Int(floor(weight)))"
+		}
 		return cell
 	}
 }

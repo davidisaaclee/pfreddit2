@@ -23,7 +23,10 @@ protocol ContentEdge {
 	var sourceNode: ContentNode! { get }
 	var destinationNode: ContentNode! { get }
 	var weight: Double { get }
+
 	var weightFollowedEdge: Int { get set }
+
+	func recalculateWeight()
 }
 
 enum ContentGraphError: ErrorType {
@@ -33,7 +36,7 @@ enum ContentGraphError: ErrorType {
 }
 
 enum EdgeWeight {
-	// User has followed an edge which has been presented to them.
+	// Some user has followed an edge which has been presented to them.
 	case FollowedEdge
 }
 
@@ -41,7 +44,7 @@ protocol ContentGraph {
 	func nodeForID(id: String) -> Future<ContentNode?, ContentGraphError>
 	func edgeForID(id: String) -> Future<ContentEdge?, ContentGraphError>
 	// TODO: Is there any way this method can return `Future<Set<ContentNode>, ...>` without assigning type parameters (via `Hashable`)?
-	func pickNodes(count: Int) -> Future<[ContentNode], ContentGraphError>
+	func pickNodes(count: Int, filter: NSPredicate?) -> Future<[ContentNode], ContentGraphError>
 	func writeNode(node: ContentNode) -> Future<ContentNode, ContentGraphError>
 	func writeNodes(nodes: [ContentNode]) -> Future<[ContentNode], ContentGraphError>
 	func incrementEdge(source: ContentNode, destination: ContentNode, incrementBy weightDelta: EdgeWeight) -> Future<ContentEdge, ContentGraphError>

@@ -81,10 +81,13 @@ extension RealmContentGraph: ContentGraph {
 		return Future(value: realm.objects(RealmContentEdge).filter("id == %@", id).first)
 	}
 
-	func pickNodes(count: Int) -> Future<[ContentNode], ContentGraphError> {
+	func pickNodes(count: Int, filter: NSPredicate? = nil) -> Future<[ContentNode], ContentGraphError> {
 		guard count > 0 else { return Future(value: []) }
 
-		let nodesQuery = realm.objects(RealmContentNode)
+		var nodesQuery = realm.objects(RealmContentNode)
+		if let filter = filter {
+			nodesQuery = nodesQuery.filter(filter)
+		}
 		let generator = nodesQuery.generate()
 		var result: [ContentNode] = []
 		for _ in 0..<count {
@@ -108,6 +111,8 @@ extension RealmContentGraph: ContentGraph {
 				case .FollowedEdge:
 					edge.weightFollowedEdge += 1
 				}
+
+				edge.recalculateWeight()
 			}
 		}
 	}
@@ -115,7 +120,7 @@ extension RealmContentGraph: ContentGraph {
 	func sortedEdgesFromNode(sourceNode: ContentNode, count: Int = 25) -> Future<[ContentEdge], ContentGraphError> {
 		let edgesQuery = realm.objects(RealmContentEdge).filter("realmSourceNode.id == %@", sourceNode.id)
 		var result = [ContentEdge](edgesQuery.sorted("weight").prefix(count).map { $0 as ContentEdge })
-		return pickNodes(count - result.count).map { nodeSet in
+		return pickNodes(count - result.count, filter: NSPredicate(format: "id != %@", sourceNode.id)).map { nodeSet in
 			let edgeSet: [RealmContentEdge] = nodeSet.map(self.nodeToRealmNode).map {
 				RealmContentEdge(sourceNode: self.nodeToRealmNode(sourceNode), destinationNode: $0)
 			}
