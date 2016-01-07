@@ -158,9 +158,18 @@ class RealmContentNodeWeighting: Object, ContentNodeWeighting {
 	dynamic var nodeID: String = ""
 	dynamic var seenByActiveUser: Bool = false
 
+	dynamic var weightAsSourceNode: Double = 0.0
+	dynamic var weightAsDestinationNode: Double = 0.0
+
+	func recalculateWeight() {
+		weightAsSourceNode = 0.0
+		weightAsDestinationNode = seenByActiveUser ? -100 : 0
+	}
+
 	convenience init(node: ContentNode) {
 		self.init()
 		nodeID = node.id
+		recalculateWeight()
 	}
 }
 
@@ -202,12 +211,8 @@ class RealmContentEdge: Object, ContentEdge {
 		SharedContentGraph.nodeWeightingForID(self.sourceNode.id)
 			.zip(SharedContentGraph.nodeWeightingForID(self.destinationNode.id))
 			.onSuccess { (sourceNodeWeighting, destinationNodeWeighting) in
-				let sourceNodeWeight: Double = 0
-				var destinationNodeWeight: Double = 0
-
-				if let destinationNodeWeighting = destinationNodeWeighting {
-					destinationNodeWeight = destinationNodeWeighting.seenByActiveUser ? -100 : 0
-				}
+				let sourceNodeWeight: Double = sourceNodeWeighting?.weightAsSourceNode ?? 0
+				let destinationNodeWeight: Double = destinationNodeWeighting?.weightAsDestinationNode ?? 0
 
 				// TODO: exceptions
 				try! self.realm?.write {

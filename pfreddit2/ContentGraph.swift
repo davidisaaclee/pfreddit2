@@ -22,6 +22,11 @@ protocol ContentNode {
 protocol ContentNodeWeighting {
 	var nodeID: String { get }
 	var seenByActiveUser: Bool { get set }
+
+	var weightAsSourceNode: Double { get }
+	var weightAsDestinationNode: Double { get }
+
+	func recalculateWeight()
 }
 
 protocol ContentEdge {
@@ -64,6 +69,7 @@ protocol ContentGraph {
 	func incrementWeightOfEdgeFromNode(source: ContentNode, toNode destination: ContentNode, incrementBy weightDelta: EdgeWeight) -> Future<ContentEdge, ContentGraphError>
 	func incrementWeightOfNode(node: ContentNode, byWeight weightDelta: NodeWeight) -> Future<ContentNodeWeighting, ContentGraphError>
 	func sortedEdgesFromNode(sourceNode: ContentNode, count: Int) -> Future<[ContentEdge], ContentGraphError>
+	func generateEdgesFromNode(node: ContentNode, count: Int) -> Future<[ContentEdge], ContentGraphError>
 }
 
 extension ContentGraph {
