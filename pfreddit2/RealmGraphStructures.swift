@@ -153,6 +153,18 @@ func ==(lhs: RealmContentNode, rhs: RealmContentNode) -> Bool {
 	return lhs.id == rhs.id
 }
 
+// Describes interactions with a ContentNode which affect associated edge weights.
+class RealmContentNodeWeighting: Object, ContentNodeWeighting {
+	dynamic var nodeID: String = ""
+	dynamic var seenByActiveUser: Bool = false
+
+	convenience init(node: ContentNode) {
+		self.init()
+		nodeID = node.id
+	}
+}
+
+
 class RealmContentEdge: Object, ContentEdge {
 	dynamic var id: String = ""
 	dynamic var weight: Double = 0.0
@@ -179,6 +191,7 @@ class RealmContentEdge: Object, ContentEdge {
 		self.init()
 		self.realmSourceNode = sourceNode
 		self.realmDestinationNode = destinationNode
+		recalculateWeight()
 	}
 
 	override static func primaryKey() -> String? {
@@ -186,7 +199,23 @@ class RealmContentEdge: Object, ContentEdge {
 	}
 
 	func recalculateWeight() {
-		self.weight = Double(weightFollowedEdge)
+		SharedContentGraph.nodeWeightingForID(self.sourceNode.id)
+			.zip(SharedContentGraph.nodeWeightingForID(self.destinationNode.id))
+			.onSuccess { (sourceNodeWeighting, destinationNodeWeighting) in
+				let sourceNodeWeight: Double = 0
+				var destinationNodeWeight: Double = 0
+
+				if let destinationNodeWeighting = destinationNodeWeighting {
+					destinationNodeWeight = destinationNodeWeighting.seenByActiveUser ? -100 : 0
+				}
+
+				// TODO: exceptions
+				try! self.realm?.write {
+					self.weight = Double(self.weightFollowedEdge)
+											+ sourceNodeWeight
+											+ destinationNodeWeight
+				}
+			}
 	}
 
 	private func updateID() {

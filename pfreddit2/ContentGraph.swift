@@ -18,6 +18,12 @@ protocol ContentNode {
 	var metadata: MetadataType? { get }
 }
 
+// Describes interactions with a ContentNode which affect associated edge weights.
+protocol ContentNodeWeighting {
+	var nodeID: String { get }
+	var seenByActiveUser: Bool { get set }
+}
+
 protocol ContentEdge {
 	var id: String { get }
 	var sourceNode: ContentNode! { get }
@@ -40,14 +46,23 @@ enum EdgeWeight {
 	case FollowedEdge
 }
 
+enum NodeWeight {
+	// The currently active user has seen this node.
+	case SeenByActiveUser
+}
+
 protocol ContentGraph {
+	// Access
 	func nodeForID(id: String) -> Future<ContentNode?, ContentGraphError>
 	func edgeForID(id: String) -> Future<ContentEdge?, ContentGraphError>
-	// TODO: Is there any way this method can return `Future<Set<ContentNode>, ...>` without assigning type parameters (via `Hashable`)?
+	func nodeWeightingForID(id: String) -> Future<ContentNodeWeighting?, ContentGraphError>
 	func pickNodes(count: Int, filter: NSPredicate?) -> Future<[ContentNode], ContentGraphError>
+
+	// Modify
 	func writeNode(node: ContentNode) -> Future<ContentNode, ContentGraphError>
 	func writeNodes(nodes: [ContentNode]) -> Future<[ContentNode], ContentGraphError>
-	func incrementEdge(source: ContentNode, destination: ContentNode, incrementBy weightDelta: EdgeWeight) -> Future<ContentEdge, ContentGraphError>
+	func incrementWeightOfEdgeFromNode(source: ContentNode, toNode destination: ContentNode, incrementBy weightDelta: EdgeWeight) -> Future<ContentEdge, ContentGraphError>
+	func incrementWeightOfNode(node: ContentNode, byWeight weightDelta: NodeWeight) -> Future<ContentNodeWeighting, ContentGraphError>
 	func sortedEdgesFromNode(sourceNode: ContentNode, count: Int) -> Future<[ContentEdge], ContentGraphError>
 }
 

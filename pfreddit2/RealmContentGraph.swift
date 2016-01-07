@@ -81,6 +81,10 @@ extension RealmContentGraph: ContentGraph {
 		return Future(value: realm.objects(RealmContentEdge).filter("id == %@", id).first)
 	}
 
+	func nodeWeightingForID(id: String) -> Future<ContentNodeWeighting?, ContentGraphError> {
+		return Future(value: realm.objects(RealmContentNodeWeighting).filter("nodeID == %@", id).first)
+	}
+
 	func pickNodes(count: Int, filter: NSPredicate? = nil) -> Future<[ContentNode], ContentGraphError> {
 		guard count > 0 else { return Future(value: []) }
 
@@ -104,7 +108,7 @@ extension RealmContentGraph: ContentGraph {
 		}.map { $0.map { $0 as ContentNode } }
 	}
 
-	func incrementEdge(source: ContentNode, destination: ContentNode, incrementBy weightDelta: EdgeWeight) -> Future<ContentEdge, ContentGraphError> {
+	func incrementWeightOfEdgeFromNode(source: ContentNode, toNode destination: ContentNode, incrementBy weightDelta: EdgeWeight) -> Future<ContentEdge, ContentGraphError> {
 		return edgeFrom(source, toDestination: destination).flatMap { edge in
 			self.safeWrite(edge) { (var edge, realm) in
 				switch weightDelta {
@@ -117,15 +121,38 @@ extension RealmContentGraph: ContentGraph {
 		}
 	}
 
+	func incrementWeightOfNode(node: ContentNode, byWeight weightDelta: NodeWeight) -> Future<ContentNodeWeighting, ContentGraphError> {
+		return nodeWeightingForID(node.id).flatMap { nodeWeightingOrNil -> Future<ContentNodeWeighting, ContentGraphError> in
+			var newNodeWeighting: RealmContentNodeWeighting!
+			if nodeWeightingOrNil == nil {
+				newNodeWeighting = RealmContentNodeWeighting(node: RealmContentNode(node: node))
+				self.safeWrite(newNodeWeighting) { weighting, realm in
+					realm.add(weighting)
+				}
+			}
+
+			let nodeWeighting: ContentNodeWeighting = nodeWeightingOrNil ?? newNodeWeighting
+			return self.safeWrite(nodeWeighting) { (var nodeWeighting, realm) in
+				switch weightDelta {
+				case .SeenByActiveUser:
+					nodeWeighting.seenByActiveUser = true
+				}
+			}
+		}
+	}
+
 	func sortedEdgesFromNode(sourceNode: ContentNode, count: Int = 25) -> Future<[ContentEdge], ContentGraphError> {
 		let edgesQuery = realm.objects(RealmContentEdge).filter("realmSourceNode.id == %@", sourceNode.id)
-		var result = [ContentEdge](edgesQuery.sorted("weight").prefix(count).map { $0 as ContentEdge })
-		return pickNodes(count - result.count, filter: NSPredicate(format: "id != %@", sourceNode.id)).map { nodeSet in
-			let edgeSet: [RealmContentEdge] = nodeSet.map(self.nodeToRealmNode).map {
-				RealmContentEdge(sourceNode: self.nodeToRealmNode(sourceNode), destinationNode: $0)
-			}
-			result.appendContentsOf(edgeSet.map { $0 as ContentEdge })
-			return result
+		let realmSourceNode = nodeToRealmNode(sourceNode)
+
+		var result: [ContentEdge] = edgesQuery.sorted("weight").prefix(count).map { $0 as ContentEdge }
+
+		return pickNodes(count - result.count, filter: NSPredicate(format: "id != %@", sourceNode.id)).map { nodeSet -> [ContentEdge] in
+			let edgeSet = nodeSet.map(self.nodeToRealmNode).map {
+				RealmContentEdge(sourceNode: realmSourceNode, destinationNode: $0)
+			}.map { $0 as ContentEdge }
+			result.appendContentsOf(edgeSet)
+			return result.sort { (before, after) in before.weight > after.weight }
 		}
 	}
 }

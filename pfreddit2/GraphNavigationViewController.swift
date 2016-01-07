@@ -42,6 +42,8 @@ class GraphNavigationViewController: UINavigationController {
 		// Append the new node onto the end of the trail, and navigate to it.
 		nodeTrailIDs.append(node.id)
 		navigateForwardAnimated(true)
+
+		SharedContentGraph.incrementWeightOfNode(node, byWeight: NodeWeight.SeenByActiveUser)
 	}
 
 	func navigateForwardAnimated(animated: Bool) {
@@ -163,7 +165,7 @@ class GraphNavigationViewController: UINavigationController {
 extension GraphNavigationViewController: NodeViewControllerDelegate {
 	func nodeViewController(nodeViewController: NodeViewController, wantsToNavigateToNode node: ContentNode) {
 		if let previousNode = nodeViewController.activeNode {
-			SharedContentGraph.incrementEdge(previousNode, destination: node, incrementBy: EdgeWeight.FollowedEdge)
+			SharedContentGraph.incrementWeightOfEdgeFromNode(previousNode, toNode: node, incrementBy: EdgeWeight.FollowedEdge)
 				.onFailure { error in print("Failed to increment edge:", error) }
 		}
 		self.pushNodeViewForNode(node, animated: true)
