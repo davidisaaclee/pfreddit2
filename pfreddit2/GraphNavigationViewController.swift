@@ -11,50 +11,22 @@ import UIKit
 class GraphNavigationViewController: UINavigationController {
 	// MARK: State
 	var nodeTrailIDs: [String] = []
-	var nodeTrailCursor: Int = -1 {
-		didSet {
-			SharedContentGraph.nodeForID(nodeTrailIDs[nodeTrailCursor]).onSuccess { node in
-				guard let node = node else {
-					print("Could not find node \(self.nodeTrailIDs[self.nodeTrailCursor]) in database.")
-					return
-				}
-
-				let nodeViewController = self.createNodeViewControllerForNode(node)
-				self.pushViewController(nodeViewController, animated: false)
-				self.topViewController?.view.addGestureRecognizer(self.interactiveForwardGestureRecognizer)
-				self.topViewController?.view.addGestureRecognizer(self.interactiveBackGestureRecognizer)
-				while self.viewControllers.count > 2 {
-					let popped = self.viewControllers.removeFirst()
-					popped.removeFromParentViewController()
-				}
-			}.onFailure { error in
-				print("Error retrieving node \(self.nodeTrailIDs[self.nodeTrailCursor]):", error)
-			}
-		}
-	}
+	private var nodeTrailCursor: Int = -1
 
 	// MARK: Gesture recognizers
 	var interactiveBackGestureRecognizer: UIScreenEdgePanGestureRecognizer!
 	var interactiveForwardGestureRecognizer: UIScreenEdgePanGestureRecognizer!
 
 	// MARK: Transition controllers
-	private lazy var animatedTransition: UIViewControllerAnimatedTransitioning = SlideAnimatedTransitioning()
-	private lazy var percentDrivenTransition: UIPercentDrivenInteractiveTransition = UIPercentDrivenInteractiveTransition()
+	private var animatedTransition: SlideAnimatedTransitioning!
+	private var backInteractionController: UIPercentDrivenInteractiveTransition?
+	private var forwardInteractionController: UIPercentDrivenInteractiveTransition?
 
 
 	// MARK: - UIViewController
 
 	override func viewDidLoad() {
-		interactivePopGestureRecognizer?.enabled = false
-
-		interactiveBackGestureRecognizer = UIScreenEdgePanGestureRecognizer(target: self, action: "handleBackNavigationGesture:")
-		interactiveBackGestureRecognizer.edges = .Left
-		interactiveBackGestureRecognizer.delegate = self
-
-		interactiveForwardGestureRecognizer = UIScreenEdgePanGestureRecognizer(target: self, action: "handleForwardNavigationGesture:")
-		interactiveForwardGestureRecognizer.edges = .Right
-		interactiveForwardGestureRecognizer.delegate = self
-
+		setupInteractiveNavigationControl()
 		styleNavigationController()
 	}
 
@@ -69,59 +41,88 @@ class GraphNavigationViewController: UINavigationController {
 
 		// Append the new node onto the end of the trail, and navigate to it.
 		nodeTrailIDs.append(node.id)
+		navigateForwardAnimated(true)
+	}
+
+	func navigateForwardAnimated(animated: Bool) {
+		animatedTransition.side = .Right
 		nodeTrailCursor = nodeTrailCursor + 1
+		navigateToCurrentNodeAnimated(animated)
+	}
+
+	func navigateBackAnimated(animated: Bool) {
+		animatedTransition.side = .Left
+		nodeTrailCursor = nodeTrailCursor - 1
+		navigateToCurrentNodeAnimated(animated)
+	}
+
+	private func navigateToCurrentNodeAnimated(animated: Bool) {
+		SharedContentGraph.nodeForID(nodeTrailIDs[nodeTrailCursor]).onSuccess { node in
+			guard let node = node else {
+				print("Could not find node \(self.nodeTrailIDs[self.nodeTrailCursor]) in database.")
+				return
+			}
+
+			let nodeViewController = self.createNodeViewControllerForNode(node)
+			self.pushViewController(nodeViewController, animated: animated)
+			while self.viewControllers.count > 2 {
+				let popped = self.viewControllers.removeFirst()
+				popped.removeFromParentViewController()
+			}
+		}.onFailure { error in
+			print("Error retrieving node \(self.nodeTrailIDs[self.nodeTrailCursor]):", error)
+		}
 	}
 
 
 	// MARK: - Gesture handlers
 
 	internal func handleBackNavigationGesture(recognizer: UIScreenEdgePanGestureRecognizer) {
-		// If we can't go back, just return.
-		guard nodeTrailCursor > nodeTrailIDs.startIndex else {
-			return
-		}
+		let percent = max(recognizer.translationInView(view).x, 0) / view.frame.size.width
 
 		switch recognizer.state {
+		case .Began:
+			// If we can't go back, just return.
+			guard nodeTrailCursor > nodeTrailIDs.startIndex else { return }
+			navigateBackAnimated(true)
+
+		case .Changed:
+			backInteractionController?.updateInteractiveTransition(percent)
+
 		case .Ended:
-			nodeTrailCursor = nodeTrailCursor - 1
+			if percent > 0.5 {
+				backInteractionController?.finishInteractiveTransition()
+			} else {
+				navigateForwardAnimated(false)
+				backInteractionController?.cancelInteractiveTransition()
+			}
 		default:
+			print(".Unhandled gesture state", recognizer.state)
 			break
 		}
-
-//		let percent = max(-recognizer.translationInView(view).x, 0) / view.frame.size.width
-//		switch recognizer.state {
-//		case .Began:
-////			popViewControllerAnimated(false)
-//			break
-//
-//		case .Changed:
-//			percentDrivenTransition.updateInteractiveTransition(percent)
-//
-//		case .Ended:
-//			if percent > 0.5 {
-//				percentDrivenTransition.finishInteractiveTransition()
-//			} else {
-//				percentDrivenTransition.cancelInteractiveTransition()
-//			}
-//		case .Cancelled:
-//			print("Cancelled")
-//		case .Failed:
-//			print("Failed")
-//		default:
-//			break
-//		}
 	}
 
 	internal func handleForwardNavigationGesture(recognizer: UIScreenEdgePanGestureRecognizer) {
-		// If we can't go forward, just return.
-		guard nodeTrailCursor < nodeTrailIDs.endIndex - 1 else {
-			return
-		}
+		let percent = max(-recognizer.translationInView(view).x, 0) / view.frame.size.width
 
 		switch recognizer.state {
+		case .Began:
+			// If we can't go back, just return.
+			guard nodeTrailCursor < nodeTrailIDs.endIndex - 1 else { return }
+			navigateForwardAnimated(true)
+
+		case .Changed:
+			forwardInteractionController?.updateInteractiveTransition(percent)
+
 		case .Ended:
-			nodeTrailCursor = nodeTrailCursor + 1
+			if percent > 0.5 {
+				forwardInteractionController?.finishInteractiveTransition()
+			} else {
+				navigateBackAnimated(false)
+				forwardInteractionController?.cancelInteractiveTransition()
+			}
 		default:
+			print(".Unhandled gesture state", recognizer.state)
 			break
 		}
 	}
@@ -131,13 +132,28 @@ class GraphNavigationViewController: UINavigationController {
 
 	private func createNodeViewControllerForNode(node: ContentNode) -> NodeViewController {
 		let nodeViewController = NodeViewController()
-		nodeViewController.nodeViewDelegate = self
+		nodeViewController.delegate = self
 		nodeViewController.activeNode = node
 		return nodeViewController
 	}
 
 	private func styleNavigationController() {
 		navigationBar.hidden = true
+	}
+
+	private func setupInteractiveNavigationControl() {
+		delegate = self
+		interactivePopGestureRecognizer?.enabled = false
+		animatedTransition = SlideAnimatedTransitioning(side: .Left)
+
+		interactiveBackGestureRecognizer = UIScreenEdgePanGestureRecognizer(target: self, action: "handleBackNavigationGesture:")
+		interactiveBackGestureRecognizer.edges = .Left
+
+		interactiveForwardGestureRecognizer = UIScreenEdgePanGestureRecognizer(target: self, action: "handleForwardNavigationGesture:")
+		interactiveForwardGestureRecognizer.edges = .Right
+
+		view.addGestureRecognizer(interactiveBackGestureRecognizer)
+		view.addGestureRecognizer(interactiveForwardGestureRecognizer)
 	}
 }
 
@@ -155,21 +171,6 @@ extension GraphNavigationViewController: NodeViewControllerDelegate {
 }
 
 
-// MARK: - UIGestureRecognizerDelegate
-
-extension GraphNavigationViewController: UIGestureRecognizerDelegate {
-	func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldReceiveTouch touch: UITouch) -> Bool {
-		return true
-	}
-
-	// TODO: Maybe make this more specific?
-	func gestureRecognizer(gestureRecognizer: UIGestureRecognizer,
-			shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-		return true
-	}
-}
-
-
 // MARK: - UINavigationControllerDelegate
 
 extension GraphNavigationViewController: UINavigationControllerDelegate {
@@ -182,6 +183,24 @@ extension GraphNavigationViewController: UINavigationControllerDelegate {
 
 	func navigationController(navigationController: UINavigationController,
 			interactionControllerForAnimationController animationController: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
-		return percentDrivenTransition
+		switch animatedTransition.side {
+		case .Left:
+			// Need this switch to return `nil` for non-interactive transitions.
+			switch interactiveBackGestureRecognizer.state {
+			case .Began:
+				backInteractionController = UIPercentDrivenInteractiveTransition()
+			default:
+				backInteractionController = nil
+			}
+			return backInteractionController
+		case .Right:
+			switch interactiveForwardGestureRecognizer.state {
+			case .Began:
+				forwardInteractionController = UIPercentDrivenInteractiveTransition()
+			default:
+				forwardInteractionController = nil
+			}
+			return forwardInteractionController
+		}
 	}
 }

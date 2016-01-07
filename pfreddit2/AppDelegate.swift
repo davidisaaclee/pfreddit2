@@ -14,18 +14,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	var window: UIWindow?
 	func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
 		// Setup initial view controller.
-		window = UIWindow(frame: UIScreen.mainScreen().bounds)
-		window?.rootViewController = GraphNavigationViewController()
-		window?.makeKeyAndVisible()
-		guard let graphNavigationController = window?.rootViewController as? GraphNavigationViewController else {
-			return false
-		}
-
+		let graphNavigationController = GraphNavigationViewController()
 		downloadStories(15) {
 			SharedContentGraph.pickNodes(1).onSuccess { nodes in
 				graphNavigationController.pushNodeViewForNode(nodes.first!, animated: false)
 			}
 		}
+
+		// Show view controller in window.
+		window = UIWindow(frame: UIScreen.mainScreen().bounds)
+		window?.rootViewController = graphNavigationController
+		window?.makeKeyAndVisible()
 		
 		return true
 	}

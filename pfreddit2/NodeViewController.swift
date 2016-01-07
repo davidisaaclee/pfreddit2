@@ -16,8 +16,12 @@ protocol NodeViewControllerDelegate: class {
 class NodeViewController: UIViewController {
 	let kEdgeFetchCount = 10
 	
-	weak var nodeViewDelegate: NodeViewControllerDelegate?
-	lazy var nodeViewDragRecognizer: UIPanGestureRecognizer = UIPanGestureRecognizer(target: self, action: "handleNodeViewDrag:")
+	weak var delegate: NodeViewControllerDelegate?
+	var nodeViewDragRecognizer: UIPanGestureRecognizer! {
+		didSet {
+			nodeViewDragRecognizer.delegate = self
+		}
+	}
 
 
 	// MARK: - Child view controllers
@@ -113,6 +117,7 @@ class NodeViewController: UIViewController {
 	}
 
 	private func startDynamics() {
+		nodeViewDragRecognizer = UIPanGestureRecognizer(target: self, action: "handleNodeViewDrag:")
 		dynamicsAnimator = UIDynamicAnimator(referenceView: view)
 
 		let drawerStart = (from: view.bounds.origin, to: view.bounds.origin + CGPoint(x: view.bounds.width, y: 0))
@@ -203,7 +208,7 @@ extension NodeViewController: ContentNodeViewDataSource {
 extension NodeViewController: GraphEdgesViewControllerDelegate {
 	func graphEdgesViewController(graphEdgesViewController: GraphEdgesViewController, didSelectEdgeAtIndexPath indexPath: NSIndexPath) {
 		guard let destinationNode = self.edgeAtIndexPath(indexPath)?.destinationNode else { return }
-		nodeViewDelegate?.nodeViewController(self, wantsToNavigateToNode: destinationNode)
+		delegate?.nodeViewController(self, wantsToNavigateToNode: destinationNode)
 	}
 }
 
@@ -218,5 +223,35 @@ extension NodeViewController: GraphEdgesViewControllerDataSource {
 
 	func graphEdgesViewController(graphEdgesViewController: GraphEdgesViewController, edgeForIndexPath indexPath: NSIndexPath) -> ContentEdge? {
 		return self.edgeAtIndexPath(indexPath)
+	}
+}
+
+
+extension NodeViewController: UIGestureRecognizerDelegate {
+	func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+		guard let graphNavigationViewController = navigationController as? GraphNavigationViewController else { return false }
+
+		switch otherGestureRecognizer {
+		case graphNavigationViewController.interactiveBackGestureRecognizer:
+			return true
+		case graphNavigationViewController.interactiveForwardGestureRecognizer:
+			return true
+		default:
+			return false
+		}
+	}
+
+
+	func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldRequireFailureOfGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+		guard let graphNavigationViewController = navigationController as? GraphNavigationViewController else { return false }
+
+		switch otherGestureRecognizer {
+		case graphNavigationViewController.interactiveBackGestureRecognizer:
+			return true
+		case graphNavigationViewController.interactiveForwardGestureRecognizer:
+			return true
+		default:
+			return false
+		}
 	}
 }

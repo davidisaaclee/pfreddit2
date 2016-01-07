@@ -9,35 +9,55 @@
 import UIKit
 
 class SlideAnimatedTransitioning: NSObject, UIViewControllerAnimatedTransitioning {
+	enum SlideSide {
+		case Left
+		case Right
+	}
+
+	var side: SlideSide
+
+	required init(side: SlideSide) {
+		self.side = side
+	}
+
 	func animateTransition(transitionContext: UIViewControllerContextTransitioning) {
 		guard let containerView = transitionContext.containerView(),
 			let fromView = transitionContext.viewControllerForKey(UITransitionContextFromViewControllerKey)?.view,
-			let toView = transitionContext.viewControllerForKey(UITransitionContextFromViewControllerKey)?.view else {
+			let toView = transitionContext.viewControllerForKey(UITransitionContextToViewControllerKey)?.view else {
 				return
 		}
 
 		let width = containerView.frame.size.width
+		let targetFrame = fromView.frame
+		let offscreenLeft = targetFrame.offsetBy(dx: width, dy: 0)
 
-		var offsetLeft = fromView.frame
-		offsetLeft.origin.x = -width / 3.0
+		switch side {
+		case .Left:
+			toView.frame = targetFrame
+			containerView.insertSubview(toView, belowSubview: fromView)
 
-		var offscreenRight = toView.frame
-		offscreenRight.origin.x = width
+			UIView.animateWithDuration(transitionDuration(transitionContext), delay: 0, options: .CurveLinear, animations: {
+				fromView.frame = offscreenLeft
+			}, completion: { finished in
+				fromView.layer.opacity = 1
+				transitionContext.completeTransition(!transitionContext.transitionWasCancelled())
+			})
 
-		toView.frame = offscreenRight
-		containerView.addSubview(toView)
+		case .Right:
+			toView.frame = offscreenLeft
+			containerView.insertSubview(toView, aboveSubview: fromView)
 
-		UIView.animateWithDuration(transitionDuration(transitionContext), delay: 0, options: .CurveLinear, animations: {
-			toView.frame = fromView.frame
-			fromView.frame = offsetLeft
-			fromView.layer.opacity = 0.9
-		}, completion: { finished in
-			fromView.layer.opacity = 1
-			transitionContext.completeTransition(!transitionContext.transitionWasCancelled())
-		})
+			UIView.animateWithDuration(transitionDuration(transitionContext), delay: 0, options: .CurveLinear, animations: {
+				toView.frame = targetFrame
+			}, completion: { finished in
+				fromView.layer.opacity = 1
+				transitionContext.completeTransition(!transitionContext.transitionWasCancelled())
+			})
+
+		}
 	}
 
 	func transitionDuration(transitionContext: UIViewControllerContextTransitioning?) -> NSTimeInterval {
-		return 0.2
+		return 0.35
 	}
 }
