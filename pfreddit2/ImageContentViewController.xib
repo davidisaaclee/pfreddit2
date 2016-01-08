@@ -7,7 +7,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ImageContentViewController" customModule="pfreddit2" customModuleProvider="target">
             <connections>
-                <outlet property="imageView" destination="m2u-3L-952" id="mZw-a9-Z2r"/>
+                <outlet property="imageView" destination="gRy-CD-64W" id="gY5-yD-wdF"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -15,18 +15,13 @@
         <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
             <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-            <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="m2u-3L-952">
-                    <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                </imageView>
-            </subviews>
             <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-            <constraints>
-                <constraint firstAttribute="bottom" secondItem="m2u-3L-952" secondAttribute="bottom" id="9H6-Qm-H82"/>
-                <constraint firstItem="m2u-3L-952" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="YlJ-GE-lLc"/>
-                <constraint firstAttribute="trailing" secondItem="m2u-3L-952" secondAttribute="trailing" id="ilU-WT-5QM"/>
-                <constraint firstItem="m2u-3L-952" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="x24-mf-A3a"/>
-            </constraints>
+            <point key="canvasLocation" x="524" y="546"/>
         </view>
+        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="gRy-CD-64W">
+            <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <point key="canvasLocation" x="445" y="990"/>
+        </imageView>
     </objects>
 </document>

@@ -17,15 +17,13 @@ class ImageContentViewController: ContentViewController {
 				}
 
 				DataRequestor.requestHTTP(url, HTTPAdditionalHeaders: nil).onSuccess { data in
-					print("Downloaded image data.")
 					guard let image = UIImage(data: data) else {
 						print("Unable to parse image data as image.")
 						return
 					}
 					self.imageView.image = image
-					self.imageView.sizeToFit()
-					}.onFailure { error in
-						print("Failed to load image.")
+				}.onFailure { error in
+					print("Failed to load image.")
 				}
 			}
 		}
@@ -37,7 +35,35 @@ class ImageContentViewController: ContentViewController {
 		}
 	}
 
+	var zoomableItemViewController: ZoomableItemViewController!
+
+	override func viewDidLoad() {
+		zoomableItemViewController = ZoomableItemViewController()
+		addChildViewController(zoomableItemViewController)
+		zoomableItemViewController.view.frame = view.bounds
+		view.addSubview(zoomableItemViewController.view)
+		zoomableItemViewController.didMoveToParentViewController(self)
+
+		imageView.frame = zoomableItemViewController.contentView.bounds
+		zoomableItemViewController.contentView.addSubview(imageView)
+
+		imageView.translatesAutoresizingMaskIntoConstraints = false
+
+		let margins = zoomableItemViewController.contentView.layoutMarginsGuide
+		imageView.leadingAnchor.constraintEqualToAnchor(margins.leadingAnchor).active = true
+		imageView.trailingAnchor.constraintEqualToAnchor(margins.trailingAnchor).active = true
+		imageView.topAnchor.constraintEqualToAnchor(margins.topAnchor).active = true
+		imageView.bottomAnchor.constraintEqualToAnchor(margins.bottomAnchor).active = true
+		zoomableItemViewController.contentView.updateConstraints()
+	}
+
 	deinit {
 		print("Deinit image view")
+	}
+}
+
+extension ImageContentViewController: UIScrollViewDelegate {
+	func viewForZoomingInScrollView(scrollView: UIScrollView) -> UIView? {
+		return imageView
 	}
 }

@@ -31,6 +31,9 @@
 		6368C6CC1C35E45100B3D432 /* ImgurDataStructures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6368C6CB1C35E45100B3D432 /* ImgurDataStructures.swift */; };
 		637825FD1C2F05E500A17668 /* TableCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637825FC1C2F05E500A17668 /* TableCollectionViewLayout.swift */; };
 		637825FF1C2F5A2500A17668 /* CGPoint++.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637825FE1C2F5A2500A17668 /* CGPoint++.swift */; };
+		63881BF31C46B54500D752D6 /* UIScrollView+setZoomScaleFromPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63881BF21C46B54500D752D6 /* UIScrollView+setZoomScaleFromPoint.swift */; };
+		6396358B1C401C23002F83A5 /* ZoomableItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639635891C401C23002F83A5 /* ZoomableItemViewController.swift */; };
+		6396358C1C401C23002F83A5 /* ZoomableItemViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6396358A1C401C23002F83A5 /* ZoomableItemViewController.xib */; };
 		639FA30C1C357CA0001E47B3 /* ContentParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639FA30B1C357CA0001E47B3 /* ContentParser.swift */; };
 		639FA3101C35818E001E47B3 /* SequenceType+firstSuccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639FA30F1C35818E001E47B3 /* SequenceType+firstSuccess.swift */; };
 		639FA3121C35921F001E47B3 /* SequenceType+completionStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639FA3111C35921F001E47B3 /* SequenceType+completionStream.swift */; };
@@ -42,6 +45,7 @@
 		63C875131C3172CA0051F970 /* ContentTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C875121C3172CA0051F970 /* ContentTypes.swift */; };
 		63E764C61C3F08E500627C06 /* InlineVideoContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E764C41C3F08E500627C06 /* InlineVideoContentViewController.swift */; };
 		63E764C71C3F08E500627C06 /* InlineVideoContentViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 63E764C51C3F08E500627C06 /* InlineVideoContentViewController.xib */; };
+		63E764CA1C3F4BEE00627C06 /* ZoomableItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E764C91C3F4BEE00627C06 /* ZoomableItemView.swift */; };
 		63F66A581C29BC7B00E0E52B /* Graph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F66A571C29BC7B00E0E52B /* Graph.swift */; };
 		63F66A5A1C29BE8100E0E52B /* DirectedWeightedGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F66A591C29BE8100E0E52B /* DirectedWeightedGraph.swift */; };
 		63F66A5C1C29C13400E0E52B /* composeHashValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F66A5B1C29C13400E0E52B /* composeHashValues.swift */; };
@@ -93,6 +97,9 @@
 		6368C6CB1C35E45100B3D432 /* ImgurDataStructures.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImgurDataStructures.swift; sourceTree = "<group>"; };
 		637825FC1C2F05E500A17668 /* TableCollectionViewLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableCollectionViewLayout.swift; sourceTree = "<group>"; };
 		637825FE1C2F5A2500A17668 /* CGPoint++.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGPoint++.swift"; sourceTree = "<group>"; };
+		63881BF21C46B54500D752D6 /* UIScrollView+setZoomScaleFromPoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIScrollView+setZoomScaleFromPoint.swift"; sourceTree = "<group>"; };
+		639635891C401C23002F83A5 /* ZoomableItemViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZoomableItemViewController.swift; sourceTree = "<group>"; };
+		6396358A1C401C23002F83A5 /* ZoomableItemViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ZoomableItemViewController.xib; sourceTree = "<group>"; };
 		639FA30B1C357CA0001E47B3 /* ContentParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentParser.swift; sourceTree = "<group>"; };
 		639FA30F1C35818E001E47B3 /* SequenceType+firstSuccess.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SequenceType+firstSuccess.swift"; sourceTree = "<group>"; };
 		639FA3111C35921F001E47B3 /* SequenceType+completionStream.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SequenceType+completionStream.swift"; sourceTree = "<group>"; };
@@ -116,6 +123,7 @@
 		63C875121C3172CA0051F970 /* ContentTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentTypes.swift; sourceTree = "<group>"; };
 		63E764C41C3F08E500627C06 /* InlineVideoContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InlineVideoContentViewController.swift; sourceTree = "<group>"; };
 		63E764C51C3F08E500627C06 /* InlineVideoContentViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = InlineVideoContentViewController.xib; sourceTree = "<group>"; };
+		63E764C91C3F4BEE00627C06 /* ZoomableItemView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZoomableItemView.swift; sourceTree = "<group>"; };
 		63F66A571C29BC7B00E0E52B /* Graph.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Graph.swift; sourceTree = "<group>"; };
 		63F66A591C29BE8100E0E52B /* DirectedWeightedGraph.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DirectedWeightedGraph.swift; sourceTree = "<group>"; };
 		63F66A5B1C29C13400E0E52B /* composeHashValues.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = composeHashValues.swift; sourceTree = "<group>"; };
@@ -234,6 +242,7 @@
 				639FA3111C35921F001E47B3 /* SequenceType+completionStream.swift */,
 				6368C6C91C35DD1D00B3D432 /* String+substringWithRange.swift */,
 				63C726921C379010005136BE /* CGRect+center.swift */,
+				63881BF21C46B54500D752D6 /* UIScrollView+setZoomScaleFromPoint.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -303,6 +312,9 @@
 				637825FC1C2F05E500A17668 /* TableCollectionViewLayout.swift */,
 				63C726901C378815005136BE /* SlidingDrawerBehavior.swift */,
 				63AFA5621C3DEDBD007D6D79 /* SlideAnimatedTransitioning.swift */,
+				63E764C91C3F4BEE00627C06 /* ZoomableItemView.swift */,
+				639635891C401C23002F83A5 /* ZoomableItemViewController.swift */,
+				6396358A1C401C23002F83A5 /* ZoomableItemViewController.xib */,
 			);
 			name = Generic;
 			sourceTree = "<group>";
@@ -444,6 +456,7 @@
 				630855B11C2B412900CE8CB6 /* NodePreviewCell.xib in Resources */,
 				632917911C36BE5000572D40 /* ImageContentViewController.xib in Resources */,
 				63F66A6B1C29C6D400E0E52B /* GraphEdgesViewController.xib in Resources */,
+				6396358C1C401C23002F83A5 /* ZoomableItemViewController.xib in Resources */,
 				63E764C71C3F08E500627C06 /* InlineVideoContentViewController.xib in Resources */,
 				6329178B1C36BD0B00572D40 /* WebpageContentViewController.xib in Resources */,
 				6363EB8B1C28A35F00CB5E82 /* Assets.xcassets in Resources */,
@@ -537,11 +550,14 @@
 				6368C6CC1C35E45100B3D432 /* ImgurDataStructures.swift in Sources */,
 				6329178A1C36BD0B00572D40 /* WebpageContentViewController.swift in Sources */,
 				6363EB841C28A35F00CB5E82 /* AppDelegate.swift in Sources */,
+				6396358B1C401C23002F83A5 /* ZoomableItemViewController.swift in Sources */,
+				63E764CA1C3F4BEE00627C06 /* ZoomableItemView.swift in Sources */,
 				63F66A621C29C48400E0E52B /* NodeViewController.swift in Sources */,
 				63F66A661C29C6AA00E0E52B /* ContentNodeViewController.swift in Sources */,
 				630855B51C2B7DB000CE8CB6 /* Globals.swift in Sources */,
 				63B0E91A1C2A0524000FF7A2 /* RedditGraphStructures.swift in Sources */,
 				630855B31C2B414000CE8CB6 /* NodePreviewCell.swift in Sources */,
+				63881BF31C46B54500D752D6 /* UIScrollView+setZoomScaleFromPoint.swift in Sources */,
 				637825FF1C2F5A2500A17668 /* CGPoint++.swift in Sources */,
 				6368C6C81C35BEA700B3D432 /* ImgurParser.swift in Sources */,
 				63F66A6D1C29CF2500E0E52B /* RedditDataStructures.swift in Sources */,

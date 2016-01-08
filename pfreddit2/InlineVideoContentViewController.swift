@@ -28,18 +28,19 @@ class InlineVideoContentViewController: ContentViewController {
 		}
 	}
 
+//	@IBOutlet weak var scrollView: UIScrollView!
+
 	var player: Player? {
 		didSet {
 			guard let player = player else {
-				guard let player = oldValue else {
-					return
+				if let player = oldValue {
+					player.stop()
+					player.view.removeFromSuperview()
+					player.removeFromParentViewController()
+					view.removeConstraints(playerViewConstraints)
+					playerViewConstraints = []
 				}
 
-				player.stop()
-				player.view.removeFromSuperview()
-				player.removeFromParentViewController()
-				view.removeConstraints(playerViewConstraints)
-				playerViewConstraints = []
 				return
 			}
 
@@ -69,21 +70,6 @@ class InlineVideoContentViewController: ContentViewController {
 
 	private var playerViewConstraints: [NSLayoutConstraint]!
 
-//	func didSetContentDataSource(contentDataSource: ContentViewControllerDataSource?, oldValue: ContentViewControllerDataSource?) {
-//		if let content = contentDataSource?.contentForContentViewController(self) {
-//			guard case let .InlineVideo(url) = content else {
-//				fatalError("Attempted to display unsupported content on ImageContentViewController.")
-//			}
-//
-//			player = Player()
-//
-//			guard let player = player else { return }
-//			player.setUrl(url)
-//			player.playFromBeginning()
-//			player.fillMode = "AVLayerVideoGravityResizeAspect"
-//		}
-//	}
-
 	override func viewDidDisappear(animated: Bool) {
 		print("Did disappear")
 		player = nil
@@ -93,3 +79,9 @@ class InlineVideoContentViewController: ContentViewController {
 		print("Deinitializing player")
 	}
 }
+
+//extension InlineVideoContentViewController: UIScrollViewDelegate {
+//	func viewForZoomingInScrollView(scrollView: UIScrollView) -> UIView? {
+//		return player?.view
+//	}
+//}
