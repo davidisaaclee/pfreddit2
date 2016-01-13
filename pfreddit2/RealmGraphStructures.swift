@@ -14,7 +14,7 @@ import RealmSwift
 class ContentTypeObject: Object {
 	private struct TypeString {
 		static let Image: String = "Image"
-		static let InlineVideo: String = "InlineVideo"
+		static let AnimatedImage: String = "AnimatedImage"
 		static let Webpage: String = "Webpage"
 		static let Unknown: String = "Unknown"
 	}
@@ -30,8 +30,8 @@ class ContentTypeObject: Object {
 			contentType = TypeString.Image
 			url = imageURL.absoluteString
 
-		case let .InlineVideo(videoURL):
-			contentType = TypeString.InlineVideo
+		case let .AnimatedImage(videoURL):
+			contentType = TypeString.AnimatedImage
 			url = videoURL.absoluteString
 
 		case let .Webpage(pageURL):
@@ -53,10 +53,10 @@ class ContentTypeObject: Object {
 				let url = NSURL(string: urlString) else { return nil }
 			return ContentType.Image(url)
 
-		case TypeString.InlineVideo:
+		case TypeString.AnimatedImage:
 			guard let urlString = self.url,
 				let url = NSURL(string: urlString) else { return nil }
-			return ContentType.InlineVideo(url)
+			return ContentType.AnimatedImage(url)
 
 		case TypeString.Webpage:
 			guard let urlString = self.url,

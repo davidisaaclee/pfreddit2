@@ -12,7 +12,7 @@ import UIKit
 enum ContentType {
 	case Image(NSURL)
 	// gifs, html video
-	case InlineVideo(NSURL)
+	case AnimatedImage(NSURL)
 	case Webpage(NSURL)
 	case Unknown(String)
 }

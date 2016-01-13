@@ -14,7 +14,7 @@ protocol NodeViewControllerDelegate: class {
 }
 
 class NodeViewController: UIViewController {
-	let kEdgeFetchCount = 10
+	let kEdgeFetchCount = 20
 	
 	weak var delegate: NodeViewControllerDelegate?
 	var nodeViewDragRecognizer: UIPanGestureRecognizer! {

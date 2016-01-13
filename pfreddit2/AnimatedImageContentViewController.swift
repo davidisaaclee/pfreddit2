@@ -1,5 +1,5 @@
 //
-//  InlineVideoContentViewController.swift
+//  AnimatedImageContentViewController
 //  pfreddit2
 //
 //  Created by David Lee on 1/7/16.
@@ -9,11 +9,11 @@
 import UIKit
 import Player
 
-class InlineVideoContentViewController: ContentViewController {
+class AnimatedImageContentViewController: ContentViewController {
 	override weak var dataSource: ContentViewControllerDataSource? {
 		didSet {
 			if let content = dataSource?.contentForContentViewController(self) {
-				guard case let .InlineVideo(url) = content else {
+				guard case let .AnimatedImage(url) = content else {
 					fatalError("Attempted to display unsupported content on ImageContentViewController.")
 				}
 
@@ -24,11 +24,8 @@ class InlineVideoContentViewController: ContentViewController {
 				player.playFromBeginning()
 				player.fillMode = "AVLayerVideoGravityResizeAspect"
 			}
-
 		}
 	}
-
-//	@IBOutlet weak var scrollView: UIScrollView!
 
 	var player: Player? {
 		didSet {
@@ -79,9 +76,3 @@ class InlineVideoContentViewController: ContentViewController {
 		print("Deinitializing player")
 	}
 }
-
-//extension InlineVideoContentViewController: UIScrollViewDelegate {
-//	func viewForZoomingInScrollView(scrollView: UIScrollView) -> UIView? {
-//		return player?.view
-//	}
-//}

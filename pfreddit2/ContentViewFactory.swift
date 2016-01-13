@@ -15,8 +15,8 @@ func createContentViewForContent(content: ContentType) -> ContentViewController?
 			return WebpageContentViewController()
 		case .Image(_):
 			return ImageContentViewController()
-		case .InlineVideo(_):
-			return InlineVideoContentViewController()
+		case .AnimatedImage(_):
+			return AnimatedImageContentViewController()
 		default:
 			return nil
 		}

@@ -55,7 +55,7 @@ class ImgurParser: ContentParserModule {
 						return nil
 					}
 					guard let imageURL = NSURL(string: mp4Link) else { return nil }
-					return ContentType.InlineVideo(imageURL)
+					return ContentType.AnimatedImage(imageURL)
 				} else {
 					guard let imageURL = NSURL(string: imgurImage.link) else { return nil }
 					return ContentType.Image(imageURL)

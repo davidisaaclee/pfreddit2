@@ -43,8 +43,8 @@
 		63C726911C378815005136BE /* SlidingDrawerBehavior.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C726901C378815005136BE /* SlidingDrawerBehavior.swift */; };
 		63C726931C379010005136BE /* CGRect+center.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C726921C379010005136BE /* CGRect+center.swift */; };
 		63C875131C3172CA0051F970 /* ContentTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C875121C3172CA0051F970 /* ContentTypes.swift */; };
-		63E764C61C3F08E500627C06 /* InlineVideoContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E764C41C3F08E500627C06 /* InlineVideoContentViewController.swift */; };
-		63E764C71C3F08E500627C06 /* InlineVideoContentViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 63E764C51C3F08E500627C06 /* InlineVideoContentViewController.xib */; };
+		63E764C61C3F08E500627C06 /* AnimatedImageContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E764C41C3F08E500627C06 /* AnimatedImageContentViewController.swift */; };
+		63E764C71C3F08E500627C06 /* AnimatedImageContentViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 63E764C51C3F08E500627C06 /* AnimatedImageContentViewController.xib */; };
 		63E764CA1C3F4BEE00627C06 /* ZoomableItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E764C91C3F4BEE00627C06 /* ZoomableItemView.swift */; };
 		63F66A581C29BC7B00E0E52B /* Graph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F66A571C29BC7B00E0E52B /* Graph.swift */; };
 		63F66A5A1C29BE8100E0E52B /* DirectedWeightedGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F66A591C29BE8100E0E52B /* DirectedWeightedGraph.swift */; };
@@ -121,8 +121,8 @@
 		63C726901C378815005136BE /* SlidingDrawerBehavior.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SlidingDrawerBehavior.swift; sourceTree = "<group>"; };
 		63C726921C379010005136BE /* CGRect+center.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGRect+center.swift"; sourceTree = "<group>"; };
 		63C875121C3172CA0051F970 /* ContentTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentTypes.swift; sourceTree = "<group>"; };
-		63E764C41C3F08E500627C06 /* InlineVideoContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InlineVideoContentViewController.swift; sourceTree = "<group>"; };
-		63E764C51C3F08E500627C06 /* InlineVideoContentViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = InlineVideoContentViewController.xib; sourceTree = "<group>"; };
+		63E764C41C3F08E500627C06 /* AnimatedImageContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimatedImageContentViewController.swift; sourceTree = "<group>"; };
+		63E764C51C3F08E500627C06 /* AnimatedImageContentViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AnimatedImageContentViewController.xib; sourceTree = "<group>"; };
 		63E764C91C3F4BEE00627C06 /* ZoomableItemView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZoomableItemView.swift; sourceTree = "<group>"; };
 		63F66A571C29BC7B00E0E52B /* Graph.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Graph.swift; sourceTree = "<group>"; };
 		63F66A591C29BE8100E0E52B /* DirectedWeightedGraph.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DirectedWeightedGraph.swift; sourceTree = "<group>"; };
@@ -191,8 +191,8 @@
 				632917891C36BD0B00572D40 /* WebpageContentViewController.xib */,
 				6329178E1C36BE5000572D40 /* ImageContentViewController.swift */,
 				6329178F1C36BE5000572D40 /* ImageContentViewController.xib */,
-				63E764C41C3F08E500627C06 /* InlineVideoContentViewController.swift */,
-				63E764C51C3F08E500627C06 /* InlineVideoContentViewController.xib */,
+				63E764C41C3F08E500627C06 /* AnimatedImageContentViewController.swift */,
+				63E764C51C3F08E500627C06 /* AnimatedImageContentViewController.xib */,
 				632917921C36BF3E00572D40 /* ContentViewFactory.swift */,
 			);
 			name = "Content Views";
@@ -457,7 +457,7 @@
 				632917911C36BE5000572D40 /* ImageContentViewController.xib in Resources */,
 				63F66A6B1C29C6D400E0E52B /* GraphEdgesViewController.xib in Resources */,
 				6396358C1C401C23002F83A5 /* ZoomableItemViewController.xib in Resources */,
-				63E764C71C3F08E500627C06 /* InlineVideoContentViewController.xib in Resources */,
+				63E764C71C3F08E500627C06 /* AnimatedImageContentViewController.xib in Resources */,
 				6329178B1C36BD0B00572D40 /* WebpageContentViewController.xib in Resources */,
 				6363EB8B1C28A35F00CB5E82 /* Assets.xcassets in Resources */,
 			);
@@ -531,7 +531,7 @@
 				63C726911C378815005136BE /* SlidingDrawerBehavior.swift in Sources */,
 				63F66A5A1C29BE8100E0E52B /* DirectedWeightedGraph.swift in Sources */,
 				639FA3121C35921F001E47B3 /* SequenceType+completionStream.swift in Sources */,
-				63E764C61C3F08E500627C06 /* InlineVideoContentViewController.swift in Sources */,
+				63E764C61C3F08E500627C06 /* AnimatedImageContentViewController.swift in Sources */,
 				63F66A5C1C29C13400E0E52B /* composeHashValues.swift in Sources */,
 				6361F27B1C29ADC40020C4CF /* CommunicationUtilities.swift in Sources */,
 				6335F04B1C32C6C800F36B1B /* RealmGraphStructures.swift in Sources */,

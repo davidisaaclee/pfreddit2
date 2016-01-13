@@ -57,7 +57,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 // Some helpers for grabbing stories / making links
 extension AppDelegate {
-	func downloadStories(downloadCount: Int = 25, callback: () -> Void) {
+	func downloadStories(downloadCount: Int = 50, callback: () -> Void) {
 		func readNodePage(alreadyDownloaded: Int)(listing: RedditListing<RedditLink>) {
 			if listing.children.count + alreadyDownloaded >= downloadCount {
 				let numberToRead = downloadCount - alreadyDownloaded
