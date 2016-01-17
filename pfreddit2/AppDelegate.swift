@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import BrightFutures
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -15,7 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
 		// Setup initial view controller.
 		let graphNavigationController = GraphNavigationViewController()
-		downloadStories(15) {
+		downloadStories(15).onSuccess { _ in
 			SharedContentGraph.pickNodes(1, filter: nil).onSuccess { nodes in
 				graphNavigationController.pushNodeViewForNode(nodes.first!, animated: false)
 			}
@@ -50,44 +51,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	func applicationWillTerminate(application: UIApplication) {
 		// Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 	}
-
-
 }
 
 
-// Some helpers for grabbing stories / making links
+// Temporary helpers for grabbing stories / making links
 extension AppDelegate {
-	func downloadStories(downloadCount: Int = 50, callback: () -> Void) {
-		func readNodePage(alreadyDownloaded: Int)(listing: RedditListing<RedditLink>) {
-			if listing.children.count + alreadyDownloaded >= downloadCount {
-				let numberToRead = downloadCount - alreadyDownloaded
-				let childrenSliceToRead: [ContentNode] = Array(listing.children.prefix(numberToRead)).map(RealmContentNode.init).map { $0 as ContentNode }
-//				let nodesSlice = childrenSliceToRead.map(RealmContentNode.init)
-				SharedContentGraph.writeNodes(childrenSliceToRead)
-				callback()
-				// exit recursion
-				return
-			} else {
-				SharedContentGraph.writeNodes(listing.children.map(RealmContentNode.init))
-				listing.next().onSuccess(callback: readNodePage(alreadyDownloaded + listing.children.count))
-			}
+	func downloadStories(downloadCount: Int = 50) -> Future<[ContentNode], ContentServiceError> {
+		let redditService = RedditContentService()
+		return redditService.prefetchNodes(30).flatMap { response -> Future<[ContentNode], ContentServiceError> in
+			return response.sequence().flatMap { SharedContentGraph.writeNodes($0).mapError(ContentServiceError.External) }
 		}
-
-		RedditCommunicator.loadStoriesFromSubreddit("all")
-			.onSuccess(callback: readNodePage(0))
-			.onFailure { print("ERROR:", $0) }
 	}
-
-//	func makeArbitraryLinks(callback: () -> Void) {
-//		SharedContentGraph.pickNodes(25).map { nodeSet in
-//			nodeSet.reduce([]) { (var acc, elm) -> [RealmContentEdge] in
-//				if let last = acc.last {
-//					acc.append(RealmContentEdge(sourceNode: last.destination, destinationNode: elm))
-//				} else {
-//					acc.append(RealmContentEdge(sourceNode: elm, destinationNode: elm))
-//				}
-//				return acc
-//			}
-//		}
-//	}
 }

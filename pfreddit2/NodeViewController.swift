@@ -192,9 +192,9 @@ class NodeViewController: UIViewController {
 		}
 	}
 
-	deinit {
-		print("Deinit NodeViewController")
-	}
+//	deinit {
+//		print("Deinit NodeViewController")
+//	}
 }
 
 
@@ -230,6 +230,8 @@ extension NodeViewController: GraphEdgesViewControllerDataSource {
 	}
 }
 
+
+// MARK: - UIGestureRecognizerDelegate
 
 extension NodeViewController: UIGestureRecognizerDelegate {
 	func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {

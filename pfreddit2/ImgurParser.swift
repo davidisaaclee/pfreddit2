@@ -78,7 +78,6 @@ class ImgurParser: ContentParserModule {
 		]
 
 		return DataRequestor.requestHTTP(requestURL, HTTPAdditionalHeaders: headers)
-			.mapError { error in DataRequestor.Error.ExternalError(error) }
 			.map { JSON(data: $0) }
 			.map(ImgurImageModel.init)
 	}

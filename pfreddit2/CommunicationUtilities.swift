@@ -17,8 +17,8 @@ class DataRequestor: NSObject {
 		case ExternalError(NSError)
 	}
 
-	class func requestHTTP(url: NSURL, HTTPAdditionalHeaders: [String: String]?) -> Future<NSData, NSError> {
-		let promise = Promise<NSData, NSError>()
+	class func requestHTTP(url: NSURL, HTTPAdditionalHeaders: [String: String]?) -> Future<NSData, DataRequestor.Error> {
+		let promise = Promise<NSData, DataRequestor.Error>()
 
 		let config = NSURLSessionConfiguration.defaultSessionConfiguration()
 		config.HTTPAdditionalHeaders = HTTPAdditionalHeaders
@@ -28,7 +28,7 @@ class DataRequestor: NSObject {
 			if let data = dataOrNil {
 				promise.success(data)
 			} else {
-				promise.failure(errorOrNil!)
+				promise.failure(DataRequestor.Error.ExternalError(errorOrNil!))
 			}
 		}
 		dataTask.resume()
@@ -48,6 +48,12 @@ struct KeyValuePair {
 			dictionary[pair.key] = pair.value
 			return dictionary
 		}
+	}
+}
+
+extension KeyValuePair {
+	func asURLQueryItem() -> NSURLQueryItem {
+		return NSURLQueryItem(name: key, value: value)
 	}
 }
 
