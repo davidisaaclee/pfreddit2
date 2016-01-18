@@ -109,18 +109,6 @@
 		63AFA5621C3DEDBD007D6D79 /* SlideAnimatedTransitioning.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SlideAnimatedTransitioning.swift; sourceTree = "<group>"; };
 		63B0E9171C29DF25000FF7A2 /* RealmContentGraph.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmContentGraph.swift; sourceTree = "<group>"; };
 		63B0E9191C2A0524000FF7A2 /* RedditGraphStructures.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RedditGraphStructures.swift; sourceTree = "<group>"; };
-		63C726831C377A0D005136BE /* SourceSansPro-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SourceSansPro-Regular.otf"; sourceTree = "<group>"; };
-		63C726851C377A4B005136BE /* SourceSansPro-Black.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SourceSansPro-Black.otf"; sourceTree = "<group>"; };
-		63C726861C377A4B005136BE /* SourceSansPro-BlackIt.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SourceSansPro-BlackIt.otf"; sourceTree = "<group>"; };
-		63C726871C377A4B005136BE /* SourceSansPro-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SourceSansPro-Bold.otf"; sourceTree = "<group>"; };
-		63C726881C377A4B005136BE /* SourceSansPro-BoldIt.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SourceSansPro-BoldIt.otf"; sourceTree = "<group>"; };
-		63C726891C377A4B005136BE /* SourceSansPro-ExtraLight.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SourceSansPro-ExtraLight.otf"; sourceTree = "<group>"; };
-		63C7268A1C377A4B005136BE /* SourceSansPro-ExtraLightIt.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SourceSansPro-ExtraLightIt.otf"; sourceTree = "<group>"; };
-		63C7268B1C377A4B005136BE /* SourceSansPro-It.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SourceSansPro-It.otf"; sourceTree = "<group>"; };
-		63C7268C1C377A4B005136BE /* SourceSansPro-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SourceSansPro-Light.otf"; sourceTree = "<group>"; };
-		63C7268D1C377A4B005136BE /* SourceSansPro-LightIt.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SourceSansPro-LightIt.otf"; sourceTree = "<group>"; };
-		63C7268E1C377A4B005136BE /* SourceSansPro-Semibold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SourceSansPro-Semibold.otf"; sourceTree = "<group>"; };
-		63C7268F1C377A4B005136BE /* SourceSansPro-SemiboldIt.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SourceSansPro-SemiboldIt.otf"; sourceTree = "<group>"; };
 		63C726901C378815005136BE /* SlidingDrawerBehavior.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SlidingDrawerBehavior.swift; sourceTree = "<group>"; };
 		63C726921C379010005136BE /* CGRect+center.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGRect+center.swift"; sourceTree = "<group>"; };
 		63C875121C3172CA0051F970 /* ContentTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentTypes.swift; sourceTree = "<group>"; };
@@ -231,7 +219,6 @@
 				6363EB8A1C28A35F00CB5E82 /* Assets.xcassets */,
 				6363EB8C1C28A35F00CB5E82 /* LaunchScreen.storyboard */,
 				6363EB8F1C28A35F00CB5E82 /* Info.plist */,
-				63C726841C377A2D005136BE /* Fonts */,
 			);
 			path = pfreddit2;
 			sourceTree = "<group>";
@@ -256,25 +243,6 @@
 				6368C6CB1C35E45100B3D432 /* ImgurDataStructures.swift */,
 			);
 			name = Imgur;
-			sourceTree = "<group>";
-		};
-		63C726841C377A2D005136BE /* Fonts */ = {
-			isa = PBXGroup;
-			children = (
-				63C726851C377A4B005136BE /* SourceSansPro-Black.otf */,
-				63C726861C377A4B005136BE /* SourceSansPro-BlackIt.otf */,
-				63C726871C377A4B005136BE /* SourceSansPro-Bold.otf */,
-				63C726881C377A4B005136BE /* SourceSansPro-BoldIt.otf */,
-				63C726891C377A4B005136BE /* SourceSansPro-ExtraLight.otf */,
-				63C7268A1C377A4B005136BE /* SourceSansPro-ExtraLightIt.otf */,
-				63C7268B1C377A4B005136BE /* SourceSansPro-It.otf */,
-				63C7268C1C377A4B005136BE /* SourceSansPro-Light.otf */,
-				63C7268D1C377A4B005136BE /* SourceSansPro-LightIt.otf */,
-				63C7268E1C377A4B005136BE /* SourceSansPro-Semibold.otf */,
-				63C7268F1C377A4B005136BE /* SourceSansPro-SemiboldIt.otf */,
-				63C726831C377A0D005136BE /* SourceSansPro-Regular.otf */,
-			);
-			name = Fonts;
 			sourceTree = "<group>";
 		};
 		63C875141C31B14C0051F970 /* Realm */ = {
